@@ -2,7 +2,9 @@
 
 an universal list view module with searchbar and configurable filter.
 
-> Build with [Vue.js](https://vuejs.org)
+[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
+
+[![forthebadge](http://forthebadge.com/images/badges/made-with-vue.svg)](http://forthebadge.com)
 
 ## Usage
 simply include the module into your project and you can use it.
