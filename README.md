@@ -1,4 +1,4 @@
-# Schul-Cloud Search & Filter Module ![Travis Status](https://travis-ci.org/schul-cloud/schulcloud-content-editor.svg?branch=master)
+# Schul-Cloud Search & Filter Module
 
 an universal list view module with searchbar and configurable filter.
 
@@ -30,7 +30,7 @@ you can use the following properties to configure the module
 #### tableConfig `tableConfig="{...}"`
 > `{type: Object, default: undefined}`
 
-#### itemsPerPage `itemsPerPage="[12,24,48]"`
+#### itemsPerPage `itemsPerPage="[...]"`
 > `{type: Array, default: [12,24,48,96]}`
 
 #### filter `filter="[...]"`
@@ -41,27 +41,27 @@ a list of filters that should be available.
 a simple function that maps the api responses to the placeholder variables of the module
 > `{type: Function, default: undefined}`
 
-## Setup
+## Development Setup
 
 ``` bash
 # clone repo to your device
-git clone https://github.com/schul-cloud/schulcloud-search-and-filter.git
+> git clone https://github.com/schul-cloud/schulcloud-search-and-filter.git
 
 # install dependencies
-npm install
+> npm install
 ```
 
 ## Build & Development
 
 ``` bash
 # serve with hot reload at localhost:8080
-npm run dev
+> npm run dev
 
 # build for production with minification
-npm run build
+> npm run build
 
 # build for production and view the bundle analyzer report
-npm run build --report
+> npm run build --report
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
@@ -87,6 +87,9 @@ Default branch: master
 
 ## Testing
 ``` bash
+# check bundlesize
+> npm run test
+
 # run build & check bundlesize
-npm run travis
+> npm run travis
 ```
