@@ -10,8 +10,8 @@ function resolve(dir) {
 module.exports = {
   entry: './src/export.js',
   output: {
-    path: path.resolve(__dirname, '../component-export'),
-    filename: 'searchComponent.js'
+    path: path.resolve(__dirname, '../dist'),
+    filename: 'search-and-filter.js'
   },
   resolve: {
     extensions: ['.js', '.vue'],
