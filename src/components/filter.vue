@@ -64,7 +64,8 @@
           Object.assign(apiQuery, value[1].apiQuery);
           Object.assign(urlQuery, value[1].urlQuery);
         }, {});
-        this.$emit('newFilter', apiQuery, urlQuery);
+        // TODO: handle URL query string
+        this.$emit('newFilter', apiQuery);
       },
       isApplied(identifier) {
         return this.activeFilter.map(i => i[0]).includes(identifier);

@@ -1,12 +1,20 @@
 ﻿<html>
-  <header>
-    <meta charset="utf-8">
-  </header>
-  <body>
-    <h1>Component Export Demo</h1>
-    <p>run <code>npm run export</code> to export the search component</p>
-    <p>you can find your component at <code>component-export/searchComponent.js</code>.</p>
-    <content-search readonly="false" title="Guten Tag"/>
-    <script src="./dist/search-and-filter.js"></script>
-  </body>
+<header>
+  <meta charset="utf-8">
+</header>
+<body>
+<h1>Component Export Demo</h1>
+<p>run <code>npm run export</code> to export the search component</p>
+<p>you can find your component at <code>component-export/searchComponent.js</code>.</p>
+<p>
+  Filter Query: <span id="filterQuery"></span>
+</p>
+<content-search id="filter"/>
+<script src="./search-and-filter.js"></script>
+<script>
+  document.getElementById("filter").addEventListener('newFilter', (e) => {
+    console.log("Filter:",e.detail[0]);
+    document.getElementById("filterQuery").innerHTML = JSON.stringify(e.detail[0]);
+  })    </script>
+</body>
 </html>
