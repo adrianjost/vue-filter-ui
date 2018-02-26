@@ -1,4 +1,4 @@
-# Schul-Cloud Search & Filter Module
+# Schul-Cloud Filter Module
 
 an universal configurable filter module that will fire an event 
 and gives you a FeathersJS query that you should apply.
@@ -53,6 +53,7 @@ filter for an date range
 ```
 filter="[
   {
+    type: "date",                             // required
     title: 'Created at'                       // required
     displayTemplate: 'created from %1 to %2', // required
     property: 'createdAt',                    // required
@@ -68,6 +69,7 @@ let the user choose an value for a variable
 ```
 filter="[
   {
+    type: "select",                // required
     title: 'Class'                 // required
     displayTemplate: 'class: %1',  // required
     property: 'classId',           // required
