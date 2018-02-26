@@ -1,13 +1,13 @@
 <template>
   <md-dialog :md-active.sync="isActive">
-    <md-dialog-title>{{$lang.filter.createdAt.modal_title}}</md-dialog-title>
+    <md-dialog-title>{{this.config.title}}</md-dialog-title>
 
     <div id="provider-picker">
-      <md-datepicker v-model="createdDateRange.from" :md-disabled-dates="disabledFromDates">
+      <md-datepicker v-model="DateRange.from" :md-disabled-dates="disabledFromDates">
         <label>{{$lang.filter.createdAt.from}}</label>
       </md-datepicker>
 
-      <md-datepicker v-model="createdDateRange.to" :md-disabled-dates="disabledToDates">
+      <md-datepicker v-model="DateRange.to" :md-disabled-dates="disabledToDates">
         <label>{{$lang.filter.createdAt.to}}</label>
       </md-datepicker>
     </div>
@@ -21,12 +21,12 @@
 
 <script>
   export default {
-    name: 'DialogConfirm',
-    props: ['identifier', 'active'],
+    name: 'date-picker',
+    props: ['identifier', 'active', 'config'],
     data() {
       return {
         isActive: false,
-        createdDateRange: {
+        DateRange: {
           from: undefined,
           to: undefined,
         },
@@ -42,30 +42,30 @@
         let displayString;
         let fromString;
         let toString;
-
-        if (this.createdDateRange.from || this.createdDateRange.to) {
-          if (this.createdDateRange.from) {
-            const from = new Date(this.createdDateRange.from);
-            this.apiQuery['createdAt[$gte]'] = this.createdDateRange.from; // startDate
-            this.urlQuery.createdAtFrom = this.createdDateRange.from;
+        console.log(this.DateRange);
+        if (this.DateRange.from || this.DateRange.to) {
+          if (this.DateRange.from) {
+            const from = new Date(this.DateRange.from);
+            this.apiQuery[this.config.property + '[$gte]'] = this.DateRange.from; // startDate
+            this.urlQuery.AtFrom = this.DateRange.from;
             fromString = `${from.getDate()}.${from.getMonth() + 1}.${from.getFullYear()}`;
           } else {
-            delete this.apiQuery['createdAt[$gte]'];
-            delete this.urlQuery.createdAtFrom;
+            delete this.apiQuery[this.config.property + '[$gte]'];
+            delete this.urlQuery.AtFrom;
             fromString = '∞';
           }
-          if (this.createdDateRange.to) {
-            const to = new Date(this.createdDateRange.to);
-            this.apiQuery['createdAt[$lte]'] = this.createdDateRange.to; // endDate
-            this.urlQuery.createdAtTo = this.createdDateRange.to;
+          if (this.DateRange.to) {
+            const to = new Date(this.DateRange.to);
+            this.apiQuery[this.config.property + '[$lte]'] = this.DateRange.to; // endDate
+            this.urlQuery.AtTo = this.DateRange.to;
             toString = `${to.getDate()}.${to.getMonth() + 1}.${to.getFullYear()}`;
           } else {
-            delete this.apiQuery['createdAt[$gte]'];
-            delete this.urlQuery.createdAtTo;
+            delete this.apiQuery[this.config.property + '[$gte]'];
+            delete this.urlQuery.AtTo;
             toString = '∞';
           }
 
-          displayString = `${fromString} - ${toString}`;
+          displayString = this.config.displayTemplate.replace("%1", fromString).replace("%2", toString);
         } else {
           this.apiQuery = {};
           displayString = null,
@@ -82,8 +82,8 @@
       },
       resetDates(key) {
         if (key == this.identifier) {
-          this.createdDateRange.from = undefined;
-          this.createdDateRange.to = undefined;
+          this.DateRange.from = undefined;
+          this.DateRange.to = undefined;
         }
       },
       disabledFromDates: (date) => {
@@ -91,7 +91,7 @@
         return (today < date);
 
         // not working
-        const earlier = !((this.createdDateRange || {}).to && (this.createdDateRange.to) > date);
+        const earlier = !((this.DateRange || {}).to && (this.DateRange.to) > date);
         return (earlier && (today < date));
       },
       disabledToDates: (date) => {
@@ -99,15 +99,15 @@
         return (today < date);
 
         // not working
-        const later = !((this.createdDateRange || {}).from && (this.createdDateRange.from > date));
+        const later = !((this.DateRange || {}).from && (this.DateRange.from > date));
         return (later && (today < date));
       },
       orderDated() {
-        const a = this.createdDateRange.from;
-        const b = this.createdDateRange.to;
+        const a = this.DateRange.from;
+        const b = this.DateRange.to;
         if (a && b) {
-          this.createdDateRange.from = Math.min(a, b);
-          this.createdDateRange.to = Math.max(a, b);
+          this.DateRange.from = Math.min(a, b);
+          this.DateRange.to = Math.max(a, b);
         }
       },
     },
@@ -120,10 +120,10 @@
           this.onCancle();
         }
       },
-      'createdDateRange.from': function () {
+      'DateRange.from': function () {
         this.orderDated();
       },
-      'createdDateRange.to': function () {
+      'DateRange.to': function () {
         this.orderDated();
       },
     },

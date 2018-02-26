@@ -78,4 +78,8 @@
       border-bottom: 1px dashed lightgrey;
     }
   }
+  p{
+    word-break: break-all;
+    word-break: break-word;
+  }
 </style>

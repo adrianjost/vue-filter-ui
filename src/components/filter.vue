@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  const selectPicker = () => import(/* webpackChunkName: "selectPicker" */ '@/components/filter/select-picker.vue');
+  const selectPicker = () => import(/* webpackChunkName: "selectPicker" */ '@/components/filter/select.vue');
   const datePicker = () => import(/* webpackChunkName: "datePicker" */ '@/components/filter/date.vue');
 
   export default {
