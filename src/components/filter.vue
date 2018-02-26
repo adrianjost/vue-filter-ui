@@ -1,6 +1,6 @@
 <template>
   <div class="filter">
-    <md-chip v-for="chip in activeFilter" v-model="activeFilter" :key="chip[0]" v-on:click="visibleProvider = chip[0]"
+    <md-chip v-for="chip in activeFilter" v-model="activeFilter" :key="chip[0]" v-on:click="visibleFilter = chip[0]"
              @md-delete.stop="removeFilter(chip[0], true)" md-clickable md-deletable>{{ chip[1].displayString }}
     </md-chip>
 
@@ -10,43 +10,55 @@
         FILTER HINZUFÜGEN
       </md-button>
       <md-menu-content>
-        <md-menu-item v-if="!isApplied('provider')" v-on:click="visibleProvider = 'provider'">Provider</md-menu-item>
-        <md-menu-item v-if="!isApplied('createdat')" v-on:click="visibleProvider = 'createdat'">Erstellt am
+        <md-menu-item v-for="filter in availableFilter"
+                      v-if="!isApplied(filter.type + '-' + filter.property)"
+                      v-on:click="visibleFilter = (filter.type + '-' + filter.property)">
+                      {{filter.title}}
         </md-menu-item>
       </md-menu-content>
     </md-menu>
 
-    <provider-filter-dialog @set="setFilter" @cancle="cancle" identifier="provider"
-                            v-bind:active="visibleProvider == 'provider'"/>
-    <createdat-filter-dialog @set="setFilter" @cancle="cancle" identifier="createdat"
-                             v-bind:active="visibleProvider == 'createdat'"/>
+    <component v-for="filter in availableFilter"
+               v-bind:is="filter.type"
+               v-bind:active="visibleFilter == (filter.type + '-' + filter.property)"
+               :identifier="(filter.type + '-' + filter.property)"
+               :config="filter"
+               @set="setFilter"
+               @cancle="cancle"/>
   </div>
 </template>
 
 <script>
-  const providerFilterDialog = () => import(/* webpackChunkName: "providerFilterDialog" */ '@/components/filter/provider.vue');
-  const createdAtFilterDialog = () => import(/* webpackChunkName: "createdAtFilterDialog" */ '@/components/filter/date.vue');
+  const selectPicker = () => import(/* webpackChunkName: "selectPicker" */ '@/components/filter/select-picker.vue');
+  const datePicker = () => import(/* webpackChunkName: "datePicker" */ '@/components/filter/date.vue');
 
   export default {
     components: {
-      'provider-filter-dialog': providerFilterDialog,
-      'createdat-filter-dialog': createdAtFilterDialog,
+      'filter-select': selectPicker,
+      'filter-date': datePicker,
     },
     props: {
       "addLabel": {type: String, default: "Add Filter"},
       "handleUrl": { type: Boolean, default: false },
-      "filter": { type: Array, default: [] },
+      "filter": { type: String, default: "[]" },
     },
     name: 'searchFilter',
     data() {
       return {
-        visibleProvider: '',
+        visibleFilter: '',
         activeFilter: [],
+        availableFilter: [],
       };
+    },
+    created(){
+      this.availableFilter = JSON.parse(this.filter).map((filter)=>{
+        filter.type = "filter-"+filter.type;
+        return filter;
+      })
     },
     methods: {
       setFilter(identifier, filterData) {
-        this.visibleProvider = '';
+        this.visibleFilter = '';
 
         filterData = JSON.parse(JSON.stringify(filterData)); // deep copy
 
@@ -60,7 +72,7 @@
         }
       },
       cancle() {
-        this.visibleProvider = '';
+        this.visibleFilter = '';
       },
       sendNewQuery() {
         const apiQuery = {};

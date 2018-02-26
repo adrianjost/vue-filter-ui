@@ -6,3 +6,7 @@
 ));
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
+
+body{
+  min-height: auto;
+}

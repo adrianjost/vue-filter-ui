@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <search-filter addLabel="Filter hinzufügen" @newFilter="updateFilter"/>
+    <search-filter addLabel="Filter hinzufügen" :filter="JSON.stringify(filter)" @newFilter="updateFilter"/>
     <p><b>FeathersJS:</b> {{JSON.stringify(filterQuery)}}</p>
     <p><b>URLQuery:</b> {{JSON.stringify(urlQuery)}}</p>
   </div>
@@ -17,8 +17,38 @@
     data() {
       return {
         filter: [{
-
-        }],
+          type: "select",
+          title: 'Anbieter',
+          displayTemplate: 'Anbieter: %1',
+          property: 'anbieterName',
+          multiple: false,
+          options: [
+            ["youtube", "Youtube"],
+            ["leifi", "Leifi Physik"],
+            ["serlo1", "Serlo 1"],
+            ["serlo2", "Serlo 2"],
+            ["serlo3", "Serlo 3"],
+            ["serlo4", "Serlo 4"],
+            ["serlo5", "Serlo 5"],
+            ["serlo6", "Serlo 6"],
+            ["serlo7", "Serlo 7"],
+            ["serlo8", "Serlo 8"],
+            ["serlo9", "Serlo 9"]
+          ]
+        },
+        {
+          type: "date",
+          title: 'Erstellt am',
+          displayTemplate: 'Erstellt: %1 bis: %2',
+          property: 'createdAt'
+        },
+        {
+          type: "date",
+          title: 'Bearbeitet am',
+          displayTemplate: 'Bearbeitet: %1 bis: %2',
+          property: 'updatedAt'
+        }
+        ],
         filterQuery: {},
         urlQuery: {}
       };
