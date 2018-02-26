@@ -5,7 +5,7 @@
     </md-chip>
 
     <md-menu md-direction="bottom-end">
-      <md-button md-menu-trigger>
+      <md-button md-menu-trigger class="add-filter">
         <md-icon><i class="material-icons">add</i></md-icon>
         FILTER HINZUFÜGEN
       </md-button>
@@ -24,13 +24,18 @@
 </template>
 
 <script>
-  const providerFilterDialog = () => import(/* webpackChunkName: "providerFilterDialog" */ '@/components/dialogs/filter/provider.vue');
-  const createdAtFilterDialog = () => import(/* webpackChunkName: "createdAtFilterDialog" */ '@/components/dialogs/filter/date.vue');
+  const providerFilterDialog = () => import(/* webpackChunkName: "providerFilterDialog" */ '@/components/filter/provider.vue');
+  const createdAtFilterDialog = () => import(/* webpackChunkName: "createdAtFilterDialog" */ '@/components/filter/date.vue');
 
   export default {
     components: {
       'provider-filter-dialog': providerFilterDialog,
       'createdat-filter-dialog': createdAtFilterDialog,
+    },
+    props: {
+      "addLabel": {type: String, default: "Add Filter"},
+      "handleUrl": { type: Boolean, default: false },
+      "filter": { type: Array, default: [] },
     },
     name: 'searchFilter',
     data() {
@@ -86,4 +91,7 @@
 </style>
 <style lang="scss" scoped>
 /* ENTER CUSTOM CSS HERE */
+.add-filter{
+  vertical-align: middle;
+}
 </style>

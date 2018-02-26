@@ -1,7 +1,7 @@
 {
-  "name": "schul-cloud-content-client",
+  "name": "schul-cloud-filter",
   "version": "0.3.1",
-  "description": "Schul-Cloud Content",
+  "description": "Schul-Cloud Filter Module",
   "author": "adrianjost <homepage@hackedit.de>",
   "private": true,
   "bundlesize": [

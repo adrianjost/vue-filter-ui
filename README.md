@@ -13,8 +13,8 @@ Then add an eventListener to watch for new querys.
 <html>
   <header><meta charset="utf-8"></header>
   <body>
-    <content-search id="filter"/>
-    <script src="./search-and-filter.js"></script>
+    <feathers-filter id="filter"/>
+    <script src="./feathers-filter.js"></script>
     <script>
       document.getElementById("filter").addEventListener('newFilter', (e) => {
         // APPLY QUERE HERE...
@@ -26,6 +26,12 @@ Then add an eventListener to watch for new querys.
 ```
 
 ## configuration
+
+### add-label `add-label="..."`
+
+the label of the "add more filter" button.
+
+> `{type: String, default: "Add Filter"}`
 
 ### handleUrl `handle-url="..."`
 
@@ -41,8 +47,6 @@ The property should be a stringified JSON Object.
 > `{type: Array, default: []}`
 
 You can use as many of each type as you want, but at the moment you only have the following filter types. 
-
-
 
 #### date
 filter for an date range
@@ -99,6 +103,9 @@ filter="[
 # build for production with minification
 > npm run build
 ```
+
+If you don't want the build-files to be located at the root directory 
+take a look at the [webpack documentation](https://webpack.js.org/guides/public-path/)
 
 ## How to name your branch
 

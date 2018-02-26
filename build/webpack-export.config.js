@@ -11,7 +11,7 @@ module.exports = {
   entry: './src/export.js',
   output: {
     path: path.resolve(__dirname, '../dist'),
-    filename: 'search-and-filter.js'
+    filename: 'feathers-filter.js'
   },
   resolve: {
     extensions: ['.js', '.vue'],

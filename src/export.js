@@ -4,4 +4,4 @@ import VueCustomElement from "vue-custom-element";
 import Module from './components/filter';
 
 Vue.use(VueCustomElement);
-Vue.customElement('content-search', Module);
+Vue.customElement('feathers-filter', Module);

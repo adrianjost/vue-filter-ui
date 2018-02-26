@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <search-filter @newFilter="updateFilter"/>
+    <search-filter addLabel="Filter hinzufügen" @newFilter="updateFilter"/>
     <p><b>FeathersJS:</b> {{JSON.stringify(filterQuery)}}</p>
     <p><b>URLQuery:</b> {{JSON.stringify(urlQuery)}}</p>
   </div>
