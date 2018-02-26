@@ -65,7 +65,7 @@
           Object.assign(urlQuery, value[1].urlQuery);
         }, {});
         // TODO: handle URL query string
-        this.$emit('newFilter', apiQuery);
+        this.$emit('newFilter', apiQuery, urlQuery);
       },
       isApplied(identifier) {
         return this.activeFilter.map(i => i[0]).includes(identifier);
@@ -80,6 +80,10 @@
 
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss">
+  @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+  @import "../default";
+</style>
 <style lang="scss" scoped>
+/* ENTER CUSTOM CSS HERE */
 </style>

@@ -1,7 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
-import App from './components/search';
+import App from './components/filter-wrapper';
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 import VueCookies from 'vue-cookies';
@@ -27,8 +27,8 @@ Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
+  el: '#filter',
   template: '<App/>',
   components: {App},
-}).$mount("#app");
+}).$mount("#filter");
 
