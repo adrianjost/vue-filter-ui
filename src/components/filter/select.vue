@@ -5,7 +5,7 @@
     <div id="selection-picker">
       <md-field>
         <label for="options">{{config.title}}</label>
-        <md-select v-model="seletions" id="options" md-dense :multiple="config.multiple">
+        <md-select v-model="seletions" id="options" :multiple="config.multiple">
           <md-option v-for="option in config.options"
                      :value="option[0]">
             {{option[1]}}

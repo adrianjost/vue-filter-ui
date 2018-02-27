@@ -2,7 +2,7 @@
   <md-dialog :md-active.sync="isActive">
     <md-dialog-title>{{this.config.title}}</md-dialog-title>
 
-    <div id="provider-picker">
+    <div id="date-picker">
       <md-datepicker v-if="config.mode <= 2" v-model="DateRange.from" :md-disabled-dates="disabledDates">
         <label>{{$lang.filter.createdAt.from}}</label>
       </md-datepicker>
@@ -138,5 +138,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+  #date-picker {
+    padding: 16px;
+  }
 </style>
