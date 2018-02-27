@@ -10,7 +10,8 @@
         FILTER HINZUFÜGEN
       </md-button>
       <md-menu-content>
-        <md-menu-item v-for="filter in availableFilter"
+        <md-menu-item v-for="(filter) in availableFilter"
+                      :key="('Option-'+filter.type + '-' + filter.property)"
                       v-if="!isApplied(filter.type + '-' + filter.property)"
                       v-on:click="visibleFilter = (filter.type + '-' + filter.property)">
                       {{filter.title}}
@@ -19,6 +20,7 @@
     </md-menu>
 
     <component v-for="filter in availableFilter"
+               :key="('Dialog-'+filter.type + '-' + filter.property)"
                v-bind:is="filter.type"
                v-bind:active="visibleFilter == (filter.type + '-' + filter.property)"
                :identifier="(filter.type + '-' + filter.property)"
@@ -29,9 +31,8 @@
 </template>
 
 <script>
-  const selectPicker = () => import(/* webpackChunkName: "selectPicker" */ '@/components/filter/select.vue');
-  const datePicker = () => import(/* webpackChunkName: "datePicker" */ '@/components/filter/date.vue');
-
+  import selectPicker from '@/components/filter/select.vue';
+  import datePicker from '@/components/filter/date.vue';
   const qs = require('query-string');
 
   export default {
