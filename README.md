@@ -9,7 +9,7 @@ and gives you a FeathersJS query that you should apply.
 ## Usage
 simply include the module into your project and you can use it.
 Then add an eventListener to watch for new querys.
-```
+```html
 <html>
   <header><meta charset="utf-8"></header>
   <body>
@@ -50,7 +50,7 @@ You can use as many of each type as you want, but at the moment you only have th
 
 #### date
 filter for an date range
-```
+```json
 filter="[
   {
     type: "date",                             // required
@@ -67,7 +67,7 @@ if you set minDate or maxDate to `false` the related input is hidden.
 
 #### value is ...
 let the user choose an value for a variable
-```
+```json
 filter="[
   {
     type: "select",                // required
