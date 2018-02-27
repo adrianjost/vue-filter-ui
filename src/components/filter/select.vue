@@ -7,6 +7,7 @@
         <label for="options">{{config.title}}</label>
         <md-select v-model="seletions" id="options" :multiple="config.multiple">
           <md-option v-for="option in config.options"
+                     :key="option[0]"
                      :value="option[0]">
             {{option[1]}}
           </md-option>
