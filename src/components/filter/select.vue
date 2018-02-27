@@ -41,7 +41,6 @@
         let displayString;
         if (this.seletions.length != 0) {
           // this.apiQuery["providerName[$in]"] = this.seletions; // corret but api seems broken
-          console.log(this.selections);
           if(this.config.multiple){
             this.apiQuery[this.config.property + '[$in]'] = this.seletions;
             this.urlQuery[this.config.property] = this.seletions.reduce((prev, curr) => prev +','+ curr );

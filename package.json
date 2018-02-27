@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",
-    "query-string": "^5.0.1",
+    "query-string": "^5.1.0",
     "vee-validate": "^2.0.0-rc.21",
     "vue": "^2.5.9",
     "vue-config": "^1.0.0",

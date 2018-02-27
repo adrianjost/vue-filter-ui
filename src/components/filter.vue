@@ -32,6 +32,8 @@
   const selectPicker = () => import(/* webpackChunkName: "selectPicker" */ '@/components/filter/select.vue');
   const datePicker = () => import(/* webpackChunkName: "datePicker" */ '@/components/filter/date.vue');
 
+  const qs = require('query-string');
+
   export default {
     components: {
       'filter-select': selectPicker,
@@ -82,7 +84,7 @@
           Object.assign(urlQuery, value[1].urlQuery);
         }, {});
         // TODO: handle URL query string
-        this.$emit('newFilter', apiQuery, urlQuery);
+        this.$emit('newFilter', apiQuery, urlQuery, qs.stringify(apiQuery), qs.stringify(urlQuery));
       },
       isApplied(identifier) {
         return this.activeFilter.map(i => i[0]).includes(identifier);

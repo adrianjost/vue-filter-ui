@@ -4,8 +4,12 @@
     <table width="100%">
       <tr><th>FeathersJS</th><th>URLQuery</th></tr>
       <tr>
-        <td><pre>{{JSON.stringify(filterQuery, null, 2)}}</pre></td>
+        <td><pre>{{JSON.stringify(apiQuery, null, 2)}}</pre></td>
         <td><pre>{{JSON.stringify(urlQuery, null, 2)}}</pre></td>
+      </tr>
+      <tr class="break-all">
+        <td>?{{apiQueryString}}</td>
+        <td>?{{urlQueryString}}</td>
       </tr>
     </table>
   </div>
@@ -56,14 +60,18 @@
           mode: 2
         }
         ],
-        filterQuery: {},
-        urlQuery: {}
+        apiQuery: {},
+        apiQueryString: "",
+        urlQuery: {},
+        urlQueryString: ""
       };
     },
     methods: {
-      updateFilter(newApiQuery, newUrlQuery) {
-        this.filterQuery = newApiQuery;
+      updateFilter(newApiQuery, newUrlQuery, newApiQueryString, newUrlQueryString) {
+        this.apiQuery = newApiQuery;
         this.urlQuery = newUrlQuery;
+        this.apiQueryString = newApiQueryString;
+        this.urlQueryString = newUrlQueryString;
       },
     },
   };
@@ -91,5 +99,8 @@
     text-align: left;
     word-break: break-all;
     word-break: break-word;
+  }
+  .break-all{
+    word-break: break-all;
   }
 </style>
