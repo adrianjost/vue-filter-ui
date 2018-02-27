@@ -5,7 +5,7 @@
     <div id="selection-picker">
       <md-field>
         <label for="options">{{config.title}}</label>
-        <md-select v-model="seletions" id="options" md-dense> <!-- multiple> -->
+        <md-select v-model="seletions" id="options" md-dense :multiple="config.multiple">
           <md-option v-for="option in config.options"
                      :value="option[0]">
             {{option[1]}}
@@ -28,7 +28,7 @@
     data() {
       return {
         isActive: false,
-        seletions: '', // []
+        seletions: (this.config.multiple)?[]:'',
         apiQuery: {},
         urlQuery: {},
       };
@@ -39,23 +39,24 @@
     methods: {
       onConfirm() {
         let displayString;
-
         if (this.seletions.length != 0) {
           // this.apiQuery["providerName[$in]"] = this.seletions; // corret but api seems broken
-          this.apiQuery[this.config.property + '[$match]'] = this.seletions;
-          this.urlQuery[this.config.property] = this.seletions; // .reduce((prev, curr) => prev +','+ curr )}
-
-          displayString = this.config.displayTemplate.replace('%1', this.seletions);; // .reduce((prev, curr) => prev +', '+ curr );
-        } else {
-          this.apiQuery = {};
-          this.urlQuery = {};
-          displayString = null;
+          console.log(this.selections);
+          if(this.config.multiple){
+            this.apiQuery[this.config.property + '[$in]'] = this.seletions;
+            this.urlQuery[this.config.property] = this.seletions.reduce((prev, curr) => prev +','+ curr );
+            displayString = this.config.displayTemplate.replace(/%1/g, this.seletions.reduce((prev, curr) => prev +', '+ curr ));
+          }else{
+            this.apiQuery[this.config.property] = this.seletions;
+            this.urlQuery[this.config.property] = this.seletions;
+            displayString = this.config.displayTemplate.replace(/%1/g, this.seletions);
+          }
+          this.$emit('set', this.identifier, {
+              apiQuery: this.apiQuery,
+              urlQuery: this.urlQuery,
+              displayString
+          });
         }
-        this.$emit('set', this.identifier, {
-          apiQuery: this.apiQuery,
-          urlQuery: this.urlQuery,
-          displayString,
-        });
       },
       onCancle() {
         this.$emit('cancle');

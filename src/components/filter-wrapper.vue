@@ -1,8 +1,13 @@
 <template>
   <div class="wrapper">
     <search-filter addLabel="Filter hinzufügen" :filter="JSON.stringify(filter)" @newFilter="updateFilter"/>
-    <p><b>FeathersJS:</b> {{JSON.stringify(filterQuery)}}</p>
-    <p><b>URLQuery:</b> {{JSON.stringify(urlQuery)}}</p>
+    <table width="100%">
+      <tr><th>FeathersJS</th><th>URLQuery</th></tr>
+      <tr>
+        <td><pre>{{JSON.stringify(filterQuery, null, 2)}}</pre></td>
+        <td><pre>{{JSON.stringify(urlQuery, null, 2)}}</pre></td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -21,7 +26,7 @@
           title: 'Anbieter',
           displayTemplate: 'Anbieter: %1',
           property: 'anbieterName',
-          multiple: false,
+          multiple: true,
           options: [
             ["youtube", "Youtube"],
             ["leifi", "Leifi Physik"],
@@ -38,15 +43,17 @@
         },
         {
           type: "date",
-          title: 'Erstellt am',
-          displayTemplate: 'Erstellt: %1 bis: %2',
-          property: 'createdAt'
+          title: 'Erstellt seit',
+          displayTemplate: 'Erstellt seit: %1',
+          property: 'createdAt',
+          mode: 1  // 1=from, 2=from&to, 3=to
         },
         {
           type: "date",
           title: 'Bearbeitet am',
           displayTemplate: 'Bearbeitet: %1 bis: %2',
-          property: 'updatedAt'
+          property: 'updatedAt',
+          mode: 2
         }
         ],
         filterQuery: {},
@@ -78,7 +85,10 @@
       border-bottom: 1px dashed lightgrey;
     }
   }
-  p{
+  table{
+    margin-top: 25px;
+    width: 100%;
+    text-align: left;
     word-break: break-all;
     word-break: break-word;
   }

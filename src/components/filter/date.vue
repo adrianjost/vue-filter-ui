@@ -3,11 +3,11 @@
     <md-dialog-title>{{this.config.title}}</md-dialog-title>
 
     <div id="provider-picker">
-      <md-datepicker v-model="DateRange.from" :md-disabled-dates="disabledFromDates">
+      <md-datepicker v-if="config.mode <= 2" v-model="DateRange.from" :md-disabled-dates="disabledDates">
         <label>{{$lang.filter.createdAt.from}}</label>
       </md-datepicker>
 
-      <md-datepicker v-model="DateRange.to" :md-disabled-dates="disabledToDates">
+      <md-datepicker v-if="config.mode  >= 2" v-model="DateRange.to" :md-disabled-dates="disabledDates">
         <label>{{$lang.filter.createdAt.to}}</label>
       </md-datepicker>
     </div>
@@ -39,38 +39,33 @@
     },
     methods: {
       onConfirm() {
-        let displayString;
         let fromString;
         let toString;
-        console.log(this.DateRange);
-        if (this.DateRange.from || this.DateRange.to) {
-          if (this.DateRange.from) {
-            const from = new Date(this.DateRange.from);
-            this.apiQuery[this.config.property + '[$gte]'] = this.DateRange.from; // startDate
-            this.urlQuery.AtFrom = this.DateRange.from;
-            fromString = `${from.getDate()}.${from.getMonth() + 1}.${from.getFullYear()}`;
-          } else {
+        if(this.config.mode <= 2 && this.DateRange.from){ // from available
+          this.apiQuery[this.config.property + '[$gte]'] = this.DateRange.from; // startDate
+          const from = new Date(this.DateRange.from);
+          fromString = `${('0'+from.getDate()).slice(-2)}.${('0'+from.getMonth() + 1).slice(-2)}.${from.getFullYear()}`;
+          this.urlQuery[this.config.property + 'From'] = fromString;
+        }
+        if(this.config.mode >= 2 && this.DateRange.to){ // to available
+          this.apiQuery[this.config.property + '[$lte]'] = this.DateRange.to; // endDate
+          const to = new Date(this.DateRange.to);
+          toString = `${('0'+to.getDate()).slice(-2)}.${('0'+to.getMonth() + 1).slice(-2)}.${to.getFullYear()}`;
+          this.urlQuery[this.config.property + 'To'] = toString;
+        }
+        if(this.config.mode == 2){
+          if(!fromString){
             delete this.apiQuery[this.config.property + '[$gte]'];
-            delete this.urlQuery.AtFrom;
+            delete this.urlQuery[this.config.property + 'From'];
             fromString = '∞';
           }
-          if (this.DateRange.to) {
-            const to = new Date(this.DateRange.to);
-            this.apiQuery[this.config.property + '[$lte]'] = this.DateRange.to; // endDate
-            this.urlQuery.AtTo = this.DateRange.to;
-            toString = `${to.getDate()}.${to.getMonth() + 1}.${to.getFullYear()}`;
-          } else {
+          if(!toString){
             delete this.apiQuery[this.config.property + '[$gte]'];
-            delete this.urlQuery.AtTo;
+            delete this.urlQuery[this.config.property + 'To'];
             toString = '∞';
           }
-
-          displayString = this.config.displayTemplate.replace("%1", fromString).replace("%2", toString);
-        } else {
-          this.apiQuery = {};
-          displayString = null,
-            this.urlQuery = {};
         }
+        const displayString = this.config.displayTemplate.replace(/%1/g, fromString).replace(/%2/g, toString);
         this.$emit('set', this.identifier, {
           apiQuery: this.apiQuery,
           urlQuery: this.urlQuery,
@@ -86,28 +81,33 @@
           this.DateRange.to = undefined;
         }
       },
-      disabledFromDates: (date) => {
-        const today = new Date();
-        return (today < date);
+      disabledDates: (date) => {
+        return false;
 
-        // not working
-        const earlier = !((this.DateRange || {}).to && (this.DateRange.to) > date);
-        return (earlier && (today < date));
-      },
-      disabledToDates: (date) => {
-        const today = new Date();
-        return (today < date);
-
-        // not working
-        const later = !((this.DateRange || {}).from && (this.DateRange.from > date));
-        return (later && (today < date));
+        // TODO ~ NOT WORKING AT ALL
+        const config = this.a.props.config;
+        let available = true;
+        date = new Date(date);
+        if(available && config.minDate){
+          const minDate = new Date(config.minDate);
+          available = (date > minDate);
+        }
+        if(available && config.maxDate){
+          const maxDate = new Date(config.maxDate);
+          available = (date < maxDate);
+        }
+        return !available;
       },
       orderDated() {
         const a = this.DateRange.from;
         const b = this.DateRange.to;
         if (a && b) {
-          this.DateRange.from = Math.min(a, b);
-          this.DateRange.to = Math.max(a, b);
+          const small = Math.min(a, b)
+          if(small == this.DateRange.to){
+              temp = this.DateRange.to;
+              this.DateRange.to = this.DateRange.from;
+              this.DateRange.from = temp;
+          }
         }
       },
     },
@@ -138,7 +138,5 @@
 </script>
 
 <style lang="scss" scoped>
-  #provider-picker {
-    padding: 16px;
-  }
+
 </style>

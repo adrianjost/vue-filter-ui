@@ -55,8 +55,9 @@ filter="[
   {
     type: "date",                             // required
     title: 'Created at'                       // required
-    displayTemplate: 'created from %1 to %2', // required
+    displayTemplate: 'created from %1 to %2', // required ~ %1=fromDate, %2=toDate
     property: 'createdAt',                    // required
+    mode: 2                                   // required ~ 1=from, 3=to, 2=both
     minDate: (UNIX TIMESTAMP),                // default: today
     maxDate: (UNIX TIMESTAMP)                 // default: today
   }
