@@ -4,7 +4,6 @@ import Vue from 'vue';
 import App from './components/filter-wrapper';
 import VueMaterial from 'vue-material';
 import 'vue-material/dist/vue-material.min.css';
-// include vue-custom-element plugin to Vue
 
 Vue.use(VueMaterial);
 
