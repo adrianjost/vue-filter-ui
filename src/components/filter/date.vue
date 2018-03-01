@@ -39,6 +39,7 @@
     },
     methods: {
       onConfirm() {
+        // TODO: sometimes the month is 41 or another way to large number
         let fromString;
         let toString;
         if(this.config.mode <= 2 && this.DateRange.from){ // from available

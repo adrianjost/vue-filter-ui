@@ -45,6 +45,7 @@
           if(this.config.multiple){
             this.apiQuery[this.config.property + '[$in]'] = this.seletions;
             this.urlQuery[this.config.property] = this.seletions.reduce((prev, curr) => prev +','+ curr );
+            // TODO ~ show only label not values.
             displayString = this.config.displayTemplate.replace(/%1/g, this.seletions.reduce((prev, curr) => prev +', '+ curr ));
           }else{
             this.apiQuery[this.config.property] = this.seletions;

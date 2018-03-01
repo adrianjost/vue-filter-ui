@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import './main.js'
+import './base.js'
 import VueCustomElement from "vue-custom-element";
 import Module from './components/filter';
 
