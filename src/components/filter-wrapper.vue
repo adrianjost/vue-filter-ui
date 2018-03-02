@@ -50,16 +50,24 @@
           title: 'Erstellt seit',
           displayTemplate: 'Erstellt seit: %1',
           property: 'createdAt',
-          mode: 1  // 1=from, 2=from&to, 3=to
+          mode: 'from'
         },
         {
           type: "date",
           title: 'Bearbeitet am',
           displayTemplate: 'Bearbeitet: %1 bis: %2',
           property: 'updatedAt',
-          mode: 2
-        }
-        ],
+          mode: 'fromto'
+        },
+        {
+          type: "sort",
+          title: 'Sortieren',
+          displayTemplate: 'Sortieren nach: %1',
+          options: [
+            ["createdAt", "Erstellt"],
+            ["updatedAt", "Bearbeitet"]
+          ]
+        }],
         apiQuery: {},
         apiQueryString: "",
         urlQuery: {},

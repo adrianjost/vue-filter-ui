@@ -5,7 +5,7 @@
     <div id="selection-picker">
       <md-field>
         <label for="options">{{config.title}}</label>
-        <md-select v-model="selections" id="options" :multiple="config.multiple">
+        <md-select v-model="selection" id="options">
           <md-option v-for="option in config.options"
                      :key="option[0]"
                      :value="JSON.stringify(option)">
@@ -13,6 +13,12 @@
           </md-option>
         </md-select>
       </md-field>
+      <md-button v-show="desc" @click="desc = false" class="md-icon-button">
+        <md-icon>arrow_downward</md-icon>
+      </md-button>
+      <md-button v-show="!desc" @click="desc = true" class="md-icon-button">
+        <md-icon>arrow_upward</md-icon>
+      </md-button>
     </div>
 
     <md-dialog-actions>
@@ -24,12 +30,13 @@
 
 <script>
   export default {
-    name: 'select-picker',
+    name: 'sort-picker',
     props: ['identifier', 'active', 'config'],
     data() {
       return {
         isActive: false,
-        selections: (this.config.multiple)?[]:'',
+        selection:'',
+        desc: true,
         apiQuery: {},
         urlQuery: {},
       };
@@ -40,28 +47,18 @@
     methods: {
       onConfirm() {
         let displayString;
-        if (this.selections) {
-          // this.apiQuery["providerName[$in]"] = this.selections; // corret but api seems broken
-          if(this.config.multiple){
-            const selections = this.selections.map(selection => {return JSON.parse(selection)});
-
-            const selectedValues = selections.map(s => {return s[0];});
-            const selectedLabels = selections.map(s => {return s[1];});
-            this.apiQuery[this.config.property + '[$in]'] = selectedValues
-            this.urlQuery[this.config.property] = selectedLabels.reduce((prev, curr) => prev +','+ curr );
-            // TODO ~ show only label not values.
-            displayString = this.config.displayTemplate.replace(/%1/g, selectedLabels.reduce((prev, curr) => prev +', '+ curr ));
-          }else{
-            const selections = JSON.parse(this.selections);
-
-            this.apiQuery[this.config.property] = selections[0];
-            this.urlQuery[this.config.property] = selections[0];
-            displayString = this.config.displayTemplate.replace(/%1/g, selections[1]);
-          }
+        this.apiQuery = {};
+        this.urlQuery = {};
+        if(this.selection) {
+          const selection = JSON.parse(this.selection);
+          this.apiQuery[`$sort[${selection[0]}]`] = (this.desc)?(1):(-1);
+          this.urlQuery['sort'] = selection[0];
+          this.urlQuery['sortorder'] = (this.desc)?(1):(-1);
+          displayString = this.config.displayTemplate.replace(/%1/g, selection[1]+((this.desc)?(' ▼'):(' ▲')));
           this.$emit('set', this.identifier, {
-              apiQuery: this.apiQuery,
-              urlQuery: this.urlQuery,
-              displayString
+            apiQuery: this.apiQuery,
+            urlQuery: this.urlQuery,
+            displayString
           });
         }
       },
@@ -69,8 +66,10 @@
         this.$emit('cancle');
       },
       resetSelection(key) {
+        console.log("RESET");
         if (key == this.identifier) {
-          this.selections = '';
+          this.selection = '';
+          this.desc = true;
         }
       },
     },
@@ -90,5 +89,15 @@
 <style lang="scss" scoped>
   #selection-picker {
     padding: 16px;
+
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    align-items: center;
+    > *{
+      display: inline-block;
+      vertical-align: middle;
+    }
   }
 </style>

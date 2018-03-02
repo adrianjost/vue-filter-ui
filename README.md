@@ -59,7 +59,8 @@ filter="[
     title: 'Created at'                       // required
     displayTemplate: 'created from %1 to %2', // required ~ %1=fromDate, %2=toDate
     property: 'createdAt',                    // required
-    mode: 2                                   // required ~ 1=from, 3=to, 2=both
+    mode: 'from',                             // required 'from', 'to', 'fromto'
+    autoOrder: false,                         // default: true
     minDate: (UNIX TIMESTAMP),                // default: today
     maxDate: (UNIX TIMESTAMP)                 // default: today
   }
@@ -67,7 +68,7 @@ filter="[
 ```
 if you set minDate or maxDate to `false` the related input is hidden.
 
-#### value is ...
+#### select value ...
 let the user choose an value for a variable
 ```json
 filter="[
@@ -77,10 +78,27 @@ filter="[
     displayTemplate: 'class: %1',  // required
     property: 'classId',           // required
     multiple: true,                // default: false
-    options: [                     // default: [], minLength: 1!
+    options: [                     // required, minLength: 1!
       [123, "Class A"],
       [456, "Class B"],
       [789, "Class C"],
+    ]
+  }
+]" 
+```
+
+#### sort by ...
+let the user order the result
+```json
+filter="[
+  {
+    type: "sort",                  // required
+    title: 'Sort'                   // required
+    displayTemplate: 'Sort by: %1', // required
+    options: [                      // required, minLength: 1!
+      ['propertyA', "Sort by A"],
+      ['propertyB', "Sort by B"],
+      ['propertyC', "Sort by C"],
     ]
   }
 ]" 

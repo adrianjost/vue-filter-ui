@@ -14,7 +14,7 @@
                       :key="('Option-'+filter.type + '-' + filter.property)"
                       v-if="!isApplied(filter.type + '-' + filter.property)"
                       v-on:click="visibleFilter = (filter.type + '-' + filter.property)">
-                      {{filter.title}}
+                      {{filter.title}}...
         </md-menu-item>
       </md-menu-content>
     </md-menu>
@@ -33,12 +33,14 @@
 <script>
   import selectPicker from '@/components/filter/select.vue';
   import datePicker from '@/components/filter/date.vue';
+  import sortPicker from '@/components/filter/sort.vue';
   const qs = require('query-string');
 
   export default {
     components: {
       'filter-select': selectPicker,
       'filter-date': datePicker,
+      'filter-sort': sortPicker
     },
     props: {
       "addLabel": {type: String, default: "Add Filter"},

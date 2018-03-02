@@ -687,6 +687,7 @@ button:focus {
     margin-left: 0;
   }
   .md-ripple {
+    box-sizing: border-box;
     padding: 0 8px;
     display: -webkit-box;
     display: flex;

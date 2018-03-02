@@ -3,11 +3,11 @@
     <md-dialog-title>{{this.config.title}}</md-dialog-title>
 
     <div id="date-picker">
-      <md-datepicker v-if="config.mode <= 2" v-model="DateRange.from" :md-disabled-dates="disabledDates">
+      <md-datepicker v-if="config.mode.includes('from')" v-model="DateRange.from" :md-disabled-dates="disabledDates">
         <label>{{$lang.filter.createdAt.from}}</label>
       </md-datepicker>
 
-      <md-datepicker v-if="config.mode  >= 2" v-model="DateRange.to" :md-disabled-dates="disabledDates">
+      <md-datepicker v-if="config.mode.includes('to')" v-model="DateRange.to" :md-disabled-dates="disabledDates">
         <label>{{$lang.filter.createdAt.to}}</label>
       </md-datepicker>
     </div>
@@ -38,33 +38,21 @@
       this.$parent.$on('reset', this.resetDates);
     },
     methods: {
+      parseDate(date, type){
+        const parsedDate = new Date(date);
+        const dateString = `${('0'+parsedDate.getDate()).slice(-2)}.${('0'+(parsedDate.getMonth()+1)).slice(-2)}.${parsedDate.getFullYear()}`;
+        this.apiQuery[this.config.property + ((type=='from')?'[$gte]':'[$lte]')] = date;
+        this.urlQuery[this.config.property + ((type=='from')?'From':'To')] = dateString;
+        return dateString;
+      },
       onConfirm() {
-        // TODO: sometimes the month is 41 or another way to large number
-        let fromString;
-        let toString;
-        if(this.config.mode <= 2 && this.DateRange.from){ // from available
-          this.apiQuery[this.config.property + '[$gte]'] = this.DateRange.from; // startDate
-          const from = new Date(this.DateRange.from);
-          fromString = `${('0'+from.getDate()).slice(-2)}.${('0'+from.getMonth() + 1).slice(-2)}.${from.getFullYear()}`;
-          this.urlQuery[this.config.property + 'From'] = fromString;
+        let fromString = '∞', toString = '∞';
+
+        if(this.config.mode.includes('from') && this.DateRange.from){ // from available
+          fromString = this.parseDate(this.DateRange.from, 'from');
         }
-        if(this.config.mode >= 2 && this.DateRange.to){ // to available
-          this.apiQuery[this.config.property + '[$lte]'] = this.DateRange.to; // endDate
-          const to = new Date(this.DateRange.to);
-          toString = `${('0'+to.getDate()).slice(-2)}.${('0'+to.getMonth() + 1).slice(-2)}.${to.getFullYear()}`;
-          this.urlQuery[this.config.property + 'To'] = toString;
-        }
-        if(this.config.mode == 2){
-          if(!fromString){
-            delete this.apiQuery[this.config.property + '[$gte]'];
-            delete this.urlQuery[this.config.property + 'From'];
-            fromString = '∞';
-          }
-          if(!toString){
-            delete this.apiQuery[this.config.property + '[$gte]'];
-            delete this.urlQuery[this.config.property + 'To'];
-            toString = '∞';
-          }
+        if(this.config.mode.includes('to') && this.DateRange.to){ // to available
+          toString = this.parseDate(this.DateRange.to, 'to');
         }
         const displayString = this.config.displayTemplate.replace(/%1/g, fromString).replace(/%2/g, toString);
         this.$emit('set', this.identifier, {
@@ -80,6 +68,8 @@
         if (key == this.identifier) {
           this.DateRange.from = undefined;
           this.DateRange.to = undefined;
+          this.apiQuery = {};
+          this.urlQuery = {};
         }
       },
       disabledDates: (date) => {
@@ -100,11 +90,13 @@
         return !available;
       },
       orderDated() {
+        if(!this.config.autoOrder){
+          return;
+        }
         const a = this.DateRange.from;
         const b = this.DateRange.to;
         if (a && b) {
-          const small = Math.min(a, b)
-          if(small == this.DateRange.to){
+          if(Math.min(a, b) == this.DateRange.to){
               temp = this.DateRange.to;
               this.DateRange.to = this.DateRange.from;
               this.DateRange.from = temp;
