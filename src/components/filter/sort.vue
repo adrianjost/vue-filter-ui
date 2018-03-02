@@ -66,7 +66,6 @@
         this.$emit('cancle');
       },
       resetSelection(key) {
-        console.log("RESET");
         if (key == this.identifier) {
           this.selection = '';
           this.desc = true;

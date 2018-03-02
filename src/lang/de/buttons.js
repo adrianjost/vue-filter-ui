@@ -1,6 +1,6 @@
 // buttons.js
 module.exports = {
-  add: 'hinzufügen',
+  add: 'übernehmen',
   cancel: 'abbrechen',
   card: 'Karte',
   create: 'erstellen',
