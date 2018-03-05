@@ -43,9 +43,7 @@
 
         let toFilter = false;
         if(this.selections) {
-          console.log("new:", this.selections);
           for (var property in this.selections) {
-            console.log(property, this.config.options[property], this.selections[property]);
             if (this.selections[property] != undefined){
               this.apiQuery[property] = this.selections[property];
               this.urlQuery[property] = this.selections[property];
@@ -53,7 +51,6 @@
               toFilter = true;
             }
           }
-          console.log("apiQuery:", this.apiQuery);
           if(toFilter){
             this.$emit('set', this.identifier, {
               apiQuery: this.apiQuery,
@@ -70,8 +67,7 @@
       },
       resetSelection(key) {
         if (key == this.identifier) {
-          this.selection = '';
-          this.desc = true;
+          this.selections = {};
         }
       },
     },
@@ -96,8 +92,8 @@
     display: flex;
     justify-content: space-between;
     font-size: 1em;
-    line-height: 2.3em;
-    padding: .5em 0;
+    line-height: 2.3rem;
+    padding: .5rem 0;
     &:not(:last-of-type){
       border-bottom: 1px dashed lightgrey;
     }
@@ -112,8 +108,8 @@
     white-space: nowrap;
     input{
       display: inline-block;
-      height: 2.3em;
-      width: 2.3em;
+      height: 2.3rem;
+      width: 2.3rem;
       visibility: hidden;
       margin: 0;
       padding: 0;
@@ -123,8 +119,8 @@
         box-sizing: border-box;
         height: 100%;
         width: 100%;
-        padding: .3em;
-        font-size: 1.125em;
+        padding: 1.1rem 0;
+        font-size: 1rem;
         text-align: center;
         color: #fff;
         background-color: rgba(0,0,0,.3);
