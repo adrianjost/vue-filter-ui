@@ -7,7 +7,7 @@
     <md-menu md-direction="bottom-end">
       <md-button md-menu-trigger class="add-filter">
         <md-icon><i class="material-icons">add</i></md-icon>
-        FILTER HINZUFÜGEN
+        {{addLabel}}
       </md-button>
       <md-menu-content>
         <md-menu-item v-for="(filter) in availableFilter"
@@ -34,16 +34,20 @@
   import selectPicker from '@/components/filter/select.vue';
   import datePicker from '@/components/filter/date.vue';
   import sortPicker from '@/components/filter/sort.vue';
+  import booleanPicker from '@/components/filter/boolean.vue';
   const qs = require('query-string');
 
   export default {
     components: {
       'filter-select': selectPicker,
       'filter-date': datePicker,
-      'filter-sort': sortPicker
+      'filter-sort': sortPicker,
+      'filter-boolean': booleanPicker
     },
     props: {
-      "addLabel": {type: String, default: "Add Filter"},
+      "addLabel": {type: String, default: "add filter"},
+      "applyLabel": {type: String, default: "apply"},
+      "cancleLabel": {type: String, default: "cancle"},
       "handleUrl": { type: Boolean, default: false },
       "filter": { type: String, default: "[]" },
     },

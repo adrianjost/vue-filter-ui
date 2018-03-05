@@ -10,12 +10,13 @@ and gives you a FeathersJS query that you should apply.
 
 ## Usage
 simply include the module into your project and you can use it.
+Configure it by apply some of the following html-attributes.
 Then add an eventListener to watch for new querys.
 ```html
 <html>
   <header><meta charset="utf-8"></header>
   <body>
-    <feathers-filter id="filter"/>
+    <feathers-filter id="filter" add-label="more filter"/>
     <script src="./feathers-filter.js"></script>
     <script>
       document.getElementById("filter").addEventListener('newFilter', (e) => {
@@ -35,6 +36,18 @@ the label of the "add more filter" button.
 
 > `{type: String, default: "Add Filter"}`
 
+### apply-label `apply-label="..."`
+
+the label of the apply button of each filter dialog.
+
+> `{type: String, default: "apply"}`
+
+### cancle-label `cancle-label="..."`
+
+the label of the cancle button of each filter dialog.
+
+> `{type: String, default: "cancle"}`
+
 ### handleUrl `handle-url="..."`
 
 should the component update the url, of the window it is mounted, 
@@ -53,7 +66,7 @@ You can use as many of each type as you want, but at the moment you only have th
 #### date
 filter for an date range
 ```json
-filter="[
+filter='[
   {
     type: "date",                             // required
     title: 'Created at'                       // required
@@ -62,9 +75,11 @@ filter="[
     mode: 'from',                             // required 'from', 'to', 'fromto'
     autoOrder: false,                         // default: true
     minDate: (UNIX TIMESTAMP),                // default: today
-    maxDate: (UNIX TIMESTAMP)                 // default: today
+    maxDate: (UNIX TIMESTAMP),                // default: today
+    fromLabel: "STRING",                      // default: "from"
+    toLabel: "STRING"                         // default: "to"
   }
-]" 
+]'
 ```
 if you set minDate or maxDate to `false` the related input is hidden.
 
@@ -100,6 +115,22 @@ filter="[
       ['propertyB', "Sort by B"],
       ['propertyC', "Sort by C"],
     ]
+  }
+]" 
+```
+
+#### boolean
+toggle if an boolean value should be true or false
+```json
+filter="[
+  {
+    type: "boolean",                // required
+    title: 'more'                   // required
+    options: {                      // required, minLength: 1!
+      'propertyA': "Label A",
+      'propertyB': "Label B",
+      'propertyC': "Label C"
+    }
   }
 ]" 
 ```

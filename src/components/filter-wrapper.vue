@@ -59,15 +59,23 @@
           property: 'updatedAt',
           mode: 'fromto'
         },
-        {
-          type: "sort",
-          title: 'Sortieren',
-          displayTemplate: 'Sortieren nach: %1',
-          options: [
-            ["createdAt", "Erstellt"],
-            ["updatedAt", "Bearbeitet"]
-          ]
-        }],
+          {
+            type: "sort",
+            title: 'Sortieren',
+            displayTemplate: 'Sortieren nach: %1',
+            options: [
+              ["createdAt", "Erstellt"],
+              ["updatedAt", "Bearbeitet"]
+            ]
+          },
+          {
+            type: "boolean",
+            title: 'Mehr',
+            options: {
+              "publicSubmissions": "Öffentliche Abgaben",
+              "teamSubmissions": "Teamabgaben"
+            }
+          }],
         apiQuery: {},
         apiQueryString: "",
         urlQuery: {},

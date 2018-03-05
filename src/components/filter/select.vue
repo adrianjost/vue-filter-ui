@@ -16,8 +16,8 @@
     </div>
 
     <md-dialog-actions>
-      <md-button @click="onCancle">{{$lang.buttons.cancel}}</md-button>
-      <md-button class="md-primary" @click="onConfirm">{{$lang.buttons.add}}</md-button>
+      <md-button @click="onCancle">{{$parent.cancleLabel}}</md-button>
+      <md-button class="md-primary" @click="onConfirm">{{$parent.applyLabel}}</md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>

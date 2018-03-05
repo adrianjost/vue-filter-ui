@@ -1,20 +1,20 @@
 <template>
   <md-dialog :md-active.sync="isActive">
-    <md-dialog-title>{{this.config.title}}</md-dialog-title>
+    <md-dialog-title>{{config.title}}</md-dialog-title>
 
     <div id="date-picker">
       <md-datepicker v-if="config.mode.includes('from')" v-model="DateRange.from" :md-disabled-dates="disabledDates">
-        <label>{{$lang.filter.createdAt.from}}</label>
+        <label>{{config.fromLabel || "from"}}</label>
       </md-datepicker>
 
       <md-datepicker v-if="config.mode.includes('to')" v-model="DateRange.to" :md-disabled-dates="disabledDates">
-        <label>{{$lang.filter.createdAt.to}}</label>
+        <label>{{config.toLabel || "to"}}</label>
       </md-datepicker>
     </div>
 
     <md-dialog-actions>
-      <md-button @click="onCancle">{{$lang.buttons.cancel}}</md-button>
-      <md-button class="md-primary" @click="onConfirm">{{$lang.buttons.add}}</md-button>
+      <md-button @click="onCancle">{{$parent.cancleLabel}}</md-button>
+      <md-button class="md-primary" @click="onConfirm">{{$parent.applyLabel}}</md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>
