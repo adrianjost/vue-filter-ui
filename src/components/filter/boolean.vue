@@ -34,6 +34,7 @@
     },
     created() {
       this.$parent.$on('reset', this.resetSelection);
+      this.$parent.$on('newUrlQuery', this.updateFromUrl);
     },
     methods: {
       onConfirm() {
@@ -70,6 +71,17 @@
           this.selections = {};
         }
       },
+      updateFromUrl(urlQuery){
+        this.resetSelection(this.identifier)
+
+        for (var property in this.config.options) {
+          if(urlQuery[property]){
+            this.selections[property] = (urlQuery[property] == "true");
+          }
+        }
+
+        this.onConfirm();
+      }
     },
     watch: {
       active(to, from) {

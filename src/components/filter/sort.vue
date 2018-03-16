@@ -43,6 +43,7 @@
     },
     created() {
       this.$parent.$on('reset', this.resetSelection);
+      this.$parent.$on('newUrlQuery', this.updateFromUrl);
     },
     methods: {
       onConfirm() {
@@ -71,6 +72,18 @@
           this.desc = true;
         }
       },
+      updateFromUrl(urlQuery){
+        this.resetSelection(this.identifier)
+
+        if(urlQuery.sort){
+          this.selection = JSON.stringify(this.config.options.filter(option => {
+            return (option[0] == urlQuery.sort);
+          })[0]);
+          this.desc = (urlQuery.sortorder == "1");
+        }
+
+        this.onConfirm();
+      }
     },
     watch: {
       active(to, from) {

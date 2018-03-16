@@ -66,73 +66,65 @@ You can use as many of each type as you want, but at the moment you only have th
 #### date
 filter for an date range
 ```json
-filter='[
-  {
-    type: "date",                             // required
-    title: 'Created at'                       // required
-    displayTemplate: 'created from %1 to %2', // required ~ %1=fromDate, %2=toDate
-    property: 'createdAt',                    // required
-    mode: 'from',                             // required 'from', 'to', 'fromto'
-    autoOrder: false,                         // default: true
-    minDate: (UNIX TIMESTAMP),                // default: today
-    maxDate: (UNIX TIMESTAMP),                // default: today
-    fromLabel: "STRING",                      // default: "from"
-    toLabel: "STRING"                         // default: "to"
-  }
-]'
+{
+  type: "date",                             // required
+  title: 'Created at'                       // required
+  displayTemplate: 'created from %1 to %2', // required ~ %1=fromDate, %2=toDate
+  property: 'createdAt',                    // required
+  mode: 'from',                             // required 'from', 'to', 'fromto'
+  autoOrder: false,                         // default: true
+  minDate: (UNIX TIMESTAMP),                // default: today
+  maxDate: (UNIX TIMESTAMP),                // default: today
+  fromLabel: "STRING",                      // default: "from"
+  toLabel: "STRING"                         // default: "to"
+}
 ```
 if you set minDate or maxDate to `false` the related input is hidden.
 
 #### select value ...
 let the user choose an value for a variable
 ```json
-filter="[
-  {
-    type: "select",                // required
-    title: 'Class'                 // required
-    displayTemplate: 'class: %1',  // required
-    property: 'classId',           // required
-    multiple: true,                // default: false
-    options: [                     // required, minLength: 1!
-      [123, "Class A"],
-      [456, "Class B"],
-      [789, "Class C"],
-    ]
-  }
-]" 
+{
+  type: "select",                // required
+  title: 'Class'                 // required
+  displayTemplate: 'class: %1',  // required
+  property: 'classId',           // required
+  multiple: true,                // default: false
+  options: [                     // required, minLength: 1!
+    [123, "Class A"],
+    [456, "Class B"],
+    [789, "Class C"],
+  ]
+} 
 ```
 
 #### sort by ...
 let the user order the result
 ```json
-filter="[
-  {
-    type: "sort",                  // required
-    title: 'Sort'                   // required
-    displayTemplate: 'Sort by: %1', // required
-    options: [                      // required, minLength: 1!
-      ['propertyA', "Sort by A"],
-      ['propertyB', "Sort by B"],
-      ['propertyC', "Sort by C"],
-    ]
-  }
-]" 
+{
+  type: "sort",                  // required
+  title: 'Sort'                   // required
+  displayTemplate: 'Sort by: %1', // required
+  options: [                      // required, minLength: 1!
+    ['propertyA', "Sort by A"],
+    ['propertyB', "Sort by B"],
+    ['propertyC', "Sort by C"],
+  ]
+}
 ```
 
 #### boolean
 toggle if an boolean value should be true or false
 ```json
-filter="[
-  {
-    type: "boolean",                // required
-    title: 'more'                   // required
-    options: {                      // required, minLength: 1!
-      'propertyA': "Label A",
-      'propertyB': "Label B",
-      'propertyC': "Label C"
-    }
+{
+  type: "boolean",                // required
+  title: 'more'                   // required
+  options: {                      // required, minLength: 1!
+    'propertyA': "Label A",
+    'propertyB': "Label B",
+    'propertyC': "Label C"
   }
-]" 
+}
 ```
 
 ## Development Setup

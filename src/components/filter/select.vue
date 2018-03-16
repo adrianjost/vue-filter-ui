@@ -36,21 +36,20 @@
     },
     created() {
       this.$parent.$on('reset', this.resetSelection);
+      this.$parent.$on('newUrlQuery', this.updateFromUrl);
     },
     methods: {
       onConfirm() {
         let displayString;
         if (this.selections) {
-          // this.apiQuery["providerName[$in]"] = this.selections; // corret but api seems broken
           if(this.config.multiple){
+            if(this.selections.length == 0){return;}
             const selections = this.selections.map(selection => {return JSON.parse(selection)});
-
             const selectedValues = selections.map(s => {return s[0];});
             const selectedLabels = selections.map(s => {return s[1];});
             this.apiQuery[this.config.property + '[$in]'] = selectedValues
-            this.urlQuery[this.config.property] = selectedLabels.reduce((prev, curr) => prev +','+ curr );
-            // TODO ~ show only label not values.
-            displayString = this.config.displayTemplate.replace(/%1/g, selectedLabels.reduce((prev, curr) => prev +', '+ curr ));
+            this.urlQuery[this.config.property] = selectedValues.reduce((prev, curr) => prev +','+ curr, '').slice(1);
+            displayString = this.config.displayTemplate.replace(/%1/g, selectedLabels.reduce((prev, curr) => prev +', '+ curr, '').slice(1));
           }else{
             const selections = JSON.parse(this.selections);
 
@@ -70,9 +69,27 @@
       },
       resetSelection(key) {
         if (key == this.identifier) {
-          this.selections = '';
+          this.selections = (this.config.multiple)?[]:'';
         }
       },
+      updateFromUrl(urlQuery){
+        this.resetSelection(this.identifier)
+
+        if(urlQuery[this.config.property]){
+          const selections = urlQuery[this.config.property].split(",");
+          let newSelections = selections.map(selection => {
+            return JSON.stringify(this.config.options.filter(option => {
+              return (option[0] == selection);
+            })[0]);
+          });
+          if(!this.config.multiple) {
+            newSelections = newSelections[0];
+          }
+          this.selections = newSelections;
+        }
+
+        this.onConfirm();
+      }
     },
     watch: {
       active(to, from) {

@@ -57,13 +57,20 @@
         visibleFilter: '',
         activeFilter: [],
         availableFilter: [],
+        isWatching: true,
       };
     },
     created(){
       this.availableFilter = JSON.parse(this.filter).map((filter)=>{
         filter.type = "filter-"+filter.type;
         return filter;
-      })
+      });
+    },
+    mounted(){
+      if(this.handleUrl){
+        window.onhashchange = this.newUrlQuery;
+        this.newUrlQuery();
+      }
     },
     methods: {
       setFilter(identifier, filterData) {
@@ -91,15 +98,29 @@
           Object.assign(urlQuery, value[1].urlQuery);
         }, {});
         // TODO: handle URL query string
+        if (this.handleUrl && history.pushState) {
+          const newurl = `${window.location.pathname}#?${qs.stringify(urlQuery)}`;
+          window.history.pushState({path: newurl}, '', newurl);
+        }
+
         this.$emit('newFilter', apiQuery, urlQuery, qs.stringify(apiQuery), qs.stringify(urlQuery));
       },
       isApplied(identifier) {
         return this.activeFilter.map(i => i[0]).includes(identifier);
       },
+      newUrlQuery(){
+        this.isWatching = false;
+        this.activeFilter = [];
+        this.isWatching = true;
+        this.$emit('newUrlQuery', (qs.parse(location.hash.slice(1)) || {}));
+      }
+
     },
     watch: {
       activeFilter(to, from) {
-        this.sendNewQuery();
+        if(this.isWatching){
+          this.sendNewQuery();
+        }
       },
     },
   };

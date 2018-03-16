@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <search-filter addLabel="Filter hinzufügen" :filter="JSON.stringify(filter)" @newFilter="updateFilter"/>
+    <search-filter addLabel="Filter hinzufügen" :filter="JSON.stringify(filter)" @newFilter="updateFilter" :handleUrl="true"/>
     <table width="100%">
       <tr><th>FeathersJS</th><th>URLQuery</th></tr>
       <tr>
@@ -27,13 +27,11 @@
       return {
         filter: [{
           type: "select",
-          title: 'Anbieter',
+          title: 'MultiSelectionPicker',
           displayTemplate: 'Anbieter: %1',
           property: 'anbieterName',
           multiple: true,
           options: [
-            ["youtube", "Youtube"],
-            ["leifi", "Leifi Physik"],
             ["serlo1", "Serlo 1"],
             ["serlo2", "Serlo 2"],
             ["serlo3", "Serlo 3"],
@@ -43,6 +41,19 @@
             ["serlo7", "Serlo 7"],
             ["serlo8", "Serlo 8"],
             ["serlo9", "Serlo 9"]
+          ]
+        },
+        {
+          type: "select",
+          title: 'SingleSelectionPicker',
+          displayTemplate: 'Anbieter: %1',
+          property: 'hostName',
+          multiple: false,
+          options: [
+            ["serlo1", "Serlo 1"],
+            ["serlo2", "Serlo 2"],
+            ["serlo3", "Serlo 3"],
+            ["serlo4", "Serlo 4"]
           ]
         },
         {

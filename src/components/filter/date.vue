@@ -36,30 +36,35 @@
     },
     created() {
       this.$parent.$on('reset', this.resetDates);
+      this.$parent.$on('newUrlQuery', this.updateFromUrl);
     },
     methods: {
       parseDate(date, type){
         const parsedDate = new Date(date);
         const dateString = `${('0'+parsedDate.getDate()).slice(-2)}.${('0'+(parsedDate.getMonth()+1)).slice(-2)}.${parsedDate.getFullYear()}`;
         this.apiQuery[this.config.property + ((type=='from')?'[$gte]':'[$lte]')] = date;
-        this.urlQuery[this.config.property + ((type=='from')?'From':'To')] = dateString;
+        this.urlQuery[this.config.property + ((type=='from')?'From':'To')] = `${parsedDate.getFullYear()}-${('0'+(parsedDate.getMonth()+1)).slice(-2)}-${('0'+parsedDate.getDate()).slice(-2)}`;
         return dateString;
       },
       onConfirm() {
         let fromString = '∞', toString = '∞';
-
+        let apply = false;
         if(this.config.mode.includes('from') && this.DateRange.from){ // from available
+          apply = true;
           fromString = this.parseDate(this.DateRange.from, 'from');
         }
         if(this.config.mode.includes('to') && this.DateRange.to){ // to available
+          apply = true;
           toString = this.parseDate(this.DateRange.to, 'to');
         }
-        const displayString = this.config.displayTemplate.replace(/%1/g, fromString).replace(/%2/g, toString);
-        this.$emit('set', this.identifier, {
-          apiQuery: this.apiQuery,
-          urlQuery: this.urlQuery,
-          displayString,
-        });
+        if(apply){
+          const displayString = this.config.displayTemplate.replace(/%1/g, fromString).replace(/%2/g, toString);
+          this.$emit('set', this.identifier, {
+            apiQuery: this.apiQuery,
+            urlQuery: this.urlQuery,
+            displayString,
+          });
+        }
       },
       onCancle() {
         this.$emit('cancle');
@@ -90,9 +95,7 @@
         return !available;
       },
       orderDated() {
-        if(!this.config.autoOrder){
-          return;
-        }
+        if(!this.config.autoOrder){return;}
         const a = this.DateRange.from;
         const b = this.DateRange.to;
         if (a && b) {
@@ -102,6 +105,24 @@
               this.DateRange.from = temp;
           }
         }
+      },
+      updateFromUrl(urlQuery){
+        this.resetDates(this.identifier)
+
+        if(urlQuery[this.config.property+"From"]){
+          const newFrom = new Date(urlQuery[this.config.property+"From"]);
+          if(newFrom instanceof Date && !isNaN(newFrom.valueOf())) {
+            this.DateRange.from = newFrom;
+          }
+        }
+        if(urlQuery[this.config.property+"To"]){
+          const newTo = new Date(urlQuery[this.config.property+"To"]);
+          if(newTo instanceof Date && !isNaN(newTo.valueOf())) {
+            this.DateRange.to = newTo;
+          }
+        }
+
+        this.onConfirm();
       },
     },
     watch: {
