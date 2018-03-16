@@ -65,7 +65,7 @@ You can use as many of each type as you want, but at the moment you only have th
 
 #### date
 filter for an date range
-```json
+```javascript
 {
   type: "date",                             // required
   title: 'Created at'                       // required
@@ -83,7 +83,7 @@ if you set minDate or maxDate to `false` the related input is hidden.
 
 #### select value ...
 let the user choose an value for a variable
-```json
+```javascript
 {
   type: "select",                // required
   title: 'Class'                 // required
@@ -100,7 +100,7 @@ let the user choose an value for a variable
 
 #### sort by ...
 let the user order the result
-```json
+```javascript
 {
   type: "sort",                  // required
   title: 'Sort'                   // required
@@ -115,7 +115,7 @@ let the user order the result
 
 #### boolean
 toggle if an boolean value should be true or false
-```json
+```javascript
 {
   type: "boolean",                // required
   title: 'more'                   // required
