@@ -79,8 +79,8 @@ filter for an date range
   maxDate: (UNIX TIMESTAMP),                // WIP ~ optional, default: today
   fromLabel: "STRING",                      // optional, default: "from"
   toLabel: "STRING",                        // optional, default: "to"
-  defaultFromDate: (UNIX TIMESTAMP),        // optional
-  defaultToDate: (UNIX TIMESTAMP)           // optional
+  defaultFromDate: (UNIX TIMESTAMP),        // optional, default: undefined
+  defaultToDate: (UNIX TIMESTAMP)           // optional, default: undefined
 }
 ```
 if you set minDate or maxDate to `false` the related input is hidden.
@@ -115,8 +115,8 @@ let the user order the result
     ['propertyB', "Sort by B"],
     ['propertyC', "Sort by C"],
   ],
-  defaultSelection: 'propertyA'  // optional
-  defaultOrder: 'DESC'           // optional
+  defaultSelection: 'propertyA'  // optional, default: undefined
+  defaultOrder: 'DESC'           // optional, default: 'DESC'
 }
 ```
 
@@ -131,7 +131,7 @@ toggle if an boolean value should be true or false
     'propertyB': "Label B",
     'propertyC': "Label C"
   },
-  defaultSelection: {             // optional
+  defaultSelection: {             // optional, default: undefined
     'propertyA': false, 
     'propertyC': true
   }
