@@ -41,7 +41,8 @@
             ["serlo7", "Serlo 7"],
             ["serlo8", "Serlo 8"],
             ["serlo9", "Serlo 9"]
-          ]
+          ],
+          defaultSelection: ["serlo1", "serlo2"]
         },
         {
           type: "select",
@@ -54,7 +55,8 @@
             ["serlo2", "Serlo 2"],
             ["serlo3", "Serlo 3"],
             ["serlo4", "Serlo 4"]
-          ]
+          ],
+          defaultSelection: "serlo3"
         },
         {
           type: "date",
@@ -68,7 +70,9 @@
           title: 'Bearbeitet am',
           displayTemplate: 'Bearbeitet: %1 bis: %2',
           property: 'updatedAt',
-          mode: 'fromto'
+          mode: 'fromto',
+          defaultFromDate: 1521302985,
+          defaultToDate: 1521302985
         },
           {
             type: "sort",
@@ -77,7 +81,9 @@
             options: [
               ["createdAt", "Erstellt"],
               ["updatedAt", "Bearbeitet"]
-            ]
+            ],
+            defaultSelection: "updatedAt",
+            defaultOrder: "DESC"
           },
           {
             type: "boolean",
@@ -85,6 +91,9 @@
             options: {
               "publicSubmissions": "Öffentliche Abgaben",
               "teamSubmissions": "Teamabgaben"
+            },
+            defaultSelection: {
+              "publicSubmissions": true
             }
           }],
         apiQuery: {},

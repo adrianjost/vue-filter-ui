@@ -63,6 +63,7 @@ The property should be a stringified JSON Object.
 
 You can use as many of each type as you want, but at the moment you only have the following filter types. 
 
+Options marked with `WIP` are `Work in Progress` and are currently not working.
 #### date
 filter for an date range
 ```javascript
@@ -72,11 +73,14 @@ filter for an date range
   displayTemplate: 'created from %1 to %2', // required ~ %1=fromDate, %2=toDate
   property: 'createdAt',                    // required
   mode: 'from',                             // required 'from', 'to', 'fromto'
-  autoOrder: false,                         // default: true
-  minDate: (UNIX TIMESTAMP),                // default: today
-  maxDate: (UNIX TIMESTAMP),                // default: today
-  fromLabel: "STRING",                      // default: "from"
-  toLabel: "STRING"                         // default: "to"
+  autoOrder: false,                         // optional, default: true
+  hideOnSelect: false,                      // WIP ~ optional, default: true
+  minDate: (UNIX TIMESTAMP),                // WIP ~ optional, default: today
+  maxDate: (UNIX TIMESTAMP),                // WIP ~ optional, default: today
+  fromLabel: "STRING",                      // optional, default: "from"
+  toLabel: "STRING",                        // optional, default: "to"
+  defaultFromDate: (UNIX TIMESTAMP),        // optional
+  defaultToDate: (UNIX TIMESTAMP)           // optional
 }
 ```
 if you set minDate or maxDate to `false` the related input is hidden.
@@ -89,12 +93,13 @@ let the user choose an value for a variable
   title: 'Class'                 // required
   displayTemplate: 'class: %1',  // required
   property: 'classId',           // required
-  multiple: true,                // default: false
+  multiple: true,                // optional, default: false
   options: [                     // required, minLength: 1!
     [123, "Class A"],
     [456, "Class B"],
     [789, "Class C"],
-  ]
+  ],
+  defaultSelection: [123, 456]  // optional, if multiple disabled the first value is applied
 } 
 ```
 
@@ -102,14 +107,16 @@ let the user choose an value for a variable
 let the user order the result
 ```javascript
 {
-  type: "sort",                  // required
+  type: "sort",                   // required
   title: 'Sort'                   // required
   displayTemplate: 'Sort by: %1', // required
   options: [                      // required, minLength: 1!
     ['propertyA', "Sort by A"],
     ['propertyB', "Sort by B"],
     ['propertyC', "Sort by C"],
-  ]
+  ],
+  defaultSelection: 'propertyA'  // optional
+  defaultOrder: 'DESC'           // optional
 }
 ```
 
@@ -123,6 +130,10 @@ toggle if an boolean value should be true or false
     'propertyA': "Label A",
     'propertyB': "Label B",
     'propertyC': "Label C"
+  },
+  defaultSelection: {             // optional
+    'propertyA': false, 
+    'propertyC': true
   }
 }
 ```

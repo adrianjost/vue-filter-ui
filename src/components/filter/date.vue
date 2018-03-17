@@ -70,9 +70,9 @@
         this.$emit('cancle');
       },
       resetDates(key) {
-        if (key == this.identifier) {
-          this.DateRange.from = undefined;
-          this.DateRange.to = undefined;
+        if (key == this.identifier || !key) {
+          this.DateRange.from = (this.config.defaultFromDate * 1000) || undefined;
+          this.DateRange.to = (this.config.defaultToDate * 1000) || undefined;
           this.apiQuery = {};
           this.urlQuery = {};
         }
@@ -107,8 +107,6 @@
         }
       },
       updateFromUrl(urlQuery){
-        this.resetDates(this.identifier)
-
         if(urlQuery[this.config.property+"From"]){
           const newFrom = new Date(urlQuery[this.config.property+"From"]);
           if(newFrom instanceof Date && !isNaN(newFrom.valueOf())) {

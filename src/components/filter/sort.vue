@@ -67,14 +67,16 @@
         this.$emit('cancle');
       },
       resetSelection(key) {
-        if (key == this.identifier) {
-          this.selection = '';
-          this.desc = true;
+        if (key == this.identifier || !key) {
+          this.selection = JSON.stringify(
+                              this.config.options.filter(option => {
+                                return option[0] == this.config.defaultSelection;
+                              })[0]
+                            ) || '';
+          this.desc = (this.config.defaultOrder === "DESC");
         }
       },
       updateFromUrl(urlQuery){
-        this.resetSelection(this.identifier)
-
         if(urlQuery.sort){
           this.selection = JSON.stringify(this.config.options.filter(option => {
             return (option[0] == urlQuery.sort);

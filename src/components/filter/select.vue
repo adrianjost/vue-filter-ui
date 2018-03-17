@@ -37,6 +37,9 @@
     created() {
       this.$parent.$on('reset', this.resetSelection);
       this.$parent.$on('newUrlQuery', this.updateFromUrl);
+      if(!Array.isArray(this.config.defaultSelection)){
+        this.config.defaultSelection = [this.config.defaultSelection]
+      }
     },
     methods: {
       onConfirm() {
@@ -68,13 +71,20 @@
         this.$emit('cancle');
       },
       resetSelection(key) {
-        if (key == this.identifier) {
-          this.selections = (this.config.multiple)?[]:'';
+        if (key == this.identifier || !key) {
+          const defaultSelection = this.config.defaultSelection.map(selection => {
+            selection = JSON.stringify(
+              this.config.options.filter(option => {
+                return option[0] == selection;
+              })[0]
+            );
+            if(!selection){throw `default value '${selection}' is not in config list`;}
+            return selection;
+          }) || [];
+          this.selections = (this.config.multiple)?(defaultSelection):(defaultSelection[0] || '');
         }
       },
       updateFromUrl(urlQuery){
-        this.resetSelection(this.identifier)
-
         if(urlQuery[this.config.property]){
           const selections = urlQuery[this.config.property].split(",");
           let newSelections = selections.map(selection => {

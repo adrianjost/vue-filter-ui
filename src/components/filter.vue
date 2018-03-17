@@ -69,8 +69,8 @@
     mounted(){
       if(this.handleUrl){
         window.onhashchange = this.newUrlQuery;
-        this.newUrlQuery();
       }
+      this.newUrlQuery();
     },
     methods: {
       setFilter(identifier, filterData) {
@@ -112,6 +112,7 @@
         this.isWatching = false;
         this.activeFilter = [];
         this.isWatching = true;
+        this.$emit('reset');
         this.$emit('newUrlQuery', (qs.parse(location.hash.slice(1)) || {}));
       }
 
@@ -135,5 +136,9 @@
 /* ENTER CUSTOM CSS HERE */
 .add-filter{
   vertical-align: middle;
+  margin-bottom: 8px;
+}
+.md-chip{
+  margin-bottom: 8px;
 }
 </style>

@@ -67,13 +67,11 @@
         this.$emit('cancle');
       },
       resetSelection(key) {
-        if (key == this.identifier) {
-          this.selections = {};
+        if (key == this.identifier || !key) {
+          this.selections = this.config.defaultSelection || {};
         }
       },
       updateFromUrl(urlQuery){
-        this.resetSelection(this.identifier)
-
         for (var property in this.config.options) {
           if(urlQuery[property]){
             this.selections[property] = (urlQuery[property] == "true");
