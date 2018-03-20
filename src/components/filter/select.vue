@@ -37,8 +37,12 @@
     created() {
       this.$parent.$on('reset', this.resetSelection);
       this.$parent.$on('newUrlQuery', this.updateFromUrl);
-      if(!Array.isArray(this.config.defaultSelection)){
-        this.config.defaultSelection = [this.config.defaultSelection]
+      if(this.config.defaultSelection){
+        if(!Array.isArray(this.config.defaultSelection)){
+          this.config.defaultSelection = [this.config.defaultSelection]
+        }
+      }else{
+        this.config.defaultSelection = [];
       }
     },
     methods: {
