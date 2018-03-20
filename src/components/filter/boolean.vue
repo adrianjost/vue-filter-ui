@@ -41,28 +41,29 @@
         let displayString;
         this.apiQuery = {};
         this.urlQuery = {};
+        if(Object.keys(this.selections).length) {
+          for (var property in this.selections) {
+            if (this.selections[property] !== undefined) {
+              if (this.config.applyNegated[property]) {
+                const negate = this.config.applyNegated[property][(this.selections[property]) ? 1 : 0];
+                const configuredProperty = ((negate) ? (property + '[$ne]') : property)
+                const configuredSelection = ((negate) ? (!this.selections[property]) : (this.selections[property]))
+                this.apiQuery[configuredProperty] = configuredSelection;
+              } else {
+                this.apiQuery[property] = this.selections[property];
+              }
 
-        for (var property in this.selections) {
-          if (this.selections[property] !== undefined){
-            if(this.config.applyNegated[property]){
-              const negate = this.config.applyNegated[property][(this.selections[property])?1:0];
-              const configuredProperty = ((negate)?(property+'[$ne]'):property)
-              const configuredSelection = ((negate)?(!this.selections[property]):(this.selections[property]))
-              this.apiQuery[configuredProperty] = configuredSelection;
-            }else{
-              this.apiQuery[property] = this.selections[property];
+
+              this.urlQuery[property] = this.selections[property];
+              displayString = ((displayString) ? (displayString + ", ") : "") + `${this.config.options[property]}: ${(this.selections[property]) ? '✔' : '✖'}`;
             }
-
-
-            this.urlQuery[property] = this.selections[property];
-            displayString = ((displayString)?(displayString + ", "):"") + `${this.config.options[property]}: ${(this.selections[property])?'✔':'✖'}`;
           }
+          this.$emit('set', this.identifier, {
+            apiQuery: this.apiQuery,
+            urlQuery: this.urlQuery,
+            displayString
+          });
         }
-        this.$emit('set', this.identifier, {
-          apiQuery: this.apiQuery,
-          urlQuery: this.urlQuery,
-          displayString
-        });
       },
       onCancle() {
         this.$emit('cancle');
