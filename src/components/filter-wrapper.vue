@@ -94,6 +94,9 @@
             },
             defaultSelection: {
               "publicSubmissions": true
+            },
+            applyNegated: {
+              teamSubmissions: [true, true]
             }
           }],
         apiQuery: {},

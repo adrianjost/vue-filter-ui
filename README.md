@@ -124,19 +124,27 @@ let the user order the result
 toggle if an boolean value should be true or false
 ```javascript
 {
-  type: "boolean",                // required
-  title: 'more'                   // required
-  options: {                      // required, minLength: 1!
+  type: "boolean",               // required
+  title: 'more'                  // required
+  options: {                     // required, minLength: 1!
     'propertyA': "Label A",
     'propertyB': "Label B",
     'propertyC': "Label C"
   },
-  defaultSelection: {             // optional, default: undefined
+  defaultSelection: {            // optional, default: undefined
     'propertyA': false, 
     'propertyC': true
+  },
+  applyNegated: {               // optional, default: [false, false]
+    'propertyA': [true, true],  // false: not true, true: not false
+    'propertyA': [false, true], // false: false, true: not false
+    'propertyA': [true, false], // false: not true, true: true
   }
 }
 ```
+applyNegated tells the filter how to query for false/true selections and negates the query according to your settings.
+e.g. if the user selects true, and you set the property to `[false, true]` the query is looking for `not false` 
+resulting in `property[$ne]=false` instead of `property=true`.
 
 ## Development Setup
 
