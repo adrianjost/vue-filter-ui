@@ -1,5 +1,5 @@
 <template>
-  <div class="filter">
+  <div class="filter" v-on:getFilter="sendNewQuery">
     <md-chip v-for="chip in activeFilter" v-model="activeFilter" :key="chip[0]" v-on:click="visibleFilter = chip[0]"
              @md-delete.stop="removeFilter(chip[0], true)" md-clickable md-deletable>{{ chip[1].displayString }}
     </md-chip>
