@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
-    "build": "rimraf dist && cross-env NODE_ENV=production BABEL_ENV=export webpack --config ./build/webpack-export.config.js --json > stats.json",
+    "build": "node build/build.js",
+    "build-min": "rimraf dist && cross-env NODE_ENV=production BABEL_ENV=export webpack --config ./build/webpack.export.conf.js --json",
     "lint": "eslint --fix --ext .js,.vue src",
     "travis": "npm run build"
   },
@@ -44,7 +45,7 @@
     "eslint-plugin-node": "^5.2.0",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.16.2",
-    "extract-text-webpack-plugin": "^3.0.0",
+    "less-loader": "^4.1.0",
     "file-loader": "^1.1.5",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
@@ -66,9 +67,10 @@
     "vue-style-loader": "^3.0.3",
     "vue-template-compiler": "*",
     "webpack": "^3.7.1",
+    "webpack-bundle-analyzer": "^2.11.1",
     "webpack-dev-middleware": "^2.0.4",
     "webpack-hot-middleware": "^2.19.1",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.2"
   },
   "engines": {
     "node": ">= 7.0.0",
