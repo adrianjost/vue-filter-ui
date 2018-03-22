@@ -26,54 +26,56 @@
     data() {
       return {
         filter: [{
-          type: "select",
-          title: 'MultiSelectionPicker',
-          displayTemplate: 'Anbieter: %1',
-          property: 'anbieterName',
-          multiple: true,
-          options: [
-            ["serlo1", "Serlo 1"],
-            ["serlo2", "Serlo 2"],
-            ["serlo3", "Serlo 3"],
-            ["serlo4", "Serlo 4"],
-            ["serlo5", "Serlo 5"],
-            ["serlo6", "Serlo 6"],
-            ["serlo7", "Serlo 7"],
-            ["serlo8", "Serlo 8"],
-            ["serlo9", "Serlo 9"]
-          ],
-          defaultSelection: ["serlo1", "serlo2"]
-        },
-        {
-          type: "select",
-          title: 'SingleSelectionPicker',
-          displayTemplate: 'Anbieter: %1',
-          property: 'hostName',
-          multiple: false,
-          options: [
-            ["serlo1", "Serlo 1"],
-            ["serlo2", "Serlo 2"],
-            ["serlo3", "Serlo 3"],
-            ["serlo4", "Serlo 4"]
-          ],
-          defaultSelection: "serlo3"
-        },
-        {
-          type: "date",
-          title: 'Erstellt seit',
-          displayTemplate: 'Erstellt seit: %1',
-          property: 'createdAt',
-          mode: 'from'
-        },
-        {
-          type: "date",
-          title: 'Bearbeitet am',
-          displayTemplate: 'Bearbeitet: %1 bis: %2',
-          property: 'updatedAt',
-          mode: 'fromto',
-          defaultFromDate: 1521302985,
-          defaultToDate: 1521302985
-        },
+            type: "select",
+            title: 'MultiSelectionPicker',
+            displayTemplate: 'Anbieter: %1',
+            property: 'anbieterName',
+            multiple: true,
+            expanded: true,
+            options: [
+              ["serlo1", "Serlo 1"],
+              ["serlo2", "Serlo 2"],
+              ["serlo3", "Serlo 3"],
+              ["serlo4", "Serlo 4"],
+              ["serlo5", "Serlo 5"],
+              ["serlo6", "Serlo 6"],
+              ["serlo7", "Serlo 7"],
+              ["serlo8", "Serlo 8"],
+              ["serlo9", "Serlo 9"]
+            ],
+            defaultSelection: ["serlo1", "serlo2"]
+          },
+          {
+            type: "select",
+            title: 'SingleSelectionPicker',
+            displayTemplate: 'Anbieter: %1',
+            property: 'hostName',
+            multiple: false,
+            expanded: true,
+            options: [
+              ["serlo1", "Serlo 1"],
+              ["serlo2", "Serlo 2"],
+              ["serlo3", "Serlo 3"],
+              ["serlo4", "Serlo 4"]
+            ],
+            defaultSelection: "serlo3"
+          },
+          {
+            type: "date",
+            title: 'Erstellt seit',
+            displayTemplate: 'Erstellt seit: %1',
+            property: 'createdAt',
+            mode: 'from'
+          },
+          {
+            type: "date",
+            title: 'Bearbeitet am',
+            displayTemplate: 'Bearbeitet: %1 bis: %2',
+            property: 'updatedAt',
+            mode: 'fromto',
+            defaultFromDate: 1521302985,
+            defaultToDate: 1521302985
+          },
           {
             type: "sort",
             title: 'Sortieren',
@@ -84,6 +86,13 @@
             ],
             defaultSelection: "updatedAt",
             defaultOrder: "DESC"
+          },
+          {
+            type: "limit",
+            title: 'Anzahl der Einträge',
+            displayTemplate: 'Einträge pro Seite: %1',
+            options: [10, 25, 50, 100, 250, 500],
+            defaultSelection: 25
           },
           {
             type: "boolean",
@@ -98,7 +107,7 @@
             applyNegated: {
               teamSubmissions: [true, true]
             }
-          }],
+        }],
         apiQuery: {},
         apiQueryString: "",
         urlQuery: {},

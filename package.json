@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
-    "build": "rimraf dist && cross-env NODE_ENV=production BABEL_ENV=export webpack --config ./build/webpack-export.config.js",
+    "build": "rimraf dist && cross-env NODE_ENV=production BABEL_ENV=export webpack --config ./build/webpack-export.config.js --json > stats.json",
     "lint": "eslint --fix --ext .js,.vue src",
     "travis": "npm run build"
   },

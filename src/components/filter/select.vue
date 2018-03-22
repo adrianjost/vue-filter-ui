@@ -3,7 +3,25 @@
     <md-dialog-title>{{config.title}}</md-dialog-title>
 
     <div id="selection-picker">
-      <md-field>
+      <div v-if="config.expanded" class="expanded-view md-menu-content-container md-scrollbar md-theme-default">
+        <div v-if="config.multiple">
+          <md-checkbox v-model="selections" v-for="option in config.options"
+                    :key="option[0]"
+                    :value="JSON.stringify(option)"
+                     class="md-primary">
+            {{option[1]}}
+          </md-checkbox>
+        </div>
+        <div v-else>
+          <md-radio v-model="selections" v-for="option in config.options"
+                    :key="option[0]"
+                    :value="JSON.stringify(option)"
+                    class="md-primary">
+            {{option[1]}}
+          </md-radio>
+        </div>
+      </div>
+      <md-field v-else>
         <label for="options">{{config.title}}</label>
         <md-select v-model="selections" id="options" :multiple="config.multiple">
           <md-option v-for="option in config.options"
@@ -121,5 +139,14 @@
 <style lang="scss" scoped>
   #selection-picker {
     padding: 16px;
+  }
+  .expanded-view{
+    max-height: 200px;
+    max-height: 40vh;
+    padding: 16px;
+    margin: -16px;
+    .md-checkbox, .md-radio{
+      display: flex;
+    }
   }
 </style>

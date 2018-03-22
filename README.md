@@ -94,6 +94,7 @@ let the user choose an value for a variable
   displayTemplate: 'class: %1',  // required
   property: 'classId',           // required
   multiple: true,                // optional, default: false
+  expanded: true                 // optional, default: false
   options: [                     // required, minLength: 1!
     [123, "Class A"],
     [456, "Class B"],
@@ -145,6 +146,20 @@ toggle if an boolean value should be true or false
 applyNegated tells the filter how to query for false/true selections and negates the query according to your settings.
 e.g. if the user selects true, and you set the property to `[false, true]` the query is looking for `not false` 
 resulting in `property[$ne]=false` instead of `property=true`.
+
+#### limit
+limit the result to the selected amount of items
+```javascript
+{
+  type: "limit",                 // required
+  title: 'Anzahl der Einträge'   // required
+  displayTemplate: '%1',         // required
+  options: [                     // required, minLength: 1!
+    10, 25, 50, 100 
+  ],
+  defaultSelection: 25           // optional, default: undefined
+}
+```
 
 ## Development Setup
 

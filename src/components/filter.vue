@@ -35,6 +35,7 @@
   import datePicker from '@/components/filter/date.vue';
   import sortPicker from '@/components/filter/sort.vue';
   import booleanPicker from '@/components/filter/boolean.vue';
+  import limitPicker from '@/components/filter/limit.vue';
   const qs = require('query-string');
 
   export default {
@@ -42,7 +43,8 @@
       'filter-select': selectPicker,
       'filter-date': datePicker,
       'filter-sort': sortPicker,
-      'filter-boolean': booleanPicker
+      'filter-boolean': booleanPicker,
+      'filter-limit': limitPicker
     },
     props: {
       "addLabel": {type: String, default: "add filter"},

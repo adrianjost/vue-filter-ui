@@ -26,7 +26,7 @@
   }
 
 }
-[class*='md-']{
+[class^='md-']{
   font-family: Roboto,Noto Sans,-apple-system,BlinkMacSystemFont,sans-serif;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
