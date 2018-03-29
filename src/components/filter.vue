@@ -10,20 +10,20 @@
         {{addLabel}}
       </md-button>
       <md-menu-content>
-        <md-menu-item v-for="(filter) in availableFilter"
-                      :key="('Option-'+filter.type + '-' + filter.property)"
-                      v-if="!isApplied(filter.type + '-' + filter.property)"
-                      v-on:click="visibleFilter = (filter.type + '-' + filter.property)">
+        <md-menu-item v-for="(filter, index) in availableFilter"
+                      :key="('Option-' + '#' + index + '-' + filter.type + '-' + filter.property)"
+                      v-if="!isApplied('#' + index + '-' + filter.type + '-' + filter.property)"
+                      v-on:click="visibleFilter = ('#' + index + '-' + filter.type + '-' + filter.property)">
                       {{filter.title}}...
         </md-menu-item>
       </md-menu-content>
     </md-menu>
 
-    <component v-for="filter in availableFilter"
-               :key="('Dialog-'+filter.type + '-' + filter.property)"
+    <component v-for="(filter, index) in availableFilter"
+               :key="('Dialog-' + '#' + index + '-' + filter.type + '-' + filter.property)"
                v-bind:is="filter.type"
-               v-bind:active="visibleFilter == (filter.type + '-' + filter.property)"
-               :identifier="(filter.type + '-' + filter.property)"
+               v-bind:active="visibleFilter == ('#' + index + '-' + filter.type + '-' + filter.property)"
+               :identifier="('#' + index + '-' + filter.type + '-' + filter.property)"
                :config="filter"
                @set="setFilter"
                @cancle="cancle"/>
@@ -82,6 +82,11 @@
 
         this.removeFilter(identifier, false);
         this.activeFilter.push([identifier, filterData]);
+        this.activeFilter.sort((a, b) => {
+          const idA = a[0].match(/[#]{1}([0-9]+)[-]{1}/)[1]
+          const idB = b[0].match(/[#]{1}([0-9]+)[-]{1}/)[1]
+          return idA - idB;
+        });
       },
       removeFilter(key, emit) {
         this.activeFilter = this.activeFilter.filter(item => item[0] != key);
