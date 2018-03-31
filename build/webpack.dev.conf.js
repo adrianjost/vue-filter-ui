@@ -11,6 +11,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 
 const webpackConfig = merge(baseWebpackConfig, {
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js',
+    }
+  },
   module: {
     rules: utils.styleLoaders({sourceMap: config.dev.cssSourceMap})
   },

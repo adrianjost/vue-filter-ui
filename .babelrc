@@ -15,7 +15,7 @@
       "plugins": [ "istanbul" ]
     },
     "development": {
-        "plugins": ["transform-runtime"]
+        "plugins": ["transform-runtime"],
     },
     "export": {
         "plugins": [],

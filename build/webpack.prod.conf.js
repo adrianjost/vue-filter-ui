@@ -8,6 +8,11 @@ const merge = require('webpack-merge');
 const baseWebpackConfig = require('./webpack.base.conf');
 
 const webpackConfig = merge(baseWebpackConfig, {
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.runtime.esm.js',
+    }
+  },
   entry: './src/export.js',
   output: {
     path: path.resolve(__dirname, '../dist'),

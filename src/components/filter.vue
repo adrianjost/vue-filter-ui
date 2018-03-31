@@ -135,10 +135,6 @@
 
 </script>
 
-<style lang="scss">
-  @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
-  @import "../default";
-</style>
 <style lang="scss" scoped>
 /* ENTER CUSTOM CSS HERE */
 .add-filter{
