@@ -107,7 +107,7 @@
         // TODO: handle URL query string
         if (this.handleUrl && history.pushState) {
           const newurl = `${window.location.pathname}#?${qs.stringify(urlQuery)}`;
-          window.history.pushState({path: newurl}, '', newurl);
+          window.history.replaceState(window.location.href , '', newurl);
         }
 
         this.$emit('newFilter', apiQuery, urlQuery, qs.stringify(apiQuery), qs.stringify(urlQuery));
