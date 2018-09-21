@@ -51,6 +51,7 @@
       "applyLabel": {type: String, default: "apply"},
       "cancleLabel": {type: String, default: "cancle"},
       "handleUrl": { type: Boolean, default: false },
+      "saveState": { type: Boolean, default: false },
       "filter": { type: String, default: "[]" },
     },
     name: 'searchFilter',
@@ -60,6 +61,7 @@
         activeFilter: [],
         availableFilter: [],
         isWatching: true,
+        pageIdentifier: `ffilter-${window.location.origin} + ${window.location.pathname}`,
       };
     },
     created(){
@@ -71,6 +73,12 @@
     mounted(){
       if(this.handleUrl){
         window.onhashchange = this.newUrlQuery;
+      }
+      if(this.saveState){
+        const savedState = localStorage.getItem(this.pageIdentifier);
+        if(savedState){
+          window.history.replaceState(null , null, savedState);
+        }
       }
       this.newUrlQuery();
     },
@@ -104,9 +112,11 @@
           Object.assign(apiQuery, value[1].apiQuery);
           Object.assign(urlQuery, value[1].urlQuery);
         }, {});
-        // TODO: handle URL query string
         if (this.handleUrl && history.pushState) {
           window.history.replaceState(null , null, `#?${qs.stringify(urlQuery)}`);
+        }
+        if(this.saveState){
+          localStorage.setItem(this.pageIdentifier, window.location.hash);
         }
 
         this.$emit('newFilter', apiQuery, urlQuery, qs.stringify(apiQuery), qs.stringify(urlQuery));
