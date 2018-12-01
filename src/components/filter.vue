@@ -1,5 +1,5 @@
 <template>
-  <div class="filter" v-on:getFilter="sendNewQuery">
+  <div class="filter" v-on:getFilter="sendNewQuery" ref="filter-module">
     <md-chip v-for="chip in activeFilter" v-model="activeFilter" :key="chip[0]" v-on:click="visibleFilter = chip[0]"
              @md-delete.stop="removeFilter(chip[0], true)" md-clickable md-deletable>{{ chip[1].displayString }}
     </md-chip>
@@ -81,6 +81,7 @@
         }
       }
       this.newUrlQuery();
+      this.$refs["filter-module"].addEventListener("getFilter", this.sendNewQuery);
     },
     methods: {
       setFilter(identifier, filterData) {
@@ -100,6 +101,7 @@
         this.activeFilter = this.activeFilter.filter(item => item[0] != key);
         if (emit) {
           this.$emit('reset', key);
+          this.nativeEvent("reset", key);
         }
       },
       cancle() {
@@ -119,7 +121,12 @@
           localStorage.setItem(this.pageIdentifier, window.location.hash);
         }
 
-        this.$emit('newFilter', apiQuery, urlQuery, qs.stringify(apiQuery), qs.stringify(urlQuery));
+        this.$emit('newFilter', apiQuery, urlQuery);
+        this.nativeEvent("newFilter", [apiQuery, urlQuery]);
+      },
+      nativeEvent(event, data) {
+        var event = new CustomEvent(event, {detail: data});
+        this.$refs["filter-module"].dispatchEvent(event);
       },
       isApplied(identifier) {
         return this.activeFilter.map(i => i[0]).includes(identifier);
@@ -129,7 +136,9 @@
         this.activeFilter = [];
         this.isWatching = true;
         this.$emit('reset');
+        this.nativeEvent("reset");
         this.$emit('newUrlQuery', (qs.parse(location.hash.slice(1)) || {}));
+        this.nativeEvent("newUrlQuery", (qs.parse(location.hash.slice(1)) || {}));
       }
 
     },

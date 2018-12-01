@@ -1,8 +1,8 @@
 {
-  "name": "schul-cloud-filter",
+  "name": "feathers-filter",
   "version": "0.3.1",
-  "description": "Schul-Cloud Filter Module",
-  "author": "adrianjost <homepage@hackedit.de>",
+  "description": "Feathers Filter Module",
+  "author": "adrianjost <adrianjost.npm@hackedit.de>",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
@@ -59,7 +59,7 @@
     "semver": "^5.4.1",
     "shelljs": "^0.8.1",
     "sw-precache-webpack-plugin": "^0.11.4",
-    "uglify-es": "^3.3.9",
+    "uglify-es": "git://github.com/mishoo/UglifyJS2.git#harmony",
     "uglify-js": "git://github.com/mishoo/UglifyJS2.git#harmony",
     "url-loader": "^0.6.2",
     "vue-custom-element": "^1.0.13",

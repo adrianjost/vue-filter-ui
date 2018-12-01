@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import App from './components/filter-wrapper';
+import App from './components/filter-demo';
 import './base.js'
 
 /* eslint-disable no-new */
