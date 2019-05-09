@@ -3,7 +3,7 @@
     <md-dialog-title>{{config.title}}</md-dialog-title>
 
     <div id="selection-picker">
-      <div class="choice" v-for="(label, property) in config.options">
+      <div class="choice" v-for="(label, property) in config.options" :key="label">
         {{label}}
         <div class="tri-state-toggle">
           <input type="radio" v-model="selections[property]" :value="false">
@@ -21,6 +21,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { MdDialog, MdButton } from 'vue-material/dist/components'
+Vue.use(MdDialog)
+Vue.use(MdButton)
+
   export default {
     name: 'boolean-picker',
     props: ['identifier', 'active', 'config'],
@@ -84,7 +89,7 @@
       }
     },
     watch: {
-      active(to, from) {
+      active(to) {
         this.isActive = to;
       },
       isActive(to) {

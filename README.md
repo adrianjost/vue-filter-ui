@@ -1,6 +1,6 @@
-# Schul-Cloud Filter Module
+# FeathersJS Filter UI
 
-an universal configurable filter module that will fire an event 
+an universal configurable filter module that will fire an event
 and gives you a FeathersJS query that you should apply.
 
 [![forthebadge](http://forthebadge.com/images/badges/made-with-vue.svg)](http://forthebadge.com)
@@ -9,9 +9,13 @@ and gives you a FeathersJS query that you should apply.
 ![filter-module](https://user-images.githubusercontent.com/22987140/36727522-db3ee16e-1bbd-11e8-91d2-426e0bebb306.PNG)
 
 ## Usage
+
+### As WebComponent - WIP
+
 simply include the module into your project and you can use it.
 Configure it by apply some of the following html-attributes.
 Then add an eventListener to watch for new querys.
+
 ```html
 <html>
   <header><meta charset="utf-8"></header>
@@ -28,7 +32,30 @@ Then add an eventListener to watch for new querys.
 </html>
 ```
 
-## configuration
+### Vue
+
+Mount globally:
+
+```javascript
+import Vue from "vue";
+import FeathersFilter from "feathersjs-filter-ui";
+
+Vue.use(FeathersFilter);
+```
+
+or directly in the component:
+
+```javascript
+import FeathersFilter from "feathersjs-filter-ui";
+
+export default {
+  components: {
+    FeathersFilter
+  },
+}
+```
+
+## Configuration
 
 ### add-label `add-label="..."`
 
@@ -50,22 +77,26 @@ the label of the cancle button of each filter dialog.
 
 ### handleUrl `handle-url="..."`
 
-should the component update the url, of the window it is mounted, 
+should the component update the url, of the window it is mounted,
 for you or do you wan't to handle it yourself?
 
 > `{type: Boolean, default: false}`
 
 ### filter `filter="[...]"`
-you can use the "filter" property to configure the available filter. 
-The property should be a stringified JSON Object. 
+
+you can use the "filter" property to configure the available filter.
+The property should be a stringified JSON Object.
 
 > `{type: Array, default: []}`
 
-You can use as many of each type as you want, but at the moment you only have the following filter types. 
+You can use as many of each type as you want, but at the moment you only have the following filter types.
 
 Options marked with `WIP` are `Work in Progress` and are currently not working.
+
 #### date
+
 filter for an date range
+
 ```javascript
 {
   type: "date",                             // required
@@ -83,10 +114,13 @@ filter for an date range
   defaultToDate: (UNIX TIMESTAMP)           // optional, default: undefined
 }
 ```
+
 if you set minDate or maxDate to `false` the related input is hidden.
 
-#### select value ...
+#### select
+
 let the user choose an value for a variable
+
 ```javascript
 {
   type: "select",                // required
@@ -101,11 +135,13 @@ let the user choose an value for a variable
     [789, "Class C"],
   ],
   defaultSelection: [123, 456]  // optional, if multiple disabled the first value is applied
-} 
+}
 ```
 
-#### sort by ...
+#### sort
+
 let the user order the result
+
 ```javascript
 {
   type: "sort",                   // required
@@ -122,7 +158,9 @@ let the user order the result
 ```
 
 #### boolean
+
 toggle if an boolean value should be true or false
+
 ```javascript
 {
   type: "boolean",               // required
@@ -133,7 +171,7 @@ toggle if an boolean value should be true or false
     'propertyC': "Label C"
   },
   defaultSelection: {            // optional, default: undefined
-    'propertyA': false, 
+    'propertyA': false,
     'propertyC': true
   },
   applyNegated: {               // optional, default: [false, false]
@@ -143,21 +181,34 @@ toggle if an boolean value should be true or false
   }
 }
 ```
+
 applyNegated tells the filter how to query for false/true selections and negates the query according to your settings.
-e.g. if the user selects true, and you set the property to `[false, true]` the query is looking for `not false` 
+e.g. if the user selects true, and you set the property to `[false, true]` the query is looking for `not false`
 resulting in `property[$ne]=false` instead of `property=true`.
 
 #### limit
+
 limit the result to the selected amount of items
+
 ```javascript
 {
   type: "limit",                 // required
   title: 'Anzahl der Einträge'   // required
   displayTemplate: '%1',         // required
   options: [                     // required, minLength: 1!
-    10, 25, 50, 100 
+    10, 25, 50, 100
   ],
   defaultSelection: 25           // optional, default: undefined
+}
+```
+
+## Theming
+
+Theming can be achived using the following css custom properties:
+```
+:root{
+  --md-theme-default-primary: #009688,
+  --md-theme-default-primary-on-background: #009688,
 }
 ```
 
@@ -165,52 +216,21 @@ limit the result to the selected amount of items
 
 ``` bash
 # clone repo to your device
-> git clone https://github.com/schul-cloud/schulcloud-filter-module.git
+> git clone https://github.com/adrianjost/feathersjs-filter-ui.git
 
 # go to directory
-> cd schulcloud-filter-module
+> cd feathersjs-filter-ui
 
 # install dependencies
-> npm install
+> yarn install
 ```
 
 ## Build & Development
 
 ``` bash
 # serve with hot reload at localhost:8080
-> npm run dev
+> yarn dev
 
-# build for production with minification
-> npm run build
-```
-
-If you don't want the build-files to be located at the root directory 
-take a look at the [webpack documentation](https://webpack.js.org/guides/public-path/)
-
-## How to name your branch
-
-1. Take the id of your github issue (e.g. 2 for [this issue](https://github.com/schul-cloud/schulcloud-content-editor/issues/2))
-2. add a short description <br>
-=> result: e.g. Branch: "2-real-Loginform"
-
-## Commiting
-
-Default branch: master
-
-1. Go into project folder
-2. Run the tests (see above)
-3. Commit with a meanigful commit message(!) even at 4 a.m. and not stuff like "dfsdfsf"
-4. Checkout to master branch
-5. Run `git pull`
-6. Checkout to the branch you want to upload
-7. run `git rebase -p develop` (not `git merge`!) and solve merge conflicts if needed
-8. run `git push`
-
-## Testing
-``` bash
-# check bundlesize
-> npm run test
-
-# run build & check bundlesize
-> npm run travis
+# build bundle
+> yarn build
 ```

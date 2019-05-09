@@ -29,6 +29,14 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { MdDialog, MdButton, MdIcon, MdList, MdField} from 'vue-material/dist/components'
+Vue.use(MdDialog)
+Vue.use(MdButton)
+Vue.use(MdIcon)
+Vue.use(MdList)
+Vue.use(MdField)
+
   export default {
     name: 'sort-picker',
     props: ['identifier', 'active', 'config'],
@@ -88,7 +96,7 @@
       }
     },
     watch: {
-      active(to, from) {
+      active(to) {
         this.isActive = to;
       },
       isActive(to) {

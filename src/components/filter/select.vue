@@ -41,6 +41,12 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { MdDialog, MdButton, MdCheckbox } from 'vue-material/dist/components'
+Vue.use(MdDialog)
+Vue.use(MdButton)
+Vue.use(MdCheckbox)
+
   export default {
     name: 'select-picker',
     props: ['identifier', 'active', 'config'],
@@ -124,7 +130,7 @@
       }
     },
     watch: {
-      active(to, from) {
+      active(to) {
         this.isActive = to;
       },
       isActive(to) {

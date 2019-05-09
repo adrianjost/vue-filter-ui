@@ -20,11 +20,11 @@
 </template>
 
 <script>
-  import filter from './filter.vue';
+import Filter from './Filter.vue';
 
-  export default {
+export default {
     components: {
-      'search-filter': filter,
+      'search-filter': Filter,
     },
     name: 'contentList',
     data() {
@@ -77,13 +77,13 @@
             displayTemplate: 'Date from: %1 to: %2',
             property: 'updatedAt',
             mode: 'fromto',
-            defaultFromDate: 1521302985,
-            defaultToDate: 1521302985
+            defaultFromDate: new Date(),
+            defaultToDate: new Date()
           },
           {
             type: "sort",
             title: 'Sort',
-            displayTemplate: 'sort by': %1',
+            displayTemplate: 'sort by: %1',
             options: [
               ["createdAt", "created"],
               ["updatedAt", "updated"]
@@ -138,10 +138,6 @@
   };
 </script>
 
-<style lang="scss">
-  @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
-  @import "../default";
-</style>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
   .wrapper{

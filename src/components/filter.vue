@@ -10,10 +10,9 @@
         {{addLabel}}
       </md-button>
       <md-menu-content>
-        <md-menu-item v-for="(filter, index) in availableFilter"
+        <md-menu-item v-for="(filter, index) in selectableFilter"
                       :key="('Option-' + '#' + index + '-' + filter.type + '-' + filter.property)"
-                      v-if="!isApplied('#' + index + '-' + filter.type + '-' + filter.property)"
-                      v-on:click="visibleFilter = ('#' + index + '-' + filter.type + '-' + filter.property)">
+                      @click="visibleFilter = ('#' + index + '-' + filter.type + '-' + filter.property)">
                       {{filter.title}}...
         </md-menu-item>
       </md-menu-content>
@@ -21,8 +20,8 @@
 
     <component v-for="(filter, index) in availableFilter"
                :key="('Dialog-' + '#' + index + '-' + filter.type + '-' + filter.property)"
-               v-bind:is="filter.type"
-               v-bind:active="visibleFilter == ('#' + index + '-' + filter.type + '-' + filter.property)"
+               :is="filter.type"
+               :active="visibleFilter === ('#' + index + '-' + filter.type + '-' + filter.property)"
                :identifier="('#' + index + '-' + filter.type + '-' + filter.property)"
                :config="filter"
                @set="setFilter"
@@ -31,6 +30,14 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { MdButton, MdMenu, MdChips, MdIcon } from 'vue-material/dist/components'
+import 'vue-material/dist/vue-material.min.css'
+Vue.use(MdButton)
+Vue.use(MdMenu)
+Vue.use(MdChips)
+Vue.use(MdIcon)
+
   import selectPicker from '@/components/filter/select.vue';
   import datePicker from '@/components/filter/date.vue';
   import sortPicker from '@/components/filter/sort.vue';
@@ -44,7 +51,8 @@
       'filter-date': datePicker,
       'filter-sort': sortPicker,
       'filter-boolean': booleanPicker,
-      'filter-limit': limitPicker
+      'filter-limit': limitPicker,
+
     },
     props: {
       "addLabel": {type: String, default: "add filter"},
@@ -82,6 +90,11 @@
       }
       this.newUrlQuery();
       this.$refs["filter-module"].addEventListener("getFilter", this.sendNewQuery);
+    },
+    computed: {
+      selectableFilter(){
+        return this.availableFilter.filter((filter, index) => !this.isApplied('#' + index + '-' + filter.type + '-' + filter.property))
+      }
     },
     methods: {
       setFilter(identifier, filterData) {
@@ -125,8 +138,7 @@
         this.nativeEvent("newFilter", [apiQuery, urlQuery]);
       },
       nativeEvent(event, data) {
-        var event = new CustomEvent(event, {detail: data});
-        this.$refs["filter-module"].dispatchEvent(event);
+        this.$refs["filter-module"].dispatchEvent(new CustomEvent(event, {detail: data}));
       },
       isApplied(identifier) {
         return this.activeFilter.map(i => i[0]).includes(identifier);
@@ -143,7 +155,7 @@
 
     },
     watch: {
-      activeFilter(to, from) {
+      activeFilter() {
         if(this.isWatching){
           this.sendNewQuery();
         }
@@ -153,6 +165,9 @@
 
 </script>
 
+<style lang="scss">
+@import '@/styles/default.scss';
+</style>
 <style lang="scss" scoped>
 /* ENTER CUSTOM CSS HERE */
 .add-filter{

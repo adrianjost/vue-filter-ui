@@ -20,6 +20,12 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { MdDialog, MdButton, MdDatepicker } from 'vue-material/dist/components'
+Vue.use(MdDialog)
+Vue.use(MdButton)
+Vue.use(MdDatepicker)
+
   export default {
     name: 'date-picker',
     props: ['identifier', 'active', 'config'],
@@ -77,10 +83,11 @@
           this.urlQuery = {};
         }
       },
-      disabledDates: (date) => {
+      disabledDates: (/* date */) => {
         return false;
 
         // TODO ~ NOT WORKING AT ALL
+        /*
         const config = this.a.props.config;
         let available = true;
         date = new Date(date);
@@ -93,6 +100,7 @@
           available = (date < maxDate);
         }
         return !available;
+        */
       },
       orderDated() {
         if(!this.config.autoOrder){return;}
@@ -100,7 +108,7 @@
         const b = this.DateRange.to;
         if (a && b) {
           if(Math.min(a, b) == this.DateRange.to){
-              temp = this.DateRange.to;
+              const temp = this.DateRange.to;
               this.DateRange.to = this.DateRange.from;
               this.DateRange.from = temp;
           }
