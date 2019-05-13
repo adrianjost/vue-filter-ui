@@ -4,7 +4,7 @@
              md-deletable @click="visibleFilter = chip[0]" @md-delete.stop="removeFilter(chip[0], true)">{{ chip[1].displayString }}
     </md-chip>
 
-    <md-menu md-direction="bottom-end">
+    <md-menu md-direction="bottom-end" v-if="selectableFilter.length">
       <md-button md-menu-trigger class="add-filter">
         <md-icon><i class="material-icons">add</i></md-icon>
         {{addLabel}}
