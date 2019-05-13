@@ -69,18 +69,24 @@ export default {
     "handleUrl": { type: Boolean },
     "saveState": { type: Boolean },
     "consistentOrder": {type: Boolean},
-    "filter": { type: String, default: JSON.stringify(defaultFilter) },
+    "filter": { type: [String, Array] , default: defaultFilter },
   },
   data() {
     return {
       visibleFilter: '',
       activeFilter: [],
-      availableFilter: [],
       isWatching: true,
       pageIdentifier: `ffilter-${window.location.origin} + ${window.location.pathname}`,
     };
   },
   computed: {
+    availableFilter(){
+      const filterSettings = (typeof this.filter === "string") ? JSON.parse(this.filter) : this.filter;
+      return filterSettings.map((filter)=>{
+        filter.type = "filter-"+filter.type;
+        return filter;
+      });
+    },
     selectableFilter(){
       return this.availableFilter.filter((filter) => !this.isApplied(this.getIdentifier(filter)));
     }
@@ -91,12 +97,6 @@ export default {
         this.sendNewQuery();
       }
     },
-  },
-  created(){
-    this.availableFilter = JSON.parse(this.filter).map((filter)=>{
-      filter.type = "filter-"+filter.type;
-      return filter;
-    });
   },
   mounted(){
     if(this.handleUrl){
@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     getIdentifier(filter){
-      return '#' + '-' + filter.type + '-' + (filter.property || `$${filter.type.replace("filter-", "")}`);
+      return '#' + filter.type + '-' + (filter.property || `$${filter.type.replace("filter-", "")}`);
     },
     setFilter(identifier, filterData) {
       this.visibleFilter = '';

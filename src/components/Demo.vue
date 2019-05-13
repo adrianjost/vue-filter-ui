@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <search-filter ref="filtercomponent" add-label="Filter hinzufügen" :filter="JSON.stringify(filter)" :handle-url="true" @newFilter="updateFilter"/>
+    <search-filter ref="filtercomponent" add-label="Filter hinzufügen" :filter="filter" :handle-url="true" @newFilter="updateFilter"/>
     <table width="100%">
       <tr><th>FeathersJS</th><th>URLQuery</th></tr>
       <tr>
