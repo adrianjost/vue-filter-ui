@@ -9,6 +9,7 @@
       </tr>
     </table>
     <div class="events">
+      <b>Native Events</b>
       <p v-for="event in nativeEvents" :key="event.timeStamp" class="event">
         ({{parseInt(event.timeStamp)}}) <b>{{event.type}}:</b>
         <code>

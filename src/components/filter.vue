@@ -10,19 +10,19 @@
         {{addLabel}}
       </md-button>
       <md-menu-content>
-        <md-menu-item v-for="(filter, index) in selectableFilter"
-                      :key="'Option-' + getIdentifier(filter,index)"
-                      @click="visibleFilter = getIdentifier(filter,index)">
+        <md-menu-item v-for="(filter) in selectableFilter"
+                      :key="'Option-' + getIdentifier(filter)"
+                      @click="visibleFilter = getIdentifier(filter)">
                       {{filter.title}}...
         </md-menu-item>
       </md-menu-content>
     </md-menu>
 
     <component :is="filter.type"
-               v-for="(filter, index) in availableFilter"
-               :key="'Dialog-' + getIdentifier(filter,index)"
-               :active="visibleFilter === getIdentifier(filter,index)"
-               :identifier="getIdentifier(filter,index)"
+               v-for="(filter) in availableFilter"
+               :key="'Dialog-' + getIdentifier(filter)"
+               :active="visibleFilter === getIdentifier(filter)"
+               :identifier="getIdentifier(filter)"
                :config="filter"
                @set="setFilter"
                @cancle="cancle"/>
@@ -81,7 +81,7 @@ export default {
   },
   computed: {
     selectableFilter(){
-      return this.availableFilter.filter((filter, index) => !this.isApplied(this.getIdentifier(filter,index)));
+      return this.availableFilter.filter((filter) => !this.isApplied(this.getIdentifier(filter)));
     }
   },
   watch: {
@@ -108,11 +108,10 @@ export default {
       }
     }
     this.newUrlQuery();
-    this.$refs["filter-module"].addEventListener("getFilter", this.sendNewQuery);
   },
   methods: {
-    getIdentifier(filter, index){
-      return '#' + index + '-' + filter.type + '-' + (filter.property || `$${filter.type.replace("filter-", "")}`);
+    getIdentifier(filter){
+      return '#' + '-' + filter.type + '-' + (filter.property || `$${filter.type.replace("filter-", "")}`);
     },
     setFilter(identifier, filterData) {
       this.visibleFilter = '';
