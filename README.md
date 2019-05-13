@@ -111,6 +111,12 @@ for you or do you wan't to handle it yourself?
 
 > `{type: Boolean, default: false}`
 
+### consistentOrder `consistent-order="..."`
+
+Should the chosen filters always appear in the same order (true) or should new filters be appended at the end (false)?
+
+> `{type: Boolean, default: false}`
+
 ### filter `filter="[...]"`
 
 you can use the "filter" property to configure the available filter.

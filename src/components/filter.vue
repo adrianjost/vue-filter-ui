@@ -66,8 +66,9 @@ export default {
     "addLabel": {type: String, default: "add filter"},
     "applyLabel": {type: String, default: "apply"},
     "cancleLabel": {type: String, default: "cancle"},
-    "handleUrl": { type: Boolean, default: false },
-    "saveState": { type: Boolean, default: false },
+    "handleUrl": { type: Boolean },
+    "saveState": { type: Boolean },
+    "consistentOrder": {type: Boolean},
     "filter": { type: String, default: JSON.stringify(defaultFilter) },
   },
   data() {
@@ -120,11 +121,9 @@ export default {
 
       this.removeFilter(identifier, false);
       this.activeFilter.push([identifier, filterData]);
-      this.activeFilter.sort((a, b) => {
-        const idA = a[0].match(/[#]{1}([0-9]+)[-]{1}/)[1]
-        const idB = b[0].match(/[#]{1}([0-9]+)[-]{1}/)[1]
-        return idA - idB;
-      });
+      if(this.consistentOrder){
+        this.activeFilter.sort((a, b) => a[0].localeCompare(b[0]));
+      }
     },
     removeFilter(key, emit) {
       this.activeFilter = this.activeFilter.filter(item => item[0] != key);
