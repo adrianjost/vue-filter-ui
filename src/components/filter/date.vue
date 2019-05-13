@@ -27,7 +27,7 @@ Vue.use(MdButton)
 Vue.use(MdDatepicker)
 
   export default {
-    name: 'date-picker',
+    name: 'DatePicker',
     props: ['identifier', 'active', 'config'],
     data() {
       return {
@@ -39,6 +39,29 @@ Vue.use(MdDatepicker)
         apiQuery: {},
         urlQuery: {},
       };
+    },
+    computed: {
+      firstDayOfAWeek: {
+        get() {
+          return 1;
+        },
+      },
+    },
+    watch: {
+      active(to) {
+        this.isActive = to;
+      },
+      isActive(to) {
+        if (to == false) {
+          this.onCancle();
+        }
+      },
+      'DateRange.from': function () {
+        this.orderDated();
+      },
+      'DateRange.to': function () {
+        this.orderDated();
+      },
     },
     created() {
       this.$parent.$on('reset', this.resetDates);
@@ -129,29 +152,6 @@ Vue.use(MdDatepicker)
         }
 
         this.onConfirm();
-      },
-    },
-    watch: {
-      active(to) {
-        this.isActive = to;
-      },
-      isActive(to) {
-        if (to == false) {
-          this.onCancle();
-        }
-      },
-      'DateRange.from': function () {
-        this.orderDated();
-      },
-      'DateRange.to': function () {
-        this.orderDated();
-      },
-    },
-    computed: {
-      firstDayOfAWeek: {
-        get() {
-          return 1;
-        },
       },
     },
   };

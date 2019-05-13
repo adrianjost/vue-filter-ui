@@ -5,7 +5,7 @@
     <div id="selection-picker">
       <md-field>
         <label for="options">{{config.title}}</label>
-        <md-select v-model="selection" id="options">
+        <md-select id="options" v-model="selection">
           <md-option v-for="option in config.options"
                      :key="option[0]"
                      :value="JSON.stringify(option)">
@@ -13,10 +13,10 @@
           </md-option>
         </md-select>
       </md-field>
-      <md-button v-show="desc" @click="desc = false" class="md-icon-button">
+      <md-button v-show="desc" class="md-icon-button" @click="desc = false">
         <md-icon>arrow_downward</md-icon>
       </md-button>
-      <md-button v-show="!desc" @click="desc = true" class="md-icon-button">
+      <md-button v-show="!desc" class="md-icon-button" @click="desc = true">
         <md-icon>arrow_upward</md-icon>
       </md-button>
     </div>
@@ -38,7 +38,7 @@ Vue.use(MdList)
 Vue.use(MdField)
 
   export default {
-    name: 'sort-picker',
+    name: 'SortPicker',
     props: ['identifier', 'active', 'config'],
     data() {
       return {
@@ -48,6 +48,16 @@ Vue.use(MdField)
         apiQuery: {},
         urlQuery: {},
       };
+    },
+    watch: {
+      active(to) {
+        this.isActive = to;
+      },
+      isActive(to) {
+        if (to == false) {
+          this.onCancle();
+        }
+      },
     },
     created() {
       this.$parent.$on('reset', this.resetSelection);
@@ -94,16 +104,6 @@ Vue.use(MdField)
 
         this.onConfirm();
       }
-    },
-    watch: {
-      active(to) {
-        this.isActive = to;
-      },
-      isActive(to) {
-        if (to == false) {
-          this.onCancle();
-        }
-      },
     },
   };
 </script>

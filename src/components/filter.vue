@@ -1,7 +1,7 @@
 <template>
-  <div class="filter" v-on:getFilter="sendNewQuery" ref="filter-module">
-    <md-chip v-for="chip in activeFilter" v-model="activeFilter" :key="chip[0]" v-on:click="visibleFilter = chip[0]"
-             @md-delete.stop="removeFilter(chip[0], true)" md-clickable md-deletable>{{ chip[1].displayString }}
+  <div ref="filter-module" class="filter" @getFilter="sendNewQuery">
+    <md-chip v-for="chip in activeFilter" :key="chip[0]" v-model="activeFilter" md-clickable
+             md-deletable @click="visibleFilter = chip[0]" @md-delete.stop="removeFilter(chip[0], true)">{{ chip[1].displayString }}
     </md-chip>
 
     <md-menu md-direction="bottom-end">
@@ -11,18 +11,18 @@
       </md-button>
       <md-menu-content>
         <md-menu-item v-for="(filter, index) in selectableFilter"
-                      :key="('Option-' + '#' + index + '-' + filter.type + '-' + filter.property)"
-                      @click="visibleFilter = ('#' + index + '-' + filter.type + '-' + filter.property)">
+                      :key="'Option-' + getIdentifier(filter,index)"
+                      @click="visibleFilter = getIdentifier(filter,index)">
                       {{filter.title}}...
         </md-menu-item>
       </md-menu-content>
     </md-menu>
 
-    <component v-for="(filter, index) in availableFilter"
-               :key="('Dialog-' + '#' + index + '-' + filter.type + '-' + filter.property)"
-               :is="filter.type"
-               :active="visibleFilter === ('#' + index + '-' + filter.type + '-' + filter.property)"
-               :identifier="('#' + index + '-' + filter.type + '-' + filter.property)"
+    <component :is="filter.type"
+               v-for="(filter, index) in availableFilter"
+               :key="'Dialog-' + getIdentifier(filter,index)"
+               :active="visibleFilter === getIdentifier(filter,index)"
+               :identifier="getIdentifier(filter,index)"
                :config="filter"
                @set="setFilter"
                @cancle="cancle"/>
@@ -38,131 +38,137 @@ Vue.use(MdMenu)
 Vue.use(MdChips)
 Vue.use(MdIcon)
 
-  import selectPicker from '@/components/filter/select.vue';
-  import datePicker from '@/components/filter/date.vue';
-  import sortPicker from '@/components/filter/sort.vue';
-  import booleanPicker from '@/components/filter/boolean.vue';
-  import limitPicker from '@/components/filter/limit.vue';
-  const qs = require('query-string');
+import selectPicker from '@/components/filter/select.vue';
+import datePicker from '@/components/filter/date.vue';
+import sortPicker from '@/components/filter/sort.vue';
+import booleanPicker from '@/components/filter/boolean.vue';
+import limitPicker from '@/components/filter/limit.vue';
+const qs = require('query-string');
 
-  export default {
-    components: {
-      'filter-select': selectPicker,
-      'filter-date': datePicker,
-      'filter-sort': sortPicker,
-      'filter-boolean': booleanPicker,
-      'filter-limit': limitPicker,
+const defaultFilter = [
+	{
+		type: "boolean",
+		title: "more",
+		options: { propertyA: "Label A", propertyB: "Label B" },
+	},
+]
 
+export default {
+  components: {
+    'filter-select': selectPicker,
+    'filter-date': datePicker,
+    'filter-sort': sortPicker,
+    'filter-boolean': booleanPicker,
+    'filter-limit': limitPicker,
+
+  },
+  props: {
+    "addLabel": {type: String, default: "add filter"},
+    "applyLabel": {type: String, default: "apply"},
+    "cancleLabel": {type: String, default: "cancle"},
+    "handleUrl": { type: Boolean, default: false },
+    "saveState": { type: Boolean, default: false },
+    "filter": { type: String, default: JSON.stringify(defaultFilter) },
+  },
+  data() {
+    return {
+      visibleFilter: '',
+      activeFilter: [],
+      availableFilter: [],
+      isWatching: true,
+      pageIdentifier: `ffilter-${window.location.origin} + ${window.location.pathname}`,
+    };
+  },
+  computed: {
+    selectableFilter(){
+      return this.availableFilter.filter((filter, index) => !this.isApplied(this.getIdentifier(filter,index)));
+    }
+  },
+  watch: {
+    activeFilter() {
+      if(this.isWatching){
+        this.sendNewQuery();
+      }
     },
-    props: {
-      "addLabel": {type: String, default: "add filter"},
-      "applyLabel": {type: String, default: "apply"},
-      "cancleLabel": {type: String, default: "cancle"},
-      "handleUrl": { type: Boolean, default: false },
-      "saveState": { type: Boolean, default: false },
-      "filter": { type: String, default: "[]" },
+  },
+  created(){
+    this.availableFilter = JSON.parse(this.filter).map((filter)=>{
+      filter.type = "filter-"+filter.type;
+      return filter;
+    });
+  },
+  mounted(){
+    if(this.handleUrl){
+      window.onhashchange = this.newUrlQuery;
+    }
+    if(this.saveState){
+      const savedState = localStorage.getItem(this.pageIdentifier);
+      if(savedState){
+        window.history.replaceState(null , null, savedState);
+      }
+    }
+    this.newUrlQuery();
+    this.$refs["filter-module"].addEventListener("getFilter", this.sendNewQuery);
+  },
+  methods: {
+    getIdentifier(filter, index){
+      return '#' + index + '-' + filter.type + '-' + (filter.property || `$${filter.type.replace("filter-", "")}`);
     },
-    name: 'searchFilter',
-    data() {
-      return {
-        visibleFilter: '',
-        activeFilter: [],
-        availableFilter: [],
-        isWatching: true,
-        pageIdentifier: `ffilter-${window.location.origin} + ${window.location.pathname}`,
-      };
-    },
-    created(){
-      this.availableFilter = JSON.parse(this.filter).map((filter)=>{
-        filter.type = "filter-"+filter.type;
-        return filter;
+    setFilter(identifier, filterData) {
+      this.visibleFilter = '';
+
+      filterData = JSON.parse(JSON.stringify(filterData)); // deep copy
+
+      this.removeFilter(identifier, false);
+      this.activeFilter.push([identifier, filterData]);
+      this.activeFilter.sort((a, b) => {
+        const idA = a[0].match(/[#]{1}([0-9]+)[-]{1}/)[1]
+        const idB = b[0].match(/[#]{1}([0-9]+)[-]{1}/)[1]
+        return idA - idB;
       });
     },
-    mounted(){
-      if(this.handleUrl){
-        window.onhashchange = this.newUrlQuery;
+    removeFilter(key, emit) {
+      this.activeFilter = this.activeFilter.filter(item => item[0] != key);
+      if (emit) {
+        this.sendEvent("reset", key);
+      }
+    },
+    cancle() {
+      this.visibleFilter = '';
+    },
+    sendEvent(event, data){
+      this.$emit(event,data);
+      this.$refs["filter-module"].dispatchEvent(new CustomEvent(event, {detail: data}));
+    },
+    sendNewQuery() {
+      const apiQuery = {};
+      const urlQuery = {};
+      this.activeFilter.forEach((value) => {
+        Object.assign(apiQuery, value[1].apiQuery);
+        Object.assign(urlQuery, value[1].urlQuery);
+      }, {});
+      if (this.handleUrl && history.pushState) {
+        window.history.replaceState(null , null, `#?${qs.stringify(urlQuery)}`);
       }
       if(this.saveState){
-        const savedState = localStorage.getItem(this.pageIdentifier);
-        if(savedState){
-          window.history.replaceState(null , null, savedState);
-        }
-      }
-      this.newUrlQuery();
-      this.$refs["filter-module"].addEventListener("getFilter", this.sendNewQuery);
-    },
-    computed: {
-      selectableFilter(){
-        return this.availableFilter.filter((filter, index) => !this.isApplied('#' + index + '-' + filter.type + '-' + filter.property))
-      }
-    },
-    methods: {
-      setFilter(identifier, filterData) {
-        this.visibleFilter = '';
-
-        filterData = JSON.parse(JSON.stringify(filterData)); // deep copy
-
-        this.removeFilter(identifier, false);
-        this.activeFilter.push([identifier, filterData]);
-        this.activeFilter.sort((a, b) => {
-          const idA = a[0].match(/[#]{1}([0-9]+)[-]{1}/)[1]
-          const idB = b[0].match(/[#]{1}([0-9]+)[-]{1}/)[1]
-          return idA - idB;
-        });
-      },
-      removeFilter(key, emit) {
-        this.activeFilter = this.activeFilter.filter(item => item[0] != key);
-        if (emit) {
-          this.$emit('reset', key);
-          this.nativeEvent("reset", key);
-        }
-      },
-      cancle() {
-        this.visibleFilter = '';
-      },
-      sendNewQuery() {
-        const apiQuery = {};
-        const urlQuery = {};
-        this.activeFilter.forEach((value) => {
-          Object.assign(apiQuery, value[1].apiQuery);
-          Object.assign(urlQuery, value[1].urlQuery);
-        }, {});
-        if (this.handleUrl && history.pushState) {
-          window.history.replaceState(null , null, `#?${qs.stringify(urlQuery)}`);
-        }
-        if(this.saveState){
-          localStorage.setItem(this.pageIdentifier, window.location.hash);
-        }
-
-        this.$emit('newFilter', apiQuery, urlQuery);
-        this.nativeEvent("newFilter", [apiQuery, urlQuery]);
-      },
-      nativeEvent(event, data) {
-        this.$refs["filter-module"].dispatchEvent(new CustomEvent(event, {detail: data}));
-      },
-      isApplied(identifier) {
-        return this.activeFilter.map(i => i[0]).includes(identifier);
-      },
-      newUrlQuery(){
-        this.isWatching = false;
-        this.activeFilter = [];
-        this.isWatching = true;
-        this.$emit('reset');
-        this.nativeEvent("reset");
-        this.$emit('newUrlQuery', (qs.parse(location.hash.slice(1)) || {}));
-        this.nativeEvent("newUrlQuery", (qs.parse(location.hash.slice(1)) || {}));
+        localStorage.setItem(this.pageIdentifier, window.location.hash);
       }
 
+      this.sendEvent("newFilter", [apiQuery, urlQuery]);
     },
-    watch: {
-      activeFilter() {
-        if(this.isWatching){
-          this.sendNewQuery();
-        }
-      },
+    isApplied(identifier) {
+      return this.activeFilter.map(i => i[0]).includes(identifier);
     },
-  };
+    newUrlQuery(){
+      this.isWatching = false;
+      this.activeFilter = [];
+      this.isWatching = true;
+      this.sendEvent('reset');
+      this.sendEvent("newUrlQuery", (qs.parse(location.hash.slice(1)) || {}));
+    }
 
+  },
+};
 </script>
 
 <style lang="scss">

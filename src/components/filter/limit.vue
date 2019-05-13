@@ -3,8 +3,8 @@
     <md-dialog-title>{{config.title}}</md-dialog-title>
 
     <div id="limit-picker" class="md-menu-content-container md-scrollbar md-theme-default">
-      <md-radio v-model="selection" v-for="option in config.options"
-                :key="option"
+      <md-radio v-for="option in config.options" :key="option"
+                v-model="selection"
                 :value="option"
                 class="md-primary">
         {{option}}
@@ -26,7 +26,7 @@ Vue.use(MdButton)
 Vue.use(MdRadio)
 
   export default {
-    name: 'limit-picker',
+    name: 'LimitPicker',
     props: ['identifier', 'active', 'config'],
     data() {
       return {
@@ -35,6 +35,16 @@ Vue.use(MdRadio)
         apiQuery: {},
         urlQuery: {},
       };
+    },
+    watch: {
+      active(to) {
+        this.isActive = to;
+      },
+      isActive(to) {
+        if (to == false) {
+          this.onCancle();
+        }
+      },
     },
     created() {
       this.$parent.$on('reset', this.resetSelection);
@@ -69,16 +79,6 @@ Vue.use(MdRadio)
 
         this.onConfirm();
       }
-    },
-    watch: {
-      active(to) {
-        this.isActive = to;
-      },
-      isActive(to) {
-        if (to == false) {
-          this.onCancle();
-        }
-      },
     },
   };
 </script>

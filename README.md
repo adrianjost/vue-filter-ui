@@ -10,28 +10,6 @@ and gives you a FeathersJS query that you should apply.
 
 ## Usage
 
-### As WebComponent - WIP
-
-simply include the module into your project and you can use it.
-Configure it by apply some of the following html-attributes.
-Then add an eventListener to watch for new querys.
-
-```html
-<html>
-  <header><meta charset="utf-8"></header>
-  <body>
-    <feathers-filter id="filter" add-label="more filter"/>
-    <script src="./feathers-filter.js"></script>
-    <script>
-      document.getElementById("filter").addEventListener('newFilter', (e) => {
-        // APPLY QUERE HERE...
-        console.log("filter:",e.detail[0]);
-      })
-    </script>
-  </body>
-</html>
-```
-
 ### Vue
 
 Mount globally:
@@ -53,6 +31,57 @@ export default {
     FeathersFilter
   },
 }
+```
+
+or on any webpage:
+
+```html
+<!-- include vue -->
+<script src="https://unpkg.com/vue"></script>
+<!-- include the filter module -->
+<script src="./dist/lib/FeathersjsFilterUi.umd.js"></script>
+
+
+<div id="app">
+  <demo></demo>
+</div>
+
+<script>
+new Vue({
+  components: {
+    demo: FeathersjsFilterUi
+  }
+}).$mount('#app')
+</script>
+
+```
+
+### As a native WebComponent (WIP, currently not working)
+
+simply include the module into your project and you can use it.
+Configure it by apply some of the following html-attributes.
+Then add an eventListener to watch for new querys.
+
+```html
+<html>
+  <header>
+    <meta charset="utf-8">
+    <!-- VueJS is not included in the bundle -->
+    <script src="https://unpkg.com/vue" defer></script>
+    <script src="./dist/wc/feathersjs-filter-ui.min.js" defer></script>
+  </header>
+  <body>
+    <!-- use in plain HTML, or in any other framework -->
+    <feathersjs-filter-ui id="filter" add-label="more filter"/>
+
+    <script>
+      document.getElementById("filter").addEventListener('newFilter', (e) => {
+        // APPLY QUERE HERE...
+        console.log("filter:",e.detail[0]);
+      })
+    </script>
+  </body>
+</html>
 ```
 
 ## Configuration
@@ -176,8 +205,8 @@ toggle if an boolean value should be true or false
   },
   applyNegated: {               // optional, default: [false, false]
     'propertyA': [true, true],  // false: not true, true: not false
-    'propertyA': [false, true], // false: false, true: not false
-    'propertyA': [true, false], // false: not true, true: true
+    'propertyB': [false, true], // false: false, true: not false
+    'propertyC': [true, false], // false: not true, true: true
   }
 }
 ```

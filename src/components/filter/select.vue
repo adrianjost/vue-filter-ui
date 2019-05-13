@@ -5,16 +5,16 @@
     <div id="selection-picker">
       <div v-if="config.expanded" class="expanded-view md-menu-content-container md-scrollbar md-theme-default">
         <div v-if="config.multiple">
-          <md-checkbox v-model="selections" v-for="option in config.options"
-                    :key="option[0]"
+          <md-checkbox v-for="option in config.options" :key="option[0]"
+                    v-model="selections"
                     :value="JSON.stringify(option)"
                      class="md-primary">
             {{option[1]}}
           </md-checkbox>
         </div>
         <div v-else>
-          <md-radio v-model="selections" v-for="option in config.options"
-                    :key="option[0]"
+          <md-radio v-for="option in config.options" :key="option[0]"
+                    v-model="selections"
                     :value="JSON.stringify(option)"
                     class="md-primary">
             {{option[1]}}
@@ -23,7 +23,7 @@
       </div>
       <md-field v-else>
         <label for="options">{{config.title}}</label>
-        <md-select v-model="selections" id="options" :multiple="config.multiple">
+        <md-select id="options" v-model="selections" :multiple="config.multiple">
           <md-option v-for="option in config.options"
                      :key="option[0]"
                      :value="JSON.stringify(option)">
@@ -48,7 +48,7 @@ Vue.use(MdButton)
 Vue.use(MdCheckbox)
 
   export default {
-    name: 'select-picker',
+    name: 'SelectPicker',
     props: ['identifier', 'active', 'config'],
     data() {
       return {
@@ -57,6 +57,16 @@ Vue.use(MdCheckbox)
         apiQuery: {},
         urlQuery: {},
       };
+    },
+    watch: {
+      active(to) {
+        this.isActive = to;
+      },
+      isActive(to) {
+        if (to == false) {
+          this.onCancle();
+        }
+      },
     },
     created() {
       this.$parent.$on('reset', this.resetSelection);
@@ -128,16 +138,6 @@ Vue.use(MdCheckbox)
 
         this.onConfirm();
       }
-    },
-    watch: {
-      active(to) {
-        this.isActive = to;
-      },
-      isActive(to) {
-        if (to == false) {
-          this.onCancle();
-        }
-      },
     },
   };
 </script>

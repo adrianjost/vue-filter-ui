@@ -3,12 +3,12 @@
     <md-dialog-title>{{config.title}}</md-dialog-title>
 
     <div id="selection-picker">
-      <div class="choice" v-for="(label, property) in config.options" :key="label">
+      <div v-for="(label, property) in config.options" :key="label" class="choice">
         {{label}}
         <div class="tri-state-toggle">
-          <input type="radio" v-model="selections[property]" :value="false">
-          <input type="radio" v-model="selections[property]" :value="undefined">
-          <input type="radio" v-model="selections[property]" :value="true">
+          <input v-model="selections[property]" type="radio" :value="false">
+          <input v-model="selections[property]" type="radio" :value="undefined">
+          <input v-model="selections[property]" type="radio" :value="true">
         </div>
       </div>
     </div>
@@ -27,7 +27,7 @@ Vue.use(MdDialog)
 Vue.use(MdButton)
 
   export default {
-    name: 'boolean-picker',
+    name: 'BooleanPicker',
     props: ['identifier', 'active', 'config'],
     data() {
       return {
@@ -36,6 +36,16 @@ Vue.use(MdButton)
         apiQuery: {},
         urlQuery: {},
       };
+    },
+    watch: {
+      active(to) {
+        this.isActive = to;
+      },
+      isActive(to) {
+        if (to == false) {
+          this.onCancle();
+        }
+      },
     },
     created() {
       this.$parent.$on('reset', this.resetSelection);
@@ -87,16 +97,6 @@ Vue.use(MdButton)
 
         this.onConfirm();
       }
-    },
-    watch: {
-      active(to) {
-        this.isActive = to;
-      },
-      isActive(to) {
-        if (to == false) {
-          this.onCancle();
-        }
-      },
     },
   };
 </script>

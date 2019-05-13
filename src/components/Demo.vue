@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <search-filter id="abc" addLabel="Filter hinzufügen" :filter="JSON.stringify(filter)" @newFilter="updateFilter" :handleUrl="true"/>
+    <search-filter ref="filtercomponent" add-label="Filter hinzufügen" :filter="JSON.stringify(filter)" :handle-url="true" @newFilter="updateFilter"/>
     <table width="100%">
       <tr><th>FeathersJS</th><th>URLQuery</th></tr>
       <tr>
@@ -9,7 +9,7 @@
       </tr>
     </table>
     <div class="events">
-      <p class="event" v-for="event in nativeEvents" :key="event.timeStamp">
+      <p v-for="event in nativeEvents" :key="event.timeStamp" class="event">
         ({{parseInt(event.timeStamp)}}) <b>{{event.type}}:</b>
         <code>
           {{JSON.stringify(event.detail, null, 2)}}
@@ -26,7 +26,6 @@ export default {
     components: {
       'search-filter': Filter,
     },
-    name: 'contentList',
     data() {
       return {
         filter: [{
@@ -121,7 +120,7 @@ export default {
       // test native event handling
       const events = ["newFilter", "newUrlQuery", "reset"];
       window.addEventListener("load", () => {
-        const filter = document.querySelector("#abc");
+        const filter = this.$refs["filtercomponent"].$el
         events.forEach((event) => {
           filter.addEventListener(event, (e) => {
             this.nativeEvents.unshift(e);
@@ -130,7 +129,7 @@ export default {
       });
     },
     methods: {
-      updateFilter(newApiQuery, newUrlQuery) {
+      updateFilter([newApiQuery, newUrlQuery]) {
         this.apiQuery = newApiQuery;
         this.urlQuery = newUrlQuery;
       },
