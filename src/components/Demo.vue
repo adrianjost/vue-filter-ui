@@ -3,49 +3,72 @@
     <search-filter
       ref="filtercomponent"
       :add-label="addLabel"
-      :applyLabel="applyLabel"
-      :cancleLabel="cancleLabel"
+      :apply-label="applyLabel"
+      :cancle-label="cancleLabel"
       :handle-url="handleUrl"
-      :saveState="saveState"
-      :consistentOrder="consistentOrder"
+      :save-state="saveState"
+      :consistent-order="consistentOrder"
       :filter="filter"
       @newFilter="updateFilter"
     />
-    <hr />
+    <hr>
     <section>
-        <div class="config">
-          <label>
-            <b>addLabel:</b>
-            <input type="text" v-model="addLabel">
-          </label>
-          <label>
-            <b>applyLabel:</b>
-            <input type="text" v-model="applyLabel">
-          </label>
-          <label>
-            <b>cancleLabel:</b>
-            <input type="text" v-model="cancleLabel">
-          </label>
-          <label>
-            <b>handleUrl:</b>
-            <input type="checkbox" v-model="handleUrl">
-          </label>
-          <label>
-            <b>saveState:</b>
-            <input type="checkbox" v-model="saveState">
-          </label>
-          <label>
-            <b>consistentOrder:</b>
-            <input type="checkbox" v-model="consistentOrder">
-          </label>
-          <label style="width: 100%">
-            <b>filter:</b>
-            <textarea v-model="filterString"></textarea>
-          </label>
-        </div>
-      <p style="color: red" v-if="configError"><b>Error:</b> {{configError}}</p>
+      <div class="config">
+        <label>
+          <b>addLabel:</b>
+          <input
+            v-model="addLabel"
+            type="text"
+          >
+        </label>
+        <label>
+          <b>applyLabel:</b>
+          <input
+            v-model="applyLabel"
+            type="text"
+          >
+        </label>
+        <label>
+          <b>cancleLabel:</b>
+          <input
+            v-model="cancleLabel"
+            type="text"
+          >
+        </label>
+        <label>
+          <b>handleUrl:</b>
+          <input
+            v-model="handleUrl"
+            type="checkbox"
+          >
+        </label>
+        <label>
+          <b>saveState:</b>
+          <input
+            v-model="saveState"
+            type="checkbox"
+          >
+        </label>
+        <label>
+          <b>consistentOrder:</b>
+          <input
+            v-model="consistentOrder"
+            type="checkbox"
+          >
+        </label>
+        <label style="width: 100%">
+          <b>filter:</b>
+          <textarea v-model="filterString" />
+        </label>
+      </div>
+      <p
+        v-if="configError"
+        style="color: red"
+      >
+        <b>Error:</b> {{ configError }}
+      </p>
     </section>
-    <hr />
+    <hr>
     <table width="100%">
       <tr><th>FeathersJS</th><th>URLQuery</th></tr>
       <tr>

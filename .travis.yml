@@ -15,7 +15,7 @@ deploy:
     skip_cleanup: true
     email: $NPM_EMAIL_ADDRESS # Set in the settings page of your repository, as a secure variable
     api_key: $NPM_AUTH_TOKEN # Set in the settings page of your repository, as a secure variable
-    tag: stable
+    tag: latest
     on:
       branch: master
   - provider: pages
