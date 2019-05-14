@@ -90,7 +90,7 @@ export default {
     "cancleLabel": {type: String, default: "cancle"},
     "handleUrl": { type: Boolean },
     "saveState": { type: Boolean },
-    "consistentOrder": {type: Boolean},
+    "consistentOrder": {type: Boolean, default: true},
     "filter": { type: [String, Array] , default: defaultFilter },
   },
   data() {
@@ -134,7 +134,8 @@ export default {
   },
   methods: {
     getIdentifier(filter){
-      return '#' + filter.type + '-' + (filter.property || `$${filter.type.replace("filter-", "")}`);
+      const filterIndex = this.availableFilter.findIndex((a) => a === filter);
+      return '#' + filterIndex + "-" + filter.type + '-' + (filter.property || `$${filter.type.replace("filter-", "")}`);
     },
     setFilter(identifier, filterData) {
       this.visibleFilter = '';

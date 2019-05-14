@@ -2,11 +2,50 @@
   <div class="wrapper">
     <search-filter
       ref="filtercomponent"
-      add-label="Filter hinzufügen"
+      :add-label="addLabel"
+      :applyLabel="applyLabel"
+      :cancleLabel="cancleLabel"
+      :handle-url="handleUrl"
+      :saveState="saveState"
+      :consistentOrder="consistentOrder"
       :filter="filter"
-      :handle-url="true"
       @newFilter="updateFilter"
     />
+    <hr />
+    <section>
+        <div class="config">
+          <label>
+            <b>addLabel:</b>
+            <input type="text" v-model="addLabel">
+          </label>
+          <label>
+            <b>applyLabel:</b>
+            <input type="text" v-model="applyLabel">
+          </label>
+          <label>
+            <b>cancleLabel:</b>
+            <input type="text" v-model="cancleLabel">
+          </label>
+          <label>
+            <b>handleUrl:</b>
+            <input type="checkbox" v-model="handleUrl">
+          </label>
+          <label>
+            <b>saveState:</b>
+            <input type="checkbox" v-model="saveState">
+          </label>
+          <label>
+            <b>consistentOrder:</b>
+            <input type="checkbox" v-model="consistentOrder">
+          </label>
+          <label style="width: 100%">
+            <b>filter:</b>
+            <textarea v-model="filterString"></textarea>
+          </label>
+        </div>
+      <p style="color: red" v-if="configError"><b>Error:</b> {{configError}}</p>
+    </section>
+    <hr />
     <table width="100%">
       <tr><th>FeathersJS</th><th>URLQuery</th></tr>
       <tr>
@@ -124,8 +163,29 @@ export default {
         }],
         apiQuery: {},
         urlQuery: {},
-        nativeEvents: []
+        nativeEvents: [],
+        addLabel: undefined,
+        applyLabel: undefined,
+        cancleLabel: undefined,
+        handleUrl: true,  
+        saveState:false,  
+        consistentOrder: true,  
+        configError: undefined
       };
+    },
+    computed: {
+      filterString: {
+        get(){
+          return JSON.stringify(this.filter, null, 2);
+        },
+        set(to){
+          try{
+            this.filter = JSON.parse(to)
+          }catch(error){
+            this.configError = error;
+          }
+        }
+      }
     },
     mounted(){
       // test native event handling
@@ -150,36 +210,61 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-  .wrapper{
-    margin: 25px;
-    padding: 25px;
-    border: 1px dashed lightgrey;
-    border-radius: 5px;
-    .filter{
-      padding-bottom: 25px;
-      border-bottom: 1px dashed lightgrey;
-    }
+.wrapper{
+  margin: 25px;
+  padding: 25px;
+  border: 1px dashed lightgrey;
+  border-radius: 5px;
+}
+.config{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 100%;
+  label{
+    padding: .5em;
+    min-width: 300px;
+    display: inline-block;
   }
-  table{
-    margin-top: 25px;
+  textarea{
     width: 100%;
-    text-align: left;
-    word-break: break-all;
-    word-break: break-word;
+    flex: 1;
+    min-height: 15rem;
+    background: url(http://i.imgur.com/2cOaJ.png);
+    background-attachment: local;
+    background-repeat: no-repeat;
+    padding-left: 35px;
+    padding-top: 10px;
+    border-color:#ccc;
+    resize: vertical;
   }
-  .pre{
-    overflow: auto;
-  }
-  .events{
-    max-height:350px;
-    overflow-y: auto;
-    .event{
-      margin: 0;
-      padding: 8px;
-      background-color: rgba(0,0,0,.05);
-      &:nth-of-type(2n){
-        background-color: rgba(0,0,0,.25);
-      }
+}
+hr{
+  border: none;
+  background: transparent;
+  border-bottom: 1px dashed lightgrey;
+  margin: 1rem 0; 
+}
+table{
+  margin-top: 25px;
+  width: 100%;
+  text-align: left;
+  word-break: break-all;
+  word-break: break-word;
+}
+.pre{
+  overflow: auto;
+}
+.events{
+  max-height:350px;
+  overflow-y: auto;
+  .event{
+    margin: 0;
+    padding: 8px;
+    background-color: rgba(0,0,0,.05);
+    &:nth-of-type(2n){
+      background-color: rgba(0,0,0,.25);
     }
   }
+}
 </style>
