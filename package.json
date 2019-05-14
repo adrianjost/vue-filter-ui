@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",
-    "build:demo": "vue-cli-service build --dest dist/demo",
+    "build:demo": "vue-cli-service build --mode production --dest dist/demo",
     "build:lib": "vue-cli-service build --target lib --name FeathersjsFilterUi ./src/components/Filter.vue --mode production --dest dist/lib",
     "build:wc": "vue-cli-service build --target wc --name Feathersjs-filter-ui ./src/components/Filter.vue --mode production --dest dist/wc",
     "build": "run-s build:*",
