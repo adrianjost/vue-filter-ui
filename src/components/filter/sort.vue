@@ -1,29 +1,49 @@
 <template>
   <md-dialog :md-active.sync="isActive">
-    <md-dialog-title>{{config.title}}</md-dialog-title>
+    <md-dialog-title>{{ config.title }}</md-dialog-title>
 
     <div id="selection-picker">
       <md-field>
-        <label for="options">{{config.title}}</label>
-        <md-select id="options" v-model="selection">
-          <md-option v-for="option in config.options"
-                     :key="option[0]"
-                     :value="JSON.stringify(option)">
-            {{option[1]}}
+        <label for="options">{{ config.title }}</label>
+        <md-select
+          id="options"
+          v-model="selection"
+        >
+          <md-option
+            v-for="option in config.options"
+            :key="option[0]"
+            :value="JSON.stringify(option)"
+          >
+            {{ option[1] }}
           </md-option>
         </md-select>
       </md-field>
-      <md-button v-show="desc" class="md-icon-button" @click="desc = false">
+      <md-button
+        v-show="desc"
+        class="md-icon-button"
+        @click="desc = false"
+      >
         <md-icon>arrow_downward</md-icon>
       </md-button>
-      <md-button v-show="!desc" class="md-icon-button" @click="desc = true">
+      <md-button
+        v-show="!desc"
+        class="md-icon-button"
+        @click="desc = true"
+      >
         <md-icon>arrow_upward</md-icon>
       </md-button>
     </div>
 
     <md-dialog-actions>
-      <md-button @click="onCancle">{{$parent.cancleLabel}}</md-button>
-      <md-button class="md-primary" @click="onConfirm">{{$parent.applyLabel}}</md-button>
+      <md-button @click="onCancle">
+        {{ $parent.cancleLabel }}
+      </md-button>
+      <md-button
+        class="md-primary"
+        @click="onConfirm"
+      >
+        {{ $parent.applyLabel }}
+      </md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>

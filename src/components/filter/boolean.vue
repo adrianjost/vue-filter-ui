@@ -1,21 +1,44 @@
 <template>
   <md-dialog :md-active.sync="isActive">
-    <md-dialog-title>{{config.title}}</md-dialog-title>
+    <md-dialog-title>{{ config.title }}</md-dialog-title>
 
     <div id="selection-picker">
-      <div v-for="(label, property) in config.options" :key="label" class="choice">
-        {{label}}
+      <div
+        v-for="(label, property) in config.options"
+        :key="label"
+        class="choice"
+      >
+        {{ label }}
         <div class="tri-state-toggle">
-          <input v-model="selections[property]" type="radio" :value="false">
-          <input v-model="selections[property]" type="radio" :value="undefined">
-          <input v-model="selections[property]" type="radio" :value="true">
+          <input
+            v-model="selections[property]"
+            type="radio"
+            :value="false"
+          >
+          <input
+            v-model="selections[property]"
+            type="radio"
+            :value="undefined"
+          >
+          <input
+            v-model="selections[property]"
+            type="radio"
+            :value="true"
+          >
         </div>
       </div>
     </div>
 
     <md-dialog-actions>
-      <md-button @click="onCancle">{{$parent.cancleLabel}}</md-button>
-      <md-button class="md-primary" @click="onConfirm">{{$parent.applyLabel}}</md-button>
+      <md-button @click="onCancle">
+        {{ $parent.cancleLabel }}
+      </md-button>
+      <md-button
+        class="md-primary"
+        @click="onConfirm"
+      >
+        {{ $parent.applyLabel }}
+      </md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>

@@ -1,41 +1,63 @@
 <template>
   <md-dialog :md-active.sync="isActive">
-    <md-dialog-title>{{config.title}}</md-dialog-title>
+    <md-dialog-title>{{ config.title }}</md-dialog-title>
 
     <div id="selection-picker">
-      <div v-if="config.expanded" class="expanded-view md-menu-content-container md-scrollbar md-theme-default">
+      <div
+        v-if="config.expanded"
+        class="expanded-view md-menu-content-container md-scrollbar md-theme-default"
+      >
         <div v-if="config.multiple">
-          <md-checkbox v-for="option in config.options" :key="option[0]"
-                    v-model="selections"
-                    :value="JSON.stringify(option)"
-                     class="md-primary">
-            {{option[1]}}
+          <md-checkbox
+            v-for="option in config.options"
+            :key="option[0]"
+            v-model="selections"
+            :value="JSON.stringify(option)"
+            class="md-primary"
+          >
+            {{ option[1] }}
           </md-checkbox>
         </div>
         <div v-else>
-          <md-radio v-for="option in config.options" :key="option[0]"
-                    v-model="selections"
-                    :value="JSON.stringify(option)"
-                    class="md-primary">
-            {{option[1]}}
+          <md-radio
+            v-for="option in config.options"
+            :key="option[0]"
+            v-model="selections"
+            :value="JSON.stringify(option)"
+            class="md-primary"
+          >
+            {{ option[1] }}
           </md-radio>
         </div>
       </div>
       <md-field v-else>
-        <label for="options">{{config.title}}</label>
-        <md-select id="options" v-model="selections" :multiple="config.multiple">
-          <md-option v-for="option in config.options"
-                     :key="option[0]"
-                     :value="JSON.stringify(option)">
-            {{option[1]}}
+        <label for="options">{{ config.title }}</label>
+        <md-select
+          id="options"
+          v-model="selections"
+          :multiple="config.multiple"
+        >
+          <md-option
+            v-for="option in config.options"
+            :key="option[0]"
+            :value="JSON.stringify(option)"
+          >
+            {{ option[1] }}
           </md-option>
         </md-select>
       </md-field>
     </div>
 
     <md-dialog-actions>
-      <md-button @click="onCancle">{{$parent.cancleLabel}}</md-button>
-      <md-button class="md-primary" @click="onConfirm">{{$parent.applyLabel}}</md-button>
+      <md-button @click="onCancle">
+        {{ $parent.cancleLabel }}
+      </md-button>
+      <md-button
+        class="md-primary"
+        @click="onConfirm"
+      >
+        {{ $parent.applyLabel }}
+      </md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>

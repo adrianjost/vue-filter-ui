@@ -1,19 +1,29 @@
 <template>
   <div class="wrapper">
-    <search-filter ref="filtercomponent" add-label="Filter hinzufügen" :filter="filter" :handle-url="true" @newFilter="updateFilter"/>
+    <search-filter
+      ref="filtercomponent"
+      add-label="Filter hinzufügen"
+      :filter="filter"
+      :handle-url="true"
+      @newFilter="updateFilter"
+    />
     <table width="100%">
       <tr><th>FeathersJS</th><th>URLQuery</th></tr>
       <tr>
-        <td><pre>{{JSON.stringify(apiQuery, null, 2)}}</pre></td>
-        <td><pre>{{JSON.stringify(urlQuery, null, 2)}}</pre></td>
+        <td><pre>{{ JSON.stringify(apiQuery, null, 2) }}</pre></td>
+        <td><pre>{{ JSON.stringify(urlQuery, null, 2) }}</pre></td>
       </tr>
     </table>
     <div class="events">
       <b>Native Events</b>
-      <p v-for="event in nativeEvents" :key="event.timeStamp" class="event">
-        ({{parseInt(event.timeStamp)}}) <b>{{event.type}}:</b>
+      <p
+        v-for="event in nativeEvents"
+        :key="event.timeStamp"
+        class="event"
+      >
+        ({{ parseInt(event.timeStamp) }}) <b>{{ event.type }}:</b>
         <code>
-          {{JSON.stringify(event.detail, null, 2)}}
+          {{ JSON.stringify(event.detail, null, 2) }}
         </code>
       </p>
     </div>

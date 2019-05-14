@@ -1,31 +1,53 @@
 <template>
-  <div ref="filter-module" class="filter" @getFilter="sendNewQuery">
-    <md-chip v-for="chip in activeFilter" :key="chip[0]" v-model="activeFilter" md-clickable
-             md-deletable @click="visibleFilter = chip[0]" @md-delete.stop="removeFilter(chip[0], true)">{{ chip[1].displayString }}
+  <div
+    ref="filter-module"
+    class="filter"
+    @getFilter="sendNewQuery"
+  >
+    <md-chip
+      v-for="chip in activeFilter"
+      :key="chip[0]"
+      v-model="activeFilter"
+      md-clickable
+      md-deletable
+      @click="visibleFilter = chip[0]"
+      @md-delete.stop="removeFilter(chip[0], true)"
+    >
+      {{ chip[1].displayString }}
     </md-chip>
 
-    <md-menu md-direction="bottom-end" v-if="selectableFilter.length">
-      <md-button md-menu-trigger class="add-filter">
+    <md-menu
+      v-if="selectableFilter.length"
+      md-direction="bottom-end"
+    >
+      <md-button
+        md-menu-trigger
+        class="add-filter"
+      >
         <md-icon><i class="material-icons">add</i></md-icon>
-        {{addLabel}}
+        {{ addLabel }}
       </md-button>
       <md-menu-content>
-        <md-menu-item v-for="(filter) in selectableFilter"
-                      :key="'Option-' + getIdentifier(filter)"
-                      @click="visibleFilter = getIdentifier(filter)">
-                      {{filter.title}}...
+        <md-menu-item
+          v-for="(filterOption) in selectableFilter"
+          :key="'Option-' + getIdentifier(filterOption)"
+          @click="visibleFilter = getIdentifier(filterOption)"
+        >
+          {{ filterOption.title }}...
         </md-menu-item>
       </md-menu-content>
     </md-menu>
 
-    <component :is="filter.type"
-               v-for="(filter) in availableFilter"
-               :key="'Dialog-' + getIdentifier(filter)"
-               :active="visibleFilter === getIdentifier(filter)"
-               :identifier="getIdentifier(filter)"
-               :config="filter"
-               @set="setFilter"
-               @cancle="cancle"/>
+    <component
+      :is="filterDialog.type"
+      v-for="(filterDialog) in availableFilter"
+      :key="'Dialog-' + getIdentifier(filterDialog)"
+      :active="visibleFilter === getIdentifier(filterDialog)"
+      :identifier="getIdentifier(filterDialog)"
+      :config="filterDialog"
+      @set="setFilter"
+      @cancle="cancle"
+    />
   </div>
 </template>
 

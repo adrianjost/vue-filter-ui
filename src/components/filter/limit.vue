@@ -1,19 +1,32 @@
 <template>
   <md-dialog :md-active.sync="isActive">
-    <md-dialog-title>{{config.title}}</md-dialog-title>
+    <md-dialog-title>{{ config.title }}</md-dialog-title>
 
-    <div id="limit-picker" class="md-menu-content-container md-scrollbar md-theme-default">
-      <md-radio v-for="option in config.options" :key="option"
-                v-model="selection"
-                :value="option"
-                class="md-primary">
-        {{option}}
+    <div
+      id="limit-picker"
+      class="md-menu-content-container md-scrollbar md-theme-default"
+    >
+      <md-radio
+        v-for="option in config.options"
+        :key="option"
+        v-model="selection"
+        :value="option"
+        class="md-primary"
+      >
+        {{ option }}
       </md-radio>
     </div>
 
     <md-dialog-actions>
-      <md-button @click="onCancle">{{$parent.cancleLabel}}</md-button>
-      <md-button class="md-primary" @click="onConfirm">{{$parent.applyLabel}}</md-button>
+      <md-button @click="onCancle">
+        {{ $parent.cancleLabel }}
+      </md-button>
+      <md-button
+        class="md-primary"
+        @click="onConfirm"
+      >
+        {{ $parent.applyLabel }}
+      </md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>
