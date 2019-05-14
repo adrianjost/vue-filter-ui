@@ -10,6 +10,14 @@ and gives you a FeathersJS query that you should apply.
 
 ## Usage
 
+```bash
+# yarn
+yarn add feathersjs-filter-ui
+
+# npm
+npm i --save feathersjs-filter-ui
+```
+
 ### Vue
 
 Mount globally:
@@ -68,7 +76,7 @@ Then add an eventListener to watch for new querys.
     <meta charset="utf-8">
     <!-- VueJS is not included in the bundle -->
     <script src="https://unpkg.com/vue" defer></script>
-    <script src="./dist/wc/feathersjs-filter-ui.min.js" defer></script>
+    <script src="~feathersjs-filter-ui/dist/wc/feathersjs-filter-ui.min.js" defer></script>
   </header>
   <body>
     <!-- use in plain HTML, or in any other framework -->
