@@ -1,36 +1,64 @@
 <template>
   <md-dialog :md-active.sync="isActive">
-    <md-dialog-title>{{config.title}}</md-dialog-title>
+    <md-dialog-title>{{ config.title }}</md-dialog-title>
 
     <div id="selection-picker">
       <md-field>
-        <label for="options">{{config.title}}</label>
-        <md-select v-model="selection" id="options">
-          <md-option v-for="option in config.options"
-                     :key="option[0]"
-                     :value="JSON.stringify(option)">
-            {{option[1]}}
+        <label for="options">{{ config.title }}</label>
+        <md-select
+          id="options"
+          v-model="selection"
+        >
+          <md-option
+            v-for="option in config.options"
+            :key="option[0]"
+            :value="JSON.stringify(option)"
+          >
+            {{ option[1] }}
           </md-option>
         </md-select>
       </md-field>
-      <md-button v-show="desc" @click="desc = false" class="md-icon-button">
+      <md-button
+        v-show="desc"
+        class="md-icon-button"
+        @click="desc = false"
+      >
         <md-icon>arrow_downward</md-icon>
       </md-button>
-      <md-button v-show="!desc" @click="desc = true" class="md-icon-button">
+      <md-button
+        v-show="!desc"
+        class="md-icon-button"
+        @click="desc = true"
+      >
         <md-icon>arrow_upward</md-icon>
       </md-button>
     </div>
 
     <md-dialog-actions>
-      <md-button @click="onCancle">{{$parent.cancleLabel}}</md-button>
-      <md-button class="md-primary" @click="onConfirm">{{$parent.applyLabel}}</md-button>
+      <md-button @click="onCancle">
+        {{ $parent.cancleLabel }}
+      </md-button>
+      <md-button
+        class="md-primary"
+        @click="onConfirm"
+      >
+        {{ $parent.applyLabel }}
+      </md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>
 
 <script>
+import Vue from 'vue'
+import { MdDialog, MdButton, MdIcon, MdList, MdField} from 'vue-material/dist/components'
+Vue.use(MdDialog)
+Vue.use(MdButton)
+Vue.use(MdIcon)
+Vue.use(MdList)
+Vue.use(MdField)
+
   export default {
-    name: 'sort-picker',
+    name: 'SortPicker',
     props: ['identifier', 'active', 'config'],
     data() {
       return {
@@ -40,6 +68,16 @@
         apiQuery: {},
         urlQuery: {},
       };
+    },
+    watch: {
+      active(to) {
+        this.isActive = to;
+      },
+      isActive(to) {
+        if (to == false) {
+          this.onCancle();
+        }
+      },
     },
     created() {
       this.$parent.$on('reset', this.resetSelection);
@@ -86,16 +124,6 @@
 
         this.onConfirm();
       }
-    },
-    watch: {
-      active(to, from) {
-        this.isActive = to;
-      },
-      isActive(to) {
-        if (to == false) {
-          this.onCancle();
-        }
-      },
     },
   };
 </script>

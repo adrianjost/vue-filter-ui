@@ -1,12 +1,27 @@
 language: node_js
 node_js:
-  - "node"
-  - "7"
+  - "lts/*"
 script:
-  - npm run travis
+  - yarn lint
+  - yarn build
   - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
 notifications:
   email: false
 cache:
   directories:
     - node_modules
+deploy:
+  skip_cleanup: true
+  - provider: npm
+    email: $NPM_EMAIL_ADDRESS
+    api_key: $NPM_AUTH_TOKEN
+    tag: stable
+    on:
+      branch: master
+  - provider: pages
+    local-dir: "dist/demo"
+    allow-empty-commit: true
+    github-token: $GITHUB_TOKEN # Set in the settings page of your repository, as a secure variable
+    keep-history: true
+    on:
+      branch: master

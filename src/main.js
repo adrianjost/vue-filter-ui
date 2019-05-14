@@ -1,11 +1,10 @@
-import Vue from 'vue';
-import App from './components/filter-wrapper';
-import './base.js'
+import Vue from 'vue'
 
-/* eslint-disable no-new */
+Vue.config.silent = false;
+Vue.config.performance = true;
+Vue.config.productionTip = false;
+
+import Demo from './components/Demo.vue'
 new Vue({
-  el: '#app',
-  template: '<App/>',
-  components: {App},
-}).$mount("#app");
-
+  render: h => h(Demo),
+}).$mount('#app')

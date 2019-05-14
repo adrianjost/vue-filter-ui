@@ -1,28 +1,56 @@
 <template>
   <md-dialog :md-active.sync="isActive">
-    <md-dialog-title>{{config.title}}</md-dialog-title>
+    <md-dialog-title>{{ config.title }}</md-dialog-title>
 
     <div id="selection-picker">
-      <div class="choice" v-for="(label, property) in config.options">
-        {{label}}
+      <div
+        v-for="(label, property) in config.options"
+        :key="label"
+        class="choice"
+      >
+        {{ label }}
         <div class="tri-state-toggle">
-          <input type="radio" v-model="selections[property]" :value="false">
-          <input type="radio" v-model="selections[property]" :value="undefined">
-          <input type="radio" v-model="selections[property]" :value="true">
+          <input
+            v-model="selections[property]"
+            type="radio"
+            :value="false"
+          >
+          <input
+            v-model="selections[property]"
+            type="radio"
+            :value="undefined"
+          >
+          <input
+            v-model="selections[property]"
+            type="radio"
+            :value="true"
+          >
         </div>
       </div>
     </div>
 
     <md-dialog-actions>
-      <md-button @click="onCancle">{{$parent.cancleLabel}}</md-button>
-      <md-button class="md-primary" @click="onConfirm">{{$parent.applyLabel}}</md-button>
+      <md-button @click="onCancle">
+        {{ $parent.cancleLabel }}
+      </md-button>
+      <md-button
+        class="md-primary"
+        @click="onConfirm"
+      >
+        {{ $parent.applyLabel }}
+      </md-button>
     </md-dialog-actions>
   </md-dialog>
 </template>
 
 <script>
+import Vue from 'vue'
+import { MdDialog, MdButton } from 'vue-material/dist/components'
+Vue.use(MdDialog)
+Vue.use(MdButton)
+
   export default {
-    name: 'boolean-picker',
+    name: 'BooleanPicker',
     props: ['identifier', 'active', 'config'],
     data() {
       return {
@@ -31,6 +59,16 @@
         apiQuery: {},
         urlQuery: {},
       };
+    },
+    watch: {
+      active(to) {
+        this.isActive = to;
+      },
+      isActive(to) {
+        if (to == false) {
+          this.onCancle();
+        }
+      },
     },
     created() {
       this.$parent.$on('reset', this.resetSelection);
@@ -82,16 +120,6 @@
 
         this.onConfirm();
       }
-    },
-    watch: {
-      active(to, from) {
-        this.isActive = to;
-      },
-      isActive(to) {
-        if (to == false) {
-          this.onCancle();
-        }
-      },
     },
   };
 </script>
