@@ -38,8 +38,28 @@
       </md-menu-content>
     </md-menu>
 
+
+
+    <md-dialog :md-active="!!visibleFilter">
+      <md-dialog-title>{{ filterModal.title }}</md-dialog-title>
+
+      body
+
+      <md-dialog-actions>
+        <md-button @click="visibleFilter = ''">
+          {{ cancleLabel }}
+        </md-button>
+        <md-button
+          class="md-primary"
+          @click="visibleFilter = ''"
+        >
+          {{ applyLabel }}
+        </md-button>
+      </md-dialog-actions>
+    </md-dialog>
+
     <component
-      :is="filterDialog.type"
+      :is="filterModal"
       v-for="(filterDialog) in availableFilter"
       :key="'Dialog-' + getIdentifier(filterDialog)"
       :active="visibleFilter === getIdentifier(filterDialog)"
@@ -53,8 +73,9 @@
 
 <script>
 import Vue from 'vue'
-import { MdButton, MdMenu, MdChips, MdIcon } from 'vue-material/dist/components'
+import { MdDialog, MdButton, MdMenu, MdChips, MdIcon } from 'vue-material/dist/components'
 import 'vue-material/dist/vue-material.min.css'
+Vue.use(MdDialog)
 Vue.use(MdButton)
 Vue.use(MdMenu)
 Vue.use(MdChips)
@@ -75,15 +96,16 @@ const defaultFilter = [
 	},
 ]
 
-export default {
-  components: {
-    'filter-select': selectPicker,
-    'filter-date': datePicker,
-    'filter-sort': sortPicker,
-    'filter-boolean': booleanPicker,
-    'filter-limit': limitPicker,
+const components = {
+  'filter-select': selectPicker,
+  'filter-date': datePicker,
+  'filter-sort': sortPicker,
+  'filter-boolean': booleanPicker,
+  'filter-limit': limitPicker,
+};
 
-  },
+export default {
+  components,
   props: {
     "addLabel": {type: String, default: "add filter"},
     "applyLabel": {type: String, default: "apply"},
@@ -95,6 +117,7 @@ export default {
   },
   data() {
     return {
+      components,
       visibleFilter: '',
       activeFilter: [],
       isWatching: true,
@@ -105,13 +128,18 @@ export default {
     availableFilter(){
       const filterSettings = (typeof this.filter === "string") ? JSON.parse(this.filter) : this.filter;
       return filterSettings.map((filter)=>{
-        filter.type = "filter-"+filter.type;
+				if(!filter.type.startsWith("filter-")){
+					filter.type = "filter-"+filter.type;
+				}
         return filter;
       });
     },
     selectableFilter(){
       return this.availableFilter.filter((filter) => !this.isApplied(this.getIdentifier(filter)));
-    }
+		},
+		filterModal(){
+			return this.availableFilter.find((filter) => this.visibleFilter === this.getIdentifier(filter)) || {}
+		}
   },
   watch: {
     activeFilter() {

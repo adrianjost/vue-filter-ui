@@ -10,7 +10,17 @@
       :consistent-order="consistentOrder"
       :filter="filter"
       @newFilter="updateFilter"
-    />
+    >
+      <template v-slot:hi="{config, components}">
+        <span @click="toggle = !toggle">Ho ^^ {{ config }} {{ components }}</span>
+        <component
+          :is="components[config.type]"
+          :active.sync="toggle"
+          :config="config"
+          :identifier="config.property"
+        />
+      </template>
+    </search-filter>
     <hr>
     <section>
       <div class="config">
@@ -58,7 +68,7 @@
         </label>
         <label style="width: 100%">
           <b>filter:</b>
-          <textarea v-model="filterString" />
+          <textarea v-model.lazy="filterString" />
         </label>
       </div>
       <p
@@ -95,13 +105,8 @@
 <script>
 import Filter from './Filter.vue';
 
-export default {
-    components: {
-      'search-filter': Filter,
-    },
-    data() {
-      return {
-        filter: [{
+const defaultFilter = [
+          {
             type: "select",
             title: 'Multi Select',
             displayTemplate: 'Selections: %1',
@@ -183,16 +188,24 @@ export default {
             applyNegated: {
               teamSubmissions: [true, true]
             }
-        }],
+        }]
+export default {
+    components: {
+      'search-filter': Filter,
+    },
+    data() {
+      return {
+        toggle: false,
+        filter: localStorage.getItem("filter") ? JSON.parse(localStorage.getItem("filter")) : defaultFilter,
         apiQuery: {},
         urlQuery: {},
         nativeEvents: [],
         addLabel: undefined,
         applyLabel: undefined,
         cancleLabel: undefined,
-        handleUrl: true,  
-        saveState:false,  
-        consistentOrder: true,  
+        handleUrl: true,
+        saveState:false,
+        consistentOrder: true,
         configError: undefined
       };
     },
@@ -203,7 +216,8 @@ export default {
         },
         set(to){
           try{
-            this.filter = JSON.parse(to)
+						this.filter = JSON.parse(to)
+						localStorage.setItem("filter", JSON.stringify(this.filter))
           }catch(error){
             this.configError = error;
           }
@@ -266,7 +280,7 @@ hr{
   border: none;
   background: transparent;
   border-bottom: 1px dashed lightgrey;
-  margin: 1rem 0; 
+  margin: 1rem 0;
 }
 table{
   margin-top: 25px;
