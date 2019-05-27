@@ -1,46 +1,30 @@
 <template>
-  <md-dialog :md-active.sync="isActive">
-    <md-dialog-title>{{ config.title }}</md-dialog-title>
-
-    <div id="selection-picker">
-      <div
-        v-for="(label, property) in config.options"
-        :key="label"
-        class="choice"
-      >
-        {{ label }}
-        <div class="tri-state-toggle">
-          <input
-            v-model="selections[property]"
-            type="radio"
-            :value="false"
-          >
-          <input
-            v-model="selections[property]"
-            type="radio"
-            :value="undefined"
-          >
-          <input
-            v-model="selections[property]"
-            type="radio"
-            :value="true"
-          >
-        </div>
+  <div class="selection-picker">
+    <div
+      v-for="(label, property) in config.options"
+      :key="label"
+      class="choice"
+    >
+      {{ label }}
+      <div class="tri-state-toggle">
+        <input
+          v-model="selections[property]"
+          type="radio"
+          :value="false"
+        >
+        <input
+          v-model="selections[property]"
+          type="radio"
+          :value="undefined"
+        >
+        <input
+          v-model="selections[property]"
+          type="radio"
+          :value="true"
+        >
       </div>
     </div>
-
-    <md-dialog-actions>
-      <md-button @click="onCancle">
-        {{ $parent.cancleLabel }}
-      </md-button>
-      <md-button
-        class="md-primary"
-        @click="onConfirm"
-      >
-        {{ $parent.applyLabel }}
-      </md-button>
-    </md-dialog-actions>
-  </md-dialog>
+  </div>
 </template>
 
 <script>
@@ -51,81 +35,17 @@ Vue.use(MdButton)
 
   export default {
     name: 'BooleanPicker',
-    props: ['identifier', 'active', 'config'],
+    props: ['config'],
     data() {
       return {
-        isActive: false,
         selections:{},
-        apiQuery: {},
-        urlQuery: {},
       };
-    },
-    watch: {
-      active(to) {
-        this.isActive = to;
-      },
-      isActive(to) {
-        if (to == false) {
-          this.onCancle();
-        }
-      },
-    },
-    created() {
-      this.$parent.$on('reset', this.resetSelection);
-      this.$parent.$on('newUrlQuery', this.updateFromUrl);
-    },
-    methods: {
-      onConfirm() {
-        let displayString;
-        this.apiQuery = {};
-        this.urlQuery = {};
-        if(Object.keys(this.selections).length) {
-          for (var property in this.selections) {
-            if (this.selections[property] !== undefined) {
-              if (this.config.applyNegated[property]) {
-                const negate = this.config.applyNegated[property][(this.selections[property]) ? 1 : 0];
-                const configuredProperty = ((negate) ? (property + '[$ne]') : property)
-                const configuredSelection = ((negate) ? (!this.selections[property]) : (this.selections[property]))
-                this.apiQuery[configuredProperty] = configuredSelection;
-              } else {
-                this.apiQuery[property] = this.selections[property];
-              }
-
-
-              this.urlQuery[property] = this.selections[property];
-              displayString = ((displayString) ? (displayString + ", ") : "") + `${this.config.options[property]}: ${(this.selections[property]) ? '✔' : '✖'}`;
-            }
-          }
-          this.$emit('set', this.identifier, {
-            apiQuery: this.apiQuery,
-            urlQuery: this.urlQuery,
-            displayString
-          });
-        }
-      },
-      onCancle() {
-        this.$emit('cancle');
-      },
-      resetSelection(key) {
-        if (key == this.identifier || !key) {
-          this.selections = this.config.defaultSelection || {};
-        }
-      },
-      updateFromUrl(urlQuery){
-        for (var property in this.config.options) {
-          if(urlQuery[property]){
-            this.selections[property] = (urlQuery[property] == "true");
-          }
-        }
-
-        this.onConfirm();
-      }
     },
   };
 </script>
 
 <style lang="scss" scoped>
-  #selection-picker {
+  .selection-picker {
     padding: 16px;
   }
   .choice{

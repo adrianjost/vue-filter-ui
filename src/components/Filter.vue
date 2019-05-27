@@ -25,7 +25,7 @@
         class="add-filter"
       >
         <md-icon><i class="material-icons">add</i></md-icon>
-        {{ addLabel }}
+        {{ labelAdd }}
       </md-button>
       <md-menu-content>
         <md-menu-item
@@ -39,35 +39,40 @@
     </md-menu>
 
 
+    <slot
+      v-if="!!visibleFilter"
+      name="modal"
+      :config="openModalConfig"
+      :labelApply="labelApply"
+      :labelCancle="labelCancle"
+      :component="components[openModalConfig.type]"
+      :methodApply="onConfirm"
+      :methodCancle="onCancle"
+    >
+      <md-dialog
+        :md-active="!!visibleFilter"
+        @md-clicked-outside="visibleFilter = ''"
+      >
+        <md-dialog-title>{{ openModalConfig.title }}</md-dialog-title>
 
-    <md-dialog :md-active="!!visibleFilter">
-      <md-dialog-title>{{ filterModal.title }}</md-dialog-title>
+        <component
+          :is="components[openModalConfig.type]"
+          :config="openModalConfig"
+        />
 
-      body
-
-      <md-dialog-actions>
-        <md-button @click="visibleFilter = ''">
-          {{ cancleLabel }}
-        </md-button>
-        <md-button
-          class="md-primary"
-          @click="visibleFilter = ''"
-        >
-          {{ applyLabel }}
-        </md-button>
-      </md-dialog-actions>
-    </md-dialog>
-
-    <component
-      :is="filterModal"
-      v-for="(filterDialog) in availableFilter"
-      :key="'Dialog-' + getIdentifier(filterDialog)"
-      :active="visibleFilter === getIdentifier(filterDialog)"
-      :identifier="getIdentifier(filterDialog)"
-      :config="filterDialog"
-      @set="setFilter"
-      @cancle="cancle"
-    />
+        <md-dialog-actions>
+          <md-button @click="onCancle">
+            {{ labelCancle }}
+          </md-button>
+          <md-button
+            class="md-primary"
+            @click="onConfirm"
+          >
+            {{ labelApply }}
+          </md-button>
+        </md-dialog-actions>
+      </md-dialog>
+    </slot>
   </div>
 </template>
 
@@ -107,9 +112,9 @@ const components = {
 export default {
   components,
   props: {
-    "addLabel": {type: String, default: "add filter"},
-    "applyLabel": {type: String, default: "apply"},
-    "cancleLabel": {type: String, default: "cancle"},
+    "labelAdd": {type: String, default: "add filter"},
+    "labelApply": {type: String, default: "apply"},
+    "labelCancle": {type: String, default: "cancle"},
     "handleUrl": { type: Boolean },
     "saveState": { type: Boolean },
     "consistentOrder": {type: Boolean, default: true},
@@ -137,7 +142,7 @@ export default {
     selectableFilter(){
       return this.availableFilter.filter((filter) => !this.isApplied(this.getIdentifier(filter)));
 		},
-		filterModal(){
+		openModalConfig(){
 			return this.availableFilter.find((filter) => this.visibleFilter === this.getIdentifier(filter)) || {}
 		}
   },
@@ -161,6 +166,37 @@ export default {
     this.newUrlQuery();
   },
   methods: {
+		onConfirm() {
+        let displayString;
+        this.apiQuery = {};
+        this.urlQuery = {};
+        if(Object.keys(this.selections).length) {
+          for (var property in this.selections) {
+            if (this.selections[property] !== undefined) {
+              if (this.config.applyNegated[property]) {
+                const negate = this.config.applyNegated[property][(this.selections[property]) ? 1 : 0];
+                const configuredProperty = ((negate) ? (property + '[$ne]') : property)
+                const configuredSelection = ((negate) ? (!this.selections[property]) : (this.selections[property]))
+                this.apiQuery[configuredProperty] = configuredSelection;
+              } else {
+                this.apiQuery[property] = this.selections[property];
+              }
+
+
+              this.urlQuery[property] = this.selections[property];
+              displayString = ((displayString) ? (displayString + ", ") : "") + `${this.config.options[property]}: ${(this.selections[property]) ? '✔' : '✖'}`;
+            }
+          }
+          this.$emit('set', this.identifier, {
+            apiQuery: this.apiQuery,
+            urlQuery: this.urlQuery,
+            displayString
+          });
+        }
+      },
+		onCancle() {
+			this.visibleFilter = "";
+		},
     getIdentifier(filter){
       const filterIndex = this.availableFilter.findIndex((a) => a === filter);
       return '#' + filterIndex + "-" + filter.type + '-' + (filter.property || `$${filter.type.replace("filter-", "")}`);
