@@ -1,13 +1,15 @@
 <template>
   <div class="parallel">
-    <slot
-      name="input-1"
-      class="slot-1"
-    />
-    <slot
-      name="input-2"
-      class="slot-2"
-    />
+    <div class="slot-1">
+      <slot
+        name="input-1"
+      />
+    </div>
+    <div class="slot-2">
+      <slot
+        name="input-2"
+      />
+    </div>
   </div>
 </template>
 

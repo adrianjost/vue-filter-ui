@@ -72,9 +72,9 @@ import Filter from "./Filter.vue";
 
 const defaultFilter = [
 	{
-		"title": "Dual",
-		"chipTemplate": (value) => `Boolean: ${value ? "+" : (value === false ? "-": "o")}`,
-		// design: "sort",
+		title: "Dual",
+		chipTemplate: (v1,v2) => `v1: ${v1} v2: ${v2}`,
+		design: "sort",
 		filter: [
 			{
 				// Query data

@@ -75,18 +75,20 @@
     </slot>
 		-->
 
-    <button @click="openFilter(internalConfig[0])">
+    <button @click="openFilter(internalConfig[0].id)">
       Toggle
     </button>
     <component
       :is="componentChips"
       :chips="chips"
+      @open="openFilter"
+      @remove="handleRemove"
     />
 
     <component
       :is="componentModal"
-      v-if="openedFilter"
-      :title="openedFilter.title"
+      v-if="openGroup"
+      :title="openGroup.title"
       :label-apply="labelApply"
       :label-cancle="labelCancle"
       :active.sync="active"
@@ -94,21 +96,21 @@
       @cancle="handleCancle"
     >
       <component
-        :is="openedFilter.design"
-        v-if="openedFilter"
+        :is="openGroup.design"
+        v-if="openGroup"
         class="layout"
       >
         <!-- eslint-disable vue/no-unused-vars -->
         <!-- index usage is not detected -->
         <template
-          v-for="(input, index) in openedFilter.filter"
+          v-for="(input, index) in openGroup.filter"
           v-slot:[getSlotName(index)]
         >
           <!-- eslint-enable vue/no-unused-vars -->
           <component
             :is="input.design"
             :key="input.label"
-            v-model="input.value"
+            v-model="tmpValues[input.id]"
             :options="input.options"
           />
         </template>
@@ -118,7 +120,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 
 export default {
   props: {
@@ -142,62 +143,62 @@ export default {
   },
   data() {
     return {
-			appliedFilterTitles: [],
-			openedFilterTitle: undefined,
+			activeGroups: [],
+			openGroupId: undefined,
+			filterValues: {},
+			values: {},
+			tmpValues: {}
 		};
 	},
 	computed: {
 		active:{
 			get(){
-				return !!this.openedFilterTitle;
+				return !!this.openGroupId;
 			},
 			set(to){
 				if(!to){
-					this.openedFilterTitle = undefined;
+					this.openGroupId = undefined;
 				}
 			}
 		},
-		openedFilter(){
-			return this.openedFilterTitle ? this.internalConfig.find(filter => filter.title === this.openedFilterTitle) : undefined
+		openGroup(){
+			return this.openGroupId ? this.internalConfig.find(filter => filter.id === this.openGroupId) : undefined
 		},
 		internalConfig(){
-			return this.filter.map((orgFilter) => {
+			return this.filter.map((orgFilter, groupIndex) => {
 				const filter = {...orgFilter};
-				if(Array.isArray(filter.filter)){
-					if(!filter.design){
-						filter.design = "default";
-					}
-					if(typeof filter.design === "string"){
-						const name = filter.design;
-						filter.design = () => import(`@/components/layouts/${name}.vue`);
-					}
-					filter.filter = filter.filter.map((orgSubFilter) => {
-						const subFilter = {...orgSubFilter};
-						if(typeof subFilter.design === "string"){
-							const name = subFilter.design;
-							subFilter.design = () => import(`./inputs/${name}.vue`)
-						}
-						return subFilter;
-					})
-					return filter;
-				}else{
-					if(typeof filter.design === "string"){
-						const type = Array.isArray(filter.filter) ? "layout" : "input";
-						const name = filter.design; // we need to copy it into a variable to prevent a recursive definition of filter.design
-						filter.design = () => import(`@/components/${type}s/${name}.vue`)
-					}
-					return {
+
+				// normalize structure
+				if(!Array.isArray(filter.filter)){
+					filter = {
 						title: filter.title,
 						chipTemplate: filter.chipTemplate,
-						design: () => import(`@/components/layouts/default.vue`),
 						filter: [filter],
 					}
 				}
+				// add identifier
+				filter.id = `group-${groupIndex}`
+				// resolve input wrapper component
+				if(typeof filter.design !== "function"){
+					const name = filter.design || "default";
+					filter.design = () => import(`@/components/layouts/${name}.vue`);
+				}
+				// resolve input components
+				filter.filter = filter.filter.map((orgSubFilter, inputIndex) => {
+					const subFilter = {...orgSubFilter};
+					if(typeof subFilter.design === "string"){
+						const name = subFilter.design;
+						subFilter.design = () => import(`./inputs/${name}.vue`);
+						subFilter.id = `input-${groupIndex}-${inputIndex}`
+					}
+					return subFilter;
+				})
+				return filter;
 			})
 		},
 		chips(){
-			return this.internalConfig.filter((filter) => this.appliedFilterTitles.includes(filter.title)).map((filter) => {
-				const values = filter.filter.map(a => a.value);
+			return this.internalConfig.filter((filter) => this.activeGroups.includes(filter.id)).map((filter) => {
+				const values = filter.filter.map(a => this.values[a.id]);
 				let label = typeof filter.chipTemplate === "function"
 					? filter.chipTemplate
 					: (values) => {
@@ -208,9 +209,21 @@ export default {
 						return out
 					}
 				return {
-					id: filter.title,
-					label: label(values),
+					id: filter.id,
+					label: label(...values),
 				}
+			})
+		}
+	},
+	watch:{
+		internalConfig(to){
+			to.forEach(group => {
+				group.filter.forEach(input => {
+					if(!this.values.hasOwnProperty(input.id)){
+						this.$set(this.values, input.id, false);
+						this.$set(this.tmpValues, input.id, false);
+					}
+				})
 			})
 		}
 	},
@@ -218,21 +231,28 @@ export default {
 		getSlotName(index){
  			return `input-${index + 1}`
 		},
-		openFilter(filterConfig){
-			this.openedFilterTitle = filterConfig.title;
+		openFilter(groupId){
+			this.openGroupId = groupId;
 		},
-		handleRemove(){
-
+		handleRemove(groupId){
+			console.log("remove", groupId)
+			const newActiveGroupList = this.activeGroups.filter((a) => a !== groupId);
+			this.$set(this, "activeGroups", newActiveGroupList )
 		},
 		handleApply(){
-			const filterTitle = this.openedFilter.title
-			if(!this.appliedFilterTitles.includes(filterTitle)){
-				this.appliedFilterTitles.push(filterTitle)
+			// add filter to list
+			if(!this.activeGroups.includes(this.openGroup.id)){
+				this.activeGroups.push(this.openGroup.id)
 			}
+			// persist new values
+			this.openGroup.filter.forEach((input) => {
+				this.$set(this.values, input.id, this.tmpValues[input.id]);
+			})
+			this.$forceUpdate();
 			this.handleCancle();
 		},
 		handleCancle(){
-			this.openedFilterTitle = undefined;
+			this.openGroupId = undefined;
 		}
 	}
 };
