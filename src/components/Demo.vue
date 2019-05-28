@@ -11,15 +11,16 @@
       :filter="config.filter"
       @newFilter="updateFilter"
     >
-      <template v-slot:modal="{config, component, labelApply, labelCancle, methodApply, methodCancle}">
+      <template v-slot:modal="{config, vmodel, component, labelApply, labelCancle, methodApply, methodCancle}">
         <div
           class="custom-modal-wrapper"
-          @click="methodCancle"
+          @click.self="methodCancle"
         >
           <div class="custom-modal">
             Custom Modal - {{ config.title }}
             <component
               :is="component"
+              v-model="vmodel"
               :config="config"
             />
             <button @click="methodCancle">
@@ -30,17 +31,6 @@
             </button>
           </div>
         </div>
-      </template>
-
-      <template v-slot:hi="{ config, components }">
-        <span @click="toggle = !toggle">
-          Ho ^^ {{ config }} {{ components }}</span>
-        <component
-          :is="components[config.type]"
-          :active.sync="toggle"
-          :config="config"
-          :identifier="config.property"
-        />
       </template>
     </search-filter>
     <hr>
@@ -60,7 +50,6 @@
         </td>
       </tr>
     </table>
-
     <div class="events">
       <b>Native Events</b>
       <p
@@ -82,86 +71,67 @@ import DemoConfig from "./DemoConfig.vue";
 import Filter from "./Filter.vue";
 
 const defaultFilter = [
+	{
+		"title": "Dual",
+		"chipTemplate": (value) => `Boolean: ${value ? "+" : (value === false ? "-": "o")}`,
+		// design: "sort",
+		filter: [
+			{
+				// Query data
+				"attribute": "",
+				"applyNegated": false,
+				"operator": "=",
+				"value": undefined,
+
+				// UI options
+				"options": undefined,
+				"design": "TriSwitch",
+			},
+			{
+				// Query data
+				"attribute": "",
+				"applyNegated": false,
+				"operator": "=",
+				"value": undefined,
+
+				// UI options
+				"options": undefined,
+				"design": "Toggle",
+			}
+		]
+	},
+	/*
   {
-    type: "select",
-    title: "Multi Select",
-    displayTemplate: "Selections: %1",
-    property: "prop1",
-    multiple: true,
-    expanded: true,
-    options: [
-      ["option-1", "option 1"],
-      ["option-2", "option 2"],
-      ["option-3", "option 3"],
-      ["option-4", "option 4"],
-      ["option-5", "option 5"],
-      ["option-6", "option 6"],
-      ["option-7", "option 7"],
-      ["option-8", "option 8"],
-      ["option-9", "option 9"]
-    ],
-    defaultSelection: ["option-1", "option-2"]
-  },
-  {
-    type: "select",
-    title: "Single Select",
-    displayTemplate: "Selection: %1",
-    property: "prop2",
-    multiple: false,
-    expanded: true,
-    options: [
-      ["option-1", "option 1"],
-      ["option-2", "option 2"],
-      ["option-3", "option 3"],
-      ["option-4", "option 4"]
-    ],
-    defaultSelection: "option-3"
-  },
-  {
-    type: "date",
-    title: "Date From",
-    displayTemplate: "Date starting at: %1",
-    property: "createdAt",
-    mode: "from"
-  },
-  {
-    type: "date",
-    title: "Date from to",
-    displayTemplate: "Date from: %1 to: %2",
-    property: "updatedAt",
-    mode: "fromto",
-    defaultFromDate: new Date(),
-    defaultToDate: new Date()
-  },
-  {
-    type: "sort",
-    title: "Sort",
-    displayTemplate: "sort by: %1",
-    options: [["createdAt", "created"], ["updatedAt", "updated"]],
-    defaultSelection: "updatedAt",
-    defaultOrder: "DESC"
-  },
-  {
-    type: "limit",
-    title: "$limit",
-    displayTemplate: "Items per page: %1",
-    options: [10, 25, 50, 100, 250, 500],
-    defaultSelection: 25
-  },
-  {
-    type: "boolean",
-    title: "Boolean",
-    options: {
-      publicSubmissions: "Public submissions",
-      teamSubmissions: "Team submissions"
-    },
-    defaultSelection: {
-      publicSubmissions: true
-    },
-    applyNegated: {
-      teamSubmissions: [true, true]
-    }
-  }
+		// Root Options
+		"title": "TriSwitch",
+		"chipTemplate": (value) => `Boolean: ${value ? "+" : (value === false ? "-": "o")}`,
+
+		// Query data
+		"attribute": "",
+		"applyNegated": false,
+		"operator": "=",
+		"value": undefined,
+
+		// UI options
+		"options": undefined,
+		"design": "TriSwitch",
+	},
+	{
+		// Root Options
+		"title": "Toggle",
+		"chipTemplate": (value) => `Boolean: ${value ? "+" : (value === false ? "-": "o")}`,
+
+		// Query data
+		"attribute": "",
+		"applyNegated": false,
+		"operator": "=",
+		"value": undefined,
+
+		// UI options
+		"options": undefined,
+		"design": "Toggle",
+	}
+	*/
 ];
 export default {
   components: {
@@ -174,7 +144,7 @@ export default {
       apiQuery: {},
       urlQuery: {},
 			nativeEvents: [],
-			config: localStorage.getItem("config")
+			config: localStorage.getItem("config") && false
 				? JSON.parse(localStorage.getItem("config"))
 				: {
 					addLabel: undefined,

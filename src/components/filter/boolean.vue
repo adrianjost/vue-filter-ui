@@ -33,15 +33,44 @@ import { MdDialog, MdButton } from 'vue-material/dist/components'
 Vue.use(MdDialog)
 Vue.use(MdButton)
 
-  export default {
-    name: 'BooleanPicker',
-    props: ['config'],
-    data() {
-      return {
-        selections:{},
-      };
-    },
-  };
+export default {
+	name: 'BooleanPicker',
+	  model: {
+		prop: "query",
+		event: "newQuery",
+  },
+	props: {
+		config: {
+			type: Object,
+			required: true,
+		},
+		query: {
+			type: Object,
+			default: () => ({})
+		}
+	},
+	data() {
+		return {
+			selections:{},
+		};
+	},
+	created(){
+		this.loadFromQuery()
+	},
+	methods: {
+		loadFromQuery(){
+			console.log(this.config);
+			const query = {
+				"publicSubmissions": false,
+				"teamSubmissions[$ne]": true,
+			}
+			this.config.options.forEach((option) => {
+				this.config.applyNegated
+			})
+		},
+		emitNewQuery(){},
+	}
+};
 </script>
 
 <style lang="scss" scoped>

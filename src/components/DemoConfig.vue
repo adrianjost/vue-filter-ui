@@ -82,6 +82,7 @@ export default {
       set(to) {
         try {
           this.config.filter = JSON.parse(to);
+          this.configError = "";
         } catch (error) {
           this.configError = error;
         }
@@ -118,11 +119,6 @@ export default {
     width: 100%;
     flex: 1;
     min-height: 15rem;
-    background: url(http://i.imgur.com/2cOaJ.png);
-    background-attachment: local;
-    background-repeat: no-repeat;
-    padding-left: 35px;
-    padding-top: 10px;
     border-color: #ccc;
     resize: vertical;
   }

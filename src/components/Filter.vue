@@ -1,9 +1,8 @@
 <template>
   <div
-    ref="filter-module"
     class="filter"
-    @getFilter="sendNewQuery"
   >
+    <!--
     <md-chip
       v-for="chip in activeFilter"
       :key="chip[0]"
@@ -48,6 +47,7 @@
       :component="components[openModalConfig.type]"
       :methodApply="onConfirm"
       :methodCancle="onCancle"
+      :vmodel="vmodel"
     >
       <md-dialog
         :md-active="!!visibleFilter"
@@ -73,186 +73,168 @@
         </md-dialog-actions>
       </md-dialog>
     </slot>
+		-->
+
+    <button @click="openFilter(internalConfig[0])">
+      Toggle
+    </button>
+    <component
+      :is="componentChips"
+      :chips="chips"
+    />
+
+    <component
+      :is="componentModal"
+      v-if="openedFilter"
+      :title="openedFilter.title"
+      :label-apply="labelApply"
+      :label-cancle="labelCancle"
+      :active.sync="active"
+      @apply="handleApply"
+      @cancle="handleCancle"
+    >
+      <component
+        :is="openedFilter.design"
+        v-if="openedFilter"
+        class="layout"
+      >
+        <!-- eslint-disable vue/no-unused-vars -->
+        <!-- index usage is not detected -->
+        <template
+          v-for="(input, index) in openedFilter.filter"
+          v-slot:[getSlotName(index)]
+        >
+          <!-- eslint-enable vue/no-unused-vars -->
+          <component
+            :is="input.design"
+            :key="input.label"
+            v-model="input.value"
+            :options="input.options"
+          />
+        </template>
+      </component>
+    </component>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import { MdDialog, MdButton, MdMenu, MdChips, MdIcon } from 'vue-material/dist/components'
-import 'vue-material/dist/vue-material.min.css'
-Vue.use(MdDialog)
-Vue.use(MdButton)
-Vue.use(MdMenu)
-Vue.use(MdChips)
-Vue.use(MdIcon)
-
-import selectPicker from '@/components/filter/select.vue';
-import datePicker from '@/components/filter/date.vue';
-import sortPicker from '@/components/filter/sort.vue';
-import booleanPicker from '@/components/filter/boolean.vue';
-import limitPicker from '@/components/filter/limit.vue';
-const qs = require('query-string');
-
-const defaultFilter = [
-	{
-		type: "boolean",
-		title: "more",
-		options: { propertyA: "Label A", propertyB: "Label B" },
-	},
-]
-
-const components = {
-  'filter-select': selectPicker,
-  'filter-date': datePicker,
-  'filter-sort': sortPicker,
-  'filter-boolean': booleanPicker,
-  'filter-limit': limitPicker,
-};
 
 export default {
-  components,
   props: {
-    "labelAdd": {type: String, default: "add filter"},
+		"labelAdd": {type: String, default: "add filter"},
     "labelApply": {type: String, default: "apply"},
     "labelCancle": {type: String, default: "cancle"},
+		/*
     "handleUrl": { type: Boolean },
     "saveState": { type: Boolean },
-    "consistentOrder": {type: Boolean, default: true},
-    "filter": { type: [String, Array] , default: defaultFilter },
+		"consistentOrder": {type: Boolean, default: true},
+		*/
+		"filter": { type: Array, required: true },
+		componentChips: {
+			type: Function,
+			default: () => import(`@/components/Chips.vue`)
+		},
+		componentModal: {
+			type: Function,
+			default: () => import(`@/components/Modal.vue`)
+		}
   },
   data() {
     return {
-      components,
-      visibleFilter: '',
-      activeFilter: [],
-      isWatching: true,
-      pageIdentifier: `ffilter-${window.location.origin} + ${window.location.pathname}`,
-    };
-  },
-  computed: {
-    availableFilter(){
-      const filterSettings = (typeof this.filter === "string") ? JSON.parse(this.filter) : this.filter;
-      return filterSettings.map((filter)=>{
-				if(!filter.type.startsWith("filter-")){
-					filter.type = "filter-"+filter.type;
+			appliedFilterTitles: [],
+			openedFilterTitle: undefined,
+		};
+	},
+	computed: {
+		active:{
+			get(){
+				return !!this.openedFilterTitle;
+			},
+			set(to){
+				if(!to){
+					this.openedFilterTitle = undefined;
 				}
-        return filter;
-      });
-    },
-    selectableFilter(){
-      return this.availableFilter.filter((filter) => !this.isApplied(this.getIdentifier(filter)));
+			}
 		},
-		openModalConfig(){
-			return this.availableFilter.find((filter) => this.visibleFilter === this.getIdentifier(filter)) || {}
+		openedFilter(){
+			return this.openedFilterTitle ? this.internalConfig.find(filter => filter.title === this.openedFilterTitle) : undefined
+		},
+		internalConfig(){
+			return this.filter.map((orgFilter) => {
+				const filter = {...orgFilter};
+				if(Array.isArray(filter.filter)){
+					if(!filter.design){
+						filter.design = "default";
+					}
+					if(typeof filter.design === "string"){
+						const name = filter.design;
+						filter.design = () => import(`@/components/layouts/${name}.vue`);
+					}
+					filter.filter = filter.filter.map((orgSubFilter) => {
+						const subFilter = {...orgSubFilter};
+						if(typeof subFilter.design === "string"){
+							const name = subFilter.design;
+							subFilter.design = () => import(`./inputs/${name}.vue`)
+						}
+						return subFilter;
+					})
+					return filter;
+				}else{
+					if(typeof filter.design === "string"){
+						const type = Array.isArray(filter.filter) ? "layout" : "input";
+						const name = filter.design; // we need to copy it into a variable to prevent a recursive definition of filter.design
+						filter.design = () => import(`@/components/${type}s/${name}.vue`)
+					}
+					return {
+						title: filter.title,
+						chipTemplate: filter.chipTemplate,
+						design: () => import(`@/components/layouts/default.vue`),
+						filter: [filter],
+					}
+				}
+			})
+		},
+		chips(){
+			return this.internalConfig.filter((filter) => this.appliedFilterTitles.includes(filter.title)).map((filter) => {
+				const values = filter.filter.map(a => a.value);
+				let label = typeof filter.chipTemplate === "function"
+					? filter.chipTemplate
+					: (values) => {
+						let out = filter.chipTemplate;
+						values.forEach((value, index) => {
+							out.replace(`%${index}`, value)
+						})
+						return out
+					}
+				return {
+					id: filter.title,
+					label: label(values),
+				}
+			})
 		}
-  },
-  watch: {
-    activeFilter() {
-      if(this.isWatching){
-        this.sendNewQuery();
-      }
-    },
-  },
-  mounted(){
-    if(this.handleUrl){
-      window.onhashchange = this.newUrlQuery;
-    }
-    if(this.saveState){
-      const savedState = localStorage.getItem(this.pageIdentifier);
-      if(savedState){
-        window.history.replaceState(null , null, savedState);
-      }
-    }
-    this.newUrlQuery();
-  },
-  methods: {
-		onConfirm() {
-        let displayString;
-        this.apiQuery = {};
-        this.urlQuery = {};
-        if(Object.keys(this.selections).length) {
-          for (var property in this.selections) {
-            if (this.selections[property] !== undefined) {
-              if (this.config.applyNegated[property]) {
-                const negate = this.config.applyNegated[property][(this.selections[property]) ? 1 : 0];
-                const configuredProperty = ((negate) ? (property + '[$ne]') : property)
-                const configuredSelection = ((negate) ? (!this.selections[property]) : (this.selections[property]))
-                this.apiQuery[configuredProperty] = configuredSelection;
-              } else {
-                this.apiQuery[property] = this.selections[property];
-              }
-
-
-              this.urlQuery[property] = this.selections[property];
-              displayString = ((displayString) ? (displayString + ", ") : "") + `${this.config.options[property]}: ${(this.selections[property]) ? '✔' : '✖'}`;
-            }
-          }
-          this.$emit('set', this.identifier, {
-            apiQuery: this.apiQuery,
-            urlQuery: this.urlQuery,
-            displayString
-          });
-        }
-      },
-		onCancle() {
-			this.visibleFilter = "";
+	},
+	methods: {
+		getSlotName(index){
+ 			return `input-${index + 1}`
 		},
-    getIdentifier(filter){
-      const filterIndex = this.availableFilter.findIndex((a) => a === filter);
-      return '#' + filterIndex + "-" + filter.type + '-' + (filter.property || `$${filter.type.replace("filter-", "")}`);
-    },
-    setFilter(identifier, filterData) {
-      this.visibleFilter = '';
+		openFilter(filterConfig){
+			this.openedFilterTitle = filterConfig.title;
+		},
+		handleRemove(){
 
-      filterData = JSON.parse(JSON.stringify(filterData)); // deep copy
-
-      this.removeFilter(identifier, false);
-      this.activeFilter.push([identifier, filterData]);
-      if(this.consistentOrder){
-        this.activeFilter.sort((a, b) => a[0].localeCompare(b[0]));
-      }
-    },
-    removeFilter(key, emit) {
-      this.activeFilter = this.activeFilter.filter(item => item[0] != key);
-      if (emit) {
-        this.sendEvent("reset", key);
-      }
-    },
-    cancle() {
-      this.visibleFilter = '';
-    },
-    sendEvent(event, data){
-      this.$emit(event,data);
-      this.$refs["filter-module"].dispatchEvent(new CustomEvent(event, {detail: data}));
-    },
-    sendNewQuery() {
-      const apiQuery = {};
-      const urlQuery = {};
-      this.activeFilter.forEach((value) => {
-        Object.assign(apiQuery, value[1].apiQuery);
-        Object.assign(urlQuery, value[1].urlQuery);
-      }, {});
-      if (this.handleUrl && history.pushState) {
-        window.history.replaceState(null , null, `#?${qs.stringify(urlQuery)}`);
-      }
-      if(this.saveState){
-        localStorage.setItem(this.pageIdentifier, window.location.hash);
-      }
-
-      this.sendEvent("newFilter", [apiQuery, urlQuery]);
-    },
-    isApplied(identifier) {
-      return this.activeFilter.map(i => i[0]).includes(identifier);
-    },
-    newUrlQuery(){
-      this.isWatching = false;
-      this.activeFilter = [];
-      this.isWatching = true;
-      this.sendEvent('reset');
-      this.sendEvent("newUrlQuery", (qs.parse(location.hash.slice(1)) || {}));
-    }
-
-  },
+		},
+		handleApply(){
+			const filterTitle = this.openedFilter.title
+			if(!this.appliedFilterTitles.includes(filterTitle)){
+				this.appliedFilterTitles.push(filterTitle)
+			}
+			this.handleCancle();
+		},
+		handleCancle(){
+			this.openedFilterTitle = undefined;
+		}
+	}
 };
 </script>
 
@@ -260,7 +242,6 @@ export default {
 @import '@/styles/default.scss';
 </style>
 <style lang="scss" scoped>
-/* ENTER CUSTOM CSS HERE */
 .add-filter{
   vertical-align: middle;
   margin-bottom: 8px;

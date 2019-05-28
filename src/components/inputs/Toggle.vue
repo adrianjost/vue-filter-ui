@@ -1,0 +1,75 @@
+<template>
+  <button
+    type="button"
+    tab-index="0"
+    class="toggle"
+    @click="nextState"
+  >
+    <span class="toggle-text">
+      {{ options[currentIndex].label }}
+    </span>
+  </button>
+</template>
+
+<script>
+	export default {
+		model: {
+			prop: "value",
+			event: "input",
+		},
+		props: {
+			value: {
+				type: Boolean,
+				default: undefined
+			},
+			options: {
+				type: Array,
+				default: () => [{value: false, label: "✖"}, {value: undefined, label: "◯"}, {value: true, label: "✔"}],
+				validator: (options) => {
+					return options.every((option, index) => {
+						if(!option.hasOwnProperty('label')){
+							throw new Error(`option ${index} is missing a label`);
+						}
+						if(!option.hasOwnProperty('value')){
+							throw new Error(`option ${index} is missing a value`);
+						}
+						return (option.hasOwnProperty('label') && option.hasOwnProperty('value'))
+					})
+				}
+			}
+		},
+		data(){
+			return {
+				currentIndex: 0
+			}
+		},
+		watch:{
+			value(to){
+				const newIndex =this.options.findIndex((option) => option.value === to);
+				if(newIndex === -1){
+					throw new Error("Can't find value in options", to)
+				}
+				this.currentIndex = newIndex
+			}
+		},
+		methods: {
+			nextState(){
+				this.currentIndex = (this.currentIndex + 1) % this.options.length
+				this.$emit("input", this.options[this.currentIndex].value)
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+.toggle{
+	border: 1px solid grey;
+	border-radius: 50vmax;
+	display: flex;
+	flex-wrap: nowrap;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	padding: .25em;
+}
+</style>
