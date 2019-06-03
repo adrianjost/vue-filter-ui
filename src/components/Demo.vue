@@ -9,30 +9,9 @@
       :save-state="config.saveState"
       :consistent-order="config.consistentOrder"
       :filter="config.filter"
+      :parser="parser"
       @newFilter="updateFilter"
-    >
-      <template v-slot:modal="{config, vmodel, component, labelApply, labelCancle, methodApply, methodCancle}">
-        <div
-          class="custom-modal-wrapper"
-          @click.self="methodCancle"
-        >
-          <div class="custom-modal">
-            Custom Modal - {{ config.title }}
-            <component
-              :is="component"
-              v-model="vmodel"
-              :config="config"
-            />
-            <button @click="methodCancle">
-              {{ labelCancle }}
-            </button>
-            <button @click="methodApply">
-              {{ labelApply }}
-            </button>
-          </div>
-        </div>
-      </template>
-    </search-filter>
+    />
     <hr>
     <DemoConfig v-model="config" />
     <hr>
@@ -70,18 +49,20 @@
 import DemoConfig from "./DemoConfig.vue";
 import Filter from "./Filter.vue";
 
+import parser from "@/parser/feathers";
+
 const defaultFilter = [
 	{
 		title: "Dual",
 		chipTemplate: (v1,v2) => `v1: ${v1} v2: ${v2}`,
 		design: "sort",
+		required: false,
 		filter: [
 			{
 				// Query data
-				"attribute": "",
+				"attribute": "$sort-attribute",
 				"applyNegated": false,
 				"operator": "=",
-				"value": undefined,
 
 				// UI options
 				"options": undefined,
@@ -89,10 +70,9 @@ const defaultFilter = [
 			},
 			{
 				// Query data
-				"attribute": "",
+				"attribute": "$sort-order",
 				"applyNegated": false,
 				"operator": "=",
-				"value": undefined,
 
 				// UI options
 				"options": undefined,
@@ -100,38 +80,6 @@ const defaultFilter = [
 			}
 		]
 	},
-	/*
-  {
-		// Root Options
-		"title": "TriSwitch",
-		"chipTemplate": (value) => `Boolean: ${value ? "+" : (value === false ? "-": "o")}`,
-
-		// Query data
-		"attribute": "",
-		"applyNegated": false,
-		"operator": "=",
-		"value": undefined,
-
-		// UI options
-		"options": undefined,
-		"design": "TriSwitch",
-	},
-	{
-		// Root Options
-		"title": "Toggle",
-		"chipTemplate": (value) => `Boolean: ${value ? "+" : (value === false ? "-": "o")}`,
-
-		// Query data
-		"attribute": "",
-		"applyNegated": false,
-		"operator": "=",
-		"value": undefined,
-
-		// UI options
-		"options": undefined,
-		"design": "Toggle",
-	}
-	*/
 ];
 export default {
   components: {
@@ -140,6 +88,7 @@ export default {
   },
   data() {
     return {
+			parser,
       toggle: false,
       apiQuery: {},
       urlQuery: {},

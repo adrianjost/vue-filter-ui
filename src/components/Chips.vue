@@ -3,8 +3,8 @@
     <md-chip
       v-for="chip in chips"
       :key="chip.id"
-      md-clickable
-      md-deletable
+      :md-clickable="true"
+      :md-deletable="chip.deletable"
       @click="$emit('open', chip.id)"
       @md-delete.stop="$emit('remove', chip.id)"
     >

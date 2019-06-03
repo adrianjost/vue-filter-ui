@@ -139,7 +139,14 @@ export default {
 		componentModal: {
 			type: Function,
 			default: () => import(`@/components/Modal.vue`)
-		}
+		},
+		parser: {
+			type: Object,
+			required: true,
+			validator: (parser) => {
+					return ["generateQuery", "parseQuery"].every(attr => typeof parser[attr] === "function")
+				}
+		},
   },
   data() {
     return {
@@ -210,6 +217,7 @@ export default {
 					}
 				return {
 					id: filter.id,
+					deletable: !filter.required,
 					label: label(...values),
 				}
 			})
@@ -236,8 +244,17 @@ export default {
 		},
 		handleRemove(groupId){
 			console.log("remove", groupId)
+			// reset values
+			const removedGroup = this.internalConfig.find((group) => group.id === groupId);
+			removedGroup.filter.forEach(input => {
+				this.tmpValues[input.id] = undefined;
+				this.values[input.id] = undefined;
+			})
+			// remove from active list
 			const newActiveGroupList = this.activeGroups.filter((a) => a !== groupId);
-			this.$set(this, "activeGroups", newActiveGroupList )
+			this.$set(this, "activeGroups", newActiveGroupList );
+			// update query
+			this.generateQuery();
 		},
 		handleApply(){
 			// add filter to list
@@ -248,11 +265,16 @@ export default {
 			this.openGroup.filter.forEach((input) => {
 				this.$set(this.values, input.id, this.tmpValues[input.id]);
 			})
-			this.$forceUpdate();
 			this.handleCancle();
+			this.generateQuery();
+			this.$forceUpdate();
 		},
 		handleCancle(){
 			this.openGroupId = undefined;
+		},
+		generateQuery(){
+			const query = this.parser.generateQuery(this.internalConfig, this.values);
+			console.log(query);
 		}
 	}
 };
