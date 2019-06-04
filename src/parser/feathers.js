@@ -5,12 +5,23 @@
  */
 const generateQuery = (config, values) => {
   const query = {};
-  debugger;
   config.forEach(group => {
+    const hasValue = group.filter.some(input => values[input.id] !== undefined);
+    // skip if no value is defined for the modal
+    if (!hasValue) {
+      return;
+    }
+    if ((group.parser || {}).generator) {
+      const groupValues = {};
+      group.filter.forEach(filter => {
+        groupValues[filter.id] = values[filter.id];
+      });
+      group.parser(group, groupValues);
+    }
     // edge case for sort
     if (
-      group.filter.every(input =>
-        ["$sort-attribute", "$sort-direction"].includes(input.attriute)
+      ["$sort-attribute", "$sort-order"].every(
+        attribute => !!group.filter.find(input => input.attribute === attribute)
       )
     ) {
       query["$sort"] = {};
@@ -18,22 +29,15 @@ const generateQuery = (config, values) => {
         input => input.attribute === "$sort-attribute"
       );
       const sortDirection = group.filter.find(
-        input => input.attribute === "$sort-direction"
+        input => input.attribute === "$sort-order"
       );
-      query["$sort"][sortAttribute] = sortDirection;
+      query["$sort"][values[sortAttribute.id]] = values[sortDirection.id];
       return;
     }
     // default handling
     group.filter.forEach(filter => {
       const applyNegated = filter.applyNegated(values[filter.id]);
       switch (filter.operator) {
-        case "=":
-          if (applyNegated) {
-            query[filter.attribute] = { $ne: values[filter.id] };
-          } else {
-            query[filter.attribute] = values[filter.id];
-          }
-          break;
         case "<": {
           const key = applyNegated ? "$lt" : "$gte";
           query[filter.attribute] = {};
@@ -52,6 +56,13 @@ const generateQuery = (config, values) => {
           query[filter.attribute] = {};
           query[filter.attribute][key] = Array.isArray(value) ? value : [value];
           break;
+        }
+        default: {
+          if (applyNegated) {
+            query[filter.attribute] = { $ne: values[filter.id] };
+          } else {
+            query[filter.attribute] = values[filter.id];
+          }
         }
       }
     });

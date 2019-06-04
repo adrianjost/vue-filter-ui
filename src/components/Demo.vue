@@ -10,11 +10,11 @@
       :consistent-order="config.consistentOrder"
       :filter="config.filter"
       :parser="parser"
-      @newFilter="updateFilter"
+      @newQuery="updateQuery"
     />
-    <hr>
+    <hr />
     <DemoConfig v-model="config" />
-    <hr>
+    <hr />
     <table width="100%">
       <tr>
         <th>FeathersJS</th>
@@ -29,13 +29,10 @@
         </td>
       </tr>
     </table>
+
     <div class="events">
       <b>Native Events</b>
-      <p
-        v-for="event in nativeEvents"
-        :key="event.timeStamp"
-        class="event"
-      >
+      <p v-for="event in nativeEvents" :key="event.timeStamp" class="event">
         ({{ parseInt(event.timeStamp) }}) <b>{{ event.type }}:</b>
         <code>
           {{ JSON.stringify(event.detail, null, 2) }}
@@ -52,34 +49,81 @@ import Filter from "./Filter.vue";
 import parser from "@/parser/feathers";
 
 const defaultFilter = [
-	{
-		title: "Dual",
-		chipTemplate: (v1,v2) => `v1: ${v1} v2: ${v2}`,
-		design: "sort",
-		required: false,
-		filter: [
-			{
-				// Query data
-				"attribute": "$sort-attribute",
-				"applyNegated": false,
-				"operator": "=",
+  {
+    title: "Sort",
+    chipTemplate: (v1, v2) => `v1: ${v1} v2: ${v2}`,
+    design: "sort",
+    required: false,
+    filter: [
+      {
+        // Query data
+        attribute: "$sort-attribute",
+        //applyNegated: false,
+        //operator: "=",
 
-				// UI options
-				"options": undefined,
-				"design": "TriSwitch",
-			},
-			{
-				// Query data
-				"attribute": "$sort-order",
-				"applyNegated": false,
-				"operator": "=",
+        // UI options
+        options: undefined,
+        design: "TriSwitch"
+      },
+      {
+        // Query data
+        attribute: "$sort-order",
+        //applyNegated: false,
+        //operator: "=",
 
-				// UI options
-				"options": undefined,
-				"design": "Toggle",
-			}
-		]
-	},
+        // UI options
+        options: undefined,
+        design: "Toggle"
+      }
+    ]
+  },
+  {
+    title: "Veröffentlicht?",
+    chipTemplate: v1 => `${v1 ? "is published" : "is unpublished"}`,
+    required: false,
+    filter: [
+      {
+        // Query data
+        attribute: "isPublished",
+        applyNegated: false,
+        operator: "=",
+
+        // UI options
+        options: undefined,
+        design: "TriSwitch"
+      }
+    ]
+  },
+  {
+    title: "Unveröffentlicht?",
+    chipTemplate: v1 => `${v1 ? "is temp" : "is persistent"}`,
+    required: false,
+    filter: [
+      {
+        // Query data
+        attribute: "isTemp",
+        applyNegated: true,
+        operator: "=",
+
+        // UI options
+        options: [
+          {
+            label: "No",
+            value: true
+          },
+          {
+            label: "~",
+            value: undefined
+          },
+          {
+            label: "Yes",
+            value: false
+          }
+        ],
+        design: "TriSwitch"
+      }
+    ]
+  }
 ];
 export default {
   components: {
@@ -88,22 +132,23 @@ export default {
   },
   data() {
     return {
-			parser,
+      parser,
       toggle: false,
       apiQuery: {},
       urlQuery: {},
-			nativeEvents: [],
-			config: localStorage.getItem("config") && false
-				? JSON.parse(localStorage.getItem("config"))
-				: {
-					addLabel: undefined,
-					filter: defaultFilter,
-					applyLabel: undefined,
-					cancleLabel: undefined,
-					handleUrl: true,
-					saveState: false,
-					consistentOrder: true,
-				}
+      nativeEvents: [],
+      config:
+        localStorage.getItem("config") && false
+          ? JSON.parse(localStorage.getItem("config"))
+          : {
+              addLabel: undefined,
+              filter: defaultFilter,
+              applyLabel: undefined,
+              cancleLabel: undefined,
+              handleUrl: true,
+              saveState: false,
+              consistentOrder: true
+            }
     };
   },
   mounted() {
@@ -119,9 +164,8 @@ export default {
     });
   },
   methods: {
-    updateFilter([newApiQuery, newUrlQuery]) {
-      this.apiQuery = newApiQuery;
-      this.urlQuery = newUrlQuery;
+    updateQuery(query) {
+      this.apiQuery = query;
     }
   }
 };
@@ -129,23 +173,23 @@ export default {
 
 <!-- CUSTOM MODAL -->
 <style lang="scss" scoped>
-.custom-modal-wrapper{
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0,0,0,.2);
+.custom-modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
 }
-.custom-modal{
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background: white;
-	padding: 2rem;
-	border: 5px solid green;
-	box-shadow: 0 0 100px rgba(0,0,0,.5);
+.custom-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 2rem;
+  border: 5px solid green;
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
 }
 </style>
 
