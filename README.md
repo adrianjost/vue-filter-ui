@@ -37,8 +37,8 @@ import FeathersFilter from "feathersjs-filter-ui";
 export default {
   components: {
     FeathersFilter
-  },
-}
+  }
+};
 ```
 
 or on any webpage:
@@ -49,19 +49,17 @@ or on any webpage:
 <!-- include the filter module -->
 <script src="./dist/lib/FeathersjsFilterUi.umd.js"></script>
 
-
 <div id="app">
   <demo></demo>
 </div>
 
 <script>
-new Vue({
-  components: {
-    demo: FeathersjsFilterUi
-  }
-}).$mount('#app')
+  new Vue({
+    components: {
+      demo: FeathersjsFilterUi
+    }
+  }).$mount("#app");
 </script>
-
 ```
 
 ### As a native WebComponent (WIP, currently not working)
@@ -73,20 +71,23 @@ Then add an eventListener to watch for new querys.
 ```html
 <html>
   <header>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <!-- VueJS is not included in the bundle -->
     <script src="https://unpkg.com/vue" defer></script>
-    <script src="~feathersjs-filter-ui/dist/wc/feathersjs-filter-ui.min.js" defer></script>
+    <script
+      src="~feathersjs-filter-ui/dist/wc/feathersjs-filter-ui.min.js"
+      defer
+    ></script>
   </header>
   <body>
     <!-- use in plain HTML, or in any other framework -->
-    <feathersjs-filter-ui id="filter" add-label="more filter"/>
+    <feathersjs-filter-ui id="filter" add-label="more filter" />
 
     <script>
-      document.getElementById("filter").addEventListener('newFilter', (e) => {
+      document.getElementById("filter").addEventListener("newFilter", e => {
         // APPLY QUERE HERE...
-        console.log("filter:",e.detail[0]);
-      })
+        console.log("filter:", e.detail[0]);
+      });
     </script>
   </body>
 </html>
@@ -248,6 +249,7 @@ limit the result to the selected amount of items
 ## Theming
 
 Theming can be achived using the following css custom properties:
+
 ```
 :root{
   --md-theme-default-primary: #009688,
@@ -257,7 +259,7 @@ Theming can be achived using the following css custom properties:
 
 ## Development Setup
 
-``` bash
+```bash
 # clone repo to your device
 > git clone https://github.com/adrianjost/feathersjs-filter-ui.git
 
@@ -270,7 +272,7 @@ Theming can be achived using the following css custom properties:
 
 ## Build & Development
 
-``` bash
+```bash
 # serve with hot reload at localhost:8080
 > yarn dev
 

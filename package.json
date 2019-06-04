@@ -7,9 +7,11 @@
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",
+    "dev:docs": "vuepress dev docs",
     "build:demo": "vue-cli-service build --mode production --dest dist/demo",
     "build:lib": "vue-cli-service build --target lib --name FeathersjsFilterUi ./src/components/Filter.vue --mode production --dest dist/lib",
     "build:wc": "vue-cli-service build --target wc --name Feathersjs-filter-ui ./src/components/Filter.vue --mode production --dest dist/wc",
+    "build:docs": "vuepress build docs -d dist/docs",
     "build": "run-s build:*",
     "lint": "vue-cli-service lint",
     "deploy": "yarn lint && yarn build && yarn publish --access public"
@@ -41,7 +43,8 @@
     "prettier": "^1.17.1",
     "sass-loader": "^7.1.0",
     "vue-material": "latest",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.21",
+    "vuepress": "^0.14.11"
   },
   "eslintConfig": {
     "root": true,
