@@ -1,7 +1,7 @@
 import camelCase from 'lodash/camelCase'
 
 const Inputs = require.context('../../src/components/inputs',false,/[A-Z]\w+\.(vue|js)$/)
-const Layouts = require.context(	'../../src/components/layouts',false,/[A-Z]\w+\.(vue|js)$/)
+const Layouts = require.context(	'../../src/components/layouts',false,/[a-z]\w+\.(vue|js)$/)
 
 const upperFirst = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
@@ -38,6 +38,7 @@ export default ({
   siteData // site metadata
 }) => {
 	Object.entries(components).forEach(([name, config]) => {
+		console.log(name)
 		Vue.component(name, config)
 	})
 }

@@ -6,8 +6,9 @@
   "homepage": "https://adrianjost.github.io/feathersjs-filter-ui",
   "license": "MIT",
   "scripts": {
-    "dev": "vue-cli-service serve",
+    "dev:vue": "vue-cli-service serve",
     "dev:docs": "vuepress dev docs",
+    "dev": "run-p dev:*",
     "build:demo": "vue-cli-service build --mode production --dest dist/demo",
     "build:lib": "vue-cli-service build --target lib --name FeathersjsFilterUi ./src/components/Filter.vue --mode production --dest dist/lib",
     "build:wc": "vue-cli-service build --target wc --name Feathersjs-filter-ui ./src/components/Filter.vue --mode production --dest dist/wc",
