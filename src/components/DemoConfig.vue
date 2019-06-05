@@ -3,104 +3,85 @@
     <div class="config">
       <label>
         <b>addLabel:</b>
-        <input
-          v-model="config.addLabel"
-          type="text"
-        >
+        <input v-model="config.addLabel" type="text" />
       </label>
       <label>
         <b>applyLabel:</b>
-        <input
-          v-model="config.applyLabel"
-          type="text"
-        >
+        <input v-model="config.applyLabel" type="text" />
       </label>
       <label>
         <b>cancleLabel:</b>
-        <input
-          v-model="config.cancleLabel"
-          type="text"
-        >
+        <input v-model="config.cancleLabel" type="text" />
       </label>
       <label>
         <b>handleUrl:</b>
-        <input
-          v-model="config.handleUrl"
-          type="checkbox"
-        >
+        <input v-model="config.handleUrl" type="checkbox" />
       </label>
       <label>
         <b>saveState:</b>
-        <input
-          v-model="config.saveState"
-          type="checkbox"
-        >
+        <input v-model="config.saveState" type="checkbox" />
       </label>
       <label>
         <b>consistentOrder:</b>
-        <input
-          v-model="config.consistentOrder"
-          type="checkbox"
-        >
+        <input v-model="config.consistentOrder" type="checkbox" />
       </label>
       <label style="width: 100%">
         <b>filter:</b>
-        <textarea v-model.lazy="filterString" />
+        <textarea v-model="filters" />
       </label>
     </div>
-    <p
-      v-if="configError"
-      style="color: red"
-    >
-      <b>Error:</b> {{ configError }}
-    </p>
+    <p v-if="configError" style="color: red"><b>Error:</b> {{ configError }}</p>
   </section>
 </template>
 
 <script>
 export default {
   model: {
-		prop: "config",
-		event: "input",
+    prop: "config",
+    event: "input"
   },
   props: {
     config: {
       type: Object,
-      required: true,
+      required: true
     }
   },
   data() {
     return {
+      filters: "",
       configError: undefined
     };
-	},
-  computed: {
-    filterString: {
-      get() {
-        return JSON.stringify(this.config.filter, null, 2);
-      },
-      set(to) {
+  },
+  watch: {
+    filters(to) {
+      try {
+        const parsed = JSON.parse(to);
+        this.config.filter = parsed;
+        this.configError = "";
+      } catch (error) {
+        this.configError = error;
+      }
+    },
+    "config.filter": {
+      deep: true,
+      handler(to) {
+        this.filters = JSON.stringify(to, null, 2);
+      }
+    },
+    config: {
+      handler(val) {
         try {
-          this.config.filter = JSON.parse(to);
-          this.configError = "";
+          localStorage.setItem("config", JSON.stringify(this.config));
         } catch (error) {
           this.configError = error;
         }
-      }
+      },
+      deep: true
     }
   },
-	watch: {
-		config: {
-			handler(val){
-				try {
-					localStorage.setItem("config", JSON.stringify(this.config));
-        } catch (error) {
-          this.configError = error;
-        }
-			},
-			deep: true,
-		}
-	}
+  created() {
+    this.filters = JSON.stringify(this.config.filter, null, 2);
+  }
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <CustomSelect v-model="vmodelProxy" multiple />
+  <CustomSelect v-model="vmodelProxy" :options="options" multiple />
 </template>
 <script>
 import CustomSelect from "./Select";
@@ -13,6 +13,7 @@ export default {
   },
   props: {
     value: {
+      type: Array,
       default: () => []
     },
     options: {

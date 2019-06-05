@@ -245,8 +245,8 @@ export default {
       to.forEach(group => {
         group.filter.forEach(input => {
           if (!this.values.hasOwnProperty(input.id)) {
-            this.$set(this.values, input.id, false);
-            this.$set(this.tmpValues, input.id, false);
+            this.$set(this.values, input.id, undefined);
+            this.$set(this.tmpValues, input.id, undefined);
           }
         });
       });
