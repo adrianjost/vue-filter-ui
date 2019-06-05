@@ -130,7 +130,7 @@ export default {
     filter: { type: Array, required: true },
     componentSelect: {
       type: Function,
-      default: () => import(`@/components/FilterSelect.vue`)
+      default: () => import(`@/components/Select.vue`)
     },
     componentChips: {
       type: Function,
@@ -213,26 +213,25 @@ export default {
       });
     },
     chips() {
-      return this.internalConfig
-        .filter(filter => this.activeGroups.includes(filter.id))
-        .map(filter => {
-          const values = filter.filter.map(a => this.values[a.id]);
-          let label =
-            typeof filter.chipTemplate === "function"
-              ? filter.chipTemplate
-              : values => {
-                  let out = filter.chipTemplate;
-                  values.forEach((value, index) => {
-                    out.replace(`%${index}`, value);
-                  });
-                  return out;
-                };
-          return {
-            id: filter.id,
-            deletable: !filter.required,
-            label: label(...values)
-          };
-        });
+      return this.activeGroups.map(groupId => {
+        const group = this.internalConfig.find(group => group.id === groupId);
+        const values = group.filter.map(a => this.values[a.id]);
+        const label =
+          typeof group.chipTemplate === "function"
+            ? group.chipTemplate
+            : values => {
+                let out = group.chipTemplate;
+                values.forEach((value, index) => {
+                  out.replace(`%${index}`, value);
+                });
+                return out;
+              };
+        return {
+          id: group.id,
+          deletable: !group.required,
+          label: label(...values)
+        };
+      });
     },
     unusedFilters() {
       return this.internalConfig.filter(group => {
@@ -260,7 +259,6 @@ export default {
       this.openGroupId = groupId;
     },
     handleRemove(groupId) {
-      console.log("remove", groupId);
       // reset values
       const removedGroup = this.internalConfig.find(
         group => group.id === groupId
@@ -277,9 +275,9 @@ export default {
     },
     handleApply() {
       // add filter to list
-      const hasValues = this.openGroup.filter.some(input => {
-        this.tmpValues[input.id] !== undefined;
-      });
+      const hasValues = this.openGroup.filter.some(
+        input => this.tmpValues[input.id] !== undefined
+      );
       if (hasValues && !this.activeGroups.includes(this.openGroup.id)) {
         this.activeGroups.push(this.openGroup.id);
       } else if (!hasValues) {
