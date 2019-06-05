@@ -67,6 +67,25 @@ Wrapper-Component for the dialog where the user can enter there filter settings.
 
 ## parser
 
+The parsers are used to generate the language specific query from the abstract config object. They are also used to initialy populate the ui with values from an existing query.
+To use an existing parser, you can simply import it.
+
+```html
+<template>
+  <FilterComponent :parser="parser" />
+</template>
+
+<script>
+  import parser from "TODO";
+
+   data(){
+   	return {
+   		parser,
+   	}
+   }
+</script>
+```
+
 ## filter
 
 The Filter Attribute gets an Array of [filter-groups](#filter-groups).
