@@ -82,6 +82,7 @@
 
     <component
       :is="componentSelect"
+      :label-add="labelAdd"
       :options="unusedFilters"
       @openFilter="openFilter"
     />
@@ -92,11 +93,10 @@
       :title="openGroup.title"
       :label-apply="labelApply"
       :label-cancle="labelCancle"
-      :active.sync="active"
       @apply="handleApply"
       @cancle="handleCancle"
     >
-      <component :is="openGroup.design" v-if="openGroup" class="layout">
+      <component :is="openGroup.design" class="layout">
         <!-- eslint-disable vue/no-unused-vars -->
         <!-- index usage is not detected -->
         <template

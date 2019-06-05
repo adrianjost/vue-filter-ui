@@ -13,6 +13,7 @@
 
 <script>
 	export default {
+		name: "Toggle",
 		model: {
 			prop: "value",
 			event: "input",
