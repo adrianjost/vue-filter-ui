@@ -1,4 +1,4 @@
-# Modal/Dialog
+# Custom Modal/Dialog
 
 ## Interface
 

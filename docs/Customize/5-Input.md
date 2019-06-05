@@ -1,4 +1,4 @@
-# Custom Layouts
+# Custom Inputs
 
 ## Interface
 
