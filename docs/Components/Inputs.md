@@ -41,3 +41,27 @@ defaultOptions = [
 #### Demo
 
 <InputCheckbox />
+
+## Select
+
+#### Demo
+
+<InputSelect />
+
+## MultiSelect
+
+#### Demo
+
+<InputMultiSelect />
+
+## InputText
+
+#### Demo
+
+<InputInputText />
+
+## InputNumber
+
+#### Demo
+
+<InputInputNumber />

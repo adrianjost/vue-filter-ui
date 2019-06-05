@@ -28,9 +28,6 @@ export default {
           if (!option.hasOwnProperty("label")) {
             throw new Error(`option ${index} is missing a label`);
           }
-          if (!option.hasOwnProperty("value")) {
-            throw new Error(`option ${index} is missing a value`);
-          }
           return (
             option.hasOwnProperty("label") && option.hasOwnProperty("value")
           );

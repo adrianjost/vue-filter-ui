@@ -98,6 +98,7 @@ import MyCustomLayout from "./MyCustomLayout";
 | `applyNegated` | `Boolean`/`Function` | ❌       | • Defines, whether the user selected value should be negated in the generated query. Example: User: `true`, applyNegated: `true` results in the query for `not true`. <br/>• Defaults to false. <br />• When used as a function, those function gets the current input value and must return a Boolean. |
 | `input`        | `String`/`Component` | ✔        | Specifies the component which will be used for the input. Can be a String for predefined Components (TODO link) or a custom one. Read more about custom inputs [here](/Customize/5-Input.md).                                                                                                           |
 | `operator`     | `String`             | (✔)      | • Defines the operator used in the generated query. <br/>• defaults to `=` <br/> • Must be one of the following options: `>`, `>=`, `=` or `includes`.<br/> • `<` and `<=` can be achived by negating the input with `applyNegated`.                                                                    |
+| `label`        | `String`             | (✔)      | Some Inputs require a label. This is often the case for free text inputs without options. Read more in the [inputs documentation](/Components/Inputs.md)                                                                                                                                                |
 
 ```js
 filter: [

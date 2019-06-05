@@ -49,7 +49,6 @@ export default ({
   siteData // site metadata
 }) => {
   Object.entries(components).forEach(([name, config]) => {
-    console.log(name);
     Vue.component(name, config);
   });
   Vue.component("DemoFilter", Demo);

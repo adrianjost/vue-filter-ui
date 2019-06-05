@@ -109,6 +109,7 @@
             :key="input.label"
             v-model="tmpValues[input.id]"
             :options="input.options"
+            :label="input.label"
           />
         </template>
       </component>
@@ -216,6 +217,7 @@ export default {
       return this.activeGroups.map(groupId => {
         const group = this.internalConfig.find(group => group.id === groupId);
         const values = group.filter.map(a => this.values[a.id]);
+        console.log(group.chipTemplate);
         const label =
           typeof group.chipTemplate === "function"
             ? group.chipTemplate
@@ -224,7 +226,6 @@ export default {
                 Array.from(arguments).forEach((value, index) => {
                   out = out.replace(`%${index + 1}`, value);
                 });
-                console.log(out);
                 return out;
               };
         return {

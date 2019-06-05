@@ -95,8 +95,9 @@ const defaultFilter = [
     ]
   },
   {
-    title: "Unveröffentlicht?",
-    chipTemplate: v1 => `${v1 ? "is temp" : "is persistent"}`,
+    title: "Lists",
+    chipTemplate: (v1, v2) =>
+      `${v1 ? "is temp" : "is persistent"} ${v2 ? "isCool" : "isHot"}`,
     required: false,
     filter: [
       {
@@ -143,24 +144,6 @@ const defaultFilter = [
           }
         ],
         input: "Checkbox"
-      },
-      {
-        // Query data
-        attribute: "isDaddy",
-        operator: "=",
-
-        // UI options
-        options: [
-          {
-            label: "Daddy",
-            value: true
-          },
-          {
-            label: "no daddy",
-            value: false
-          }
-        ],
-        input: "Select"
       }
     ]
   },
