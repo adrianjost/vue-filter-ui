@@ -143,6 +143,66 @@ const defaultFilter = [
           }
         ],
         input: "Checkbox"
+      },
+      {
+        // Query data
+        attribute: "isDaddy",
+        operator: "=",
+
+        // UI options
+        options: [
+          {
+            label: "Daddy",
+            value: true
+          },
+          {
+            label: "no daddy",
+            value: false
+          }
+        ],
+        input: "Select"
+      }
+    ]
+  },
+  {
+    title: "Select",
+    chipTemplate: `1: %1; 2: %2`,
+    filter: [
+      {
+        // Query data
+        attribute: "isDaddy",
+        operator: "=",
+
+        // UI options
+        options: [
+          {
+            label: "Daddy",
+            value: true
+          },
+          {
+            label: "no daddy",
+            value: false
+          }
+        ],
+        input: "Select"
+      },
+      {
+        // Query data
+        attribute: "isMultiDaddy",
+        operator: "=",
+
+        // UI options
+        options: [
+          {
+            label: "Daddy",
+            value: true
+          },
+          {
+            label: "no daddy",
+            value: false
+          }
+        ],
+        input: "MultiSelect"
       }
     ]
   }

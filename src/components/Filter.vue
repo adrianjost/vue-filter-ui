@@ -219,11 +219,12 @@ export default {
         const label =
           typeof group.chipTemplate === "function"
             ? group.chipTemplate
-            : values => {
+            : function() {
                 let out = group.chipTemplate;
-                values.forEach((value, index) => {
-                  out.replace(`%${index}`, value);
+                Array.from(arguments).forEach((value, index) => {
+                  out = out.replace(`%${index + 1}`, value);
                 });
+                console.log(out);
                 return out;
               };
         return {
@@ -288,6 +289,7 @@ export default {
       this.openGroup.filter.forEach(input => {
         this.$set(this.values, input.id, this.tmpValues[input.id]);
       });
+
       this.handleCancle();
       this.generateQuery();
       this.$forceUpdate();
