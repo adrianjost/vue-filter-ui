@@ -96,7 +96,7 @@
       @apply="handleApply"
       @cancle="handleCancle"
     >
-      <component :is="openGroup.design" class="layout">
+      <component :is="openGroup.layout" class="layout">
         <!-- eslint-disable vue/no-unused-vars -->
         <!-- index usage is not detected -->
         <template
@@ -105,7 +105,7 @@
         >
           <!-- eslint-enable vue/no-unused-vars -->
           <component
-            :is="input.design"
+            :is="input.input"
             :key="input.label"
             v-model="tmpValues[input.id]"
             :options="input.options"
@@ -191,16 +191,16 @@ export default {
         // add identifier
         filter.id = `group-${groupIndex}`;
         // resolve input wrapper component
-        if (typeof filter.design !== "function") {
-          const name = filter.design || "default";
-          filter.design = () => import(`@/components/layouts/${name}.vue`);
+        if (typeof filter.layout !== "function") {
+          const name = filter.layout || "default";
+          filter.layout = () => import(`@/components/layouts/${name}.vue`);
         }
         // resolve input components
         filter.filter = filter.filter.map((orgSubFilter, inputIndex) => {
           const subFilter = { ...orgSubFilter };
-          if (typeof subFilter.design === "string") {
-            const name = subFilter.design;
-            subFilter.design = () => import(`./inputs/${name}.vue`);
+          if (typeof subFilter.input === "string") {
+            const name = subFilter.input;
+            subFilter.input = () => import(`./inputs/${name}.vue`);
             subFilter.id = `input-${groupIndex}-${inputIndex}`;
           }
           if (typeof subFilter.applyNegated !== "function") {

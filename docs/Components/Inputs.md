@@ -3,7 +3,9 @@
 [[toc]]
 
 ## Toggle
+
 #### Demo
+
 <InputToggle />
 
 ## TriSwitch
@@ -18,12 +20,24 @@ The label attribute gets currently ignored, so you can't change it. This may cha
 
 ```js
 defaultOptions = [
-	{ value: false, label: "false" },
-	{ value: undefined, label: "undefined" },
-	{ value: true, label: "true" }
-]
+  { value: false, label: "false" },
+  { value: undefined, label: "undefined" },
+  { value: true, label: "true" }
+];
 ```
 
 #### Demo
 
 <InputTriSwitch />
+
+## Radio
+
+#### Demo
+
+<InputRadio />
+
+## Checkbox
+
+#### Demo
+
+<InputCheckbox />

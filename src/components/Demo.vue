@@ -52,7 +52,7 @@ const defaultFilter = [
   {
     title: "Sort",
     chipTemplate: (v1, v2) => `v1: ${v1} v2: ${v2}`,
-    design: "sort",
+    layout: "sort",
     required: false,
     filter: [
       {
@@ -63,7 +63,7 @@ const defaultFilter = [
 
         // UI options
         options: undefined,
-        design: "TriSwitch"
+        input: "TriSwitch"
       },
       {
         // Query data
@@ -73,7 +73,7 @@ const defaultFilter = [
 
         // UI options
         options: undefined,
-        design: "Toggle"
+        input: "Toggle"
       }
     ]
   },
@@ -90,7 +90,7 @@ const defaultFilter = [
 
         // UI options
         options: undefined,
-        design: "TriSwitch"
+        input: "TriSwitch"
       }
     ]
   },
@@ -120,7 +120,29 @@ const defaultFilter = [
             value: false
           }
         ],
-        design: "TriSwitch"
+        input: "Radio"
+      },
+      {
+        // Query data
+        attribute: "isCool",
+        operator: "=",
+
+        // UI options
+        options: [
+          {
+            label: "Check",
+            value: "YES"
+          },
+          {
+            label: "Yes",
+            value: "YES YES"
+          },
+          {
+            label: "NO",
+            value: "nope :("
+          }
+        ],
+        input: "Checkbox"
       }
     ]
   }

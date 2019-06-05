@@ -1,0 +1,69 @@
+<template>
+  <fieldset class="checkbox-list">
+    <label v-for="option in options" :key="option.label" class="label">
+      <input
+        v-model="vmodelProxy"
+        type="checkbox"
+        :name="option.label + option.value"
+        :value="option.value"
+      />
+      {{ option.label }}
+    </label>
+  </fieldset>
+</template>
+
+<script>
+export default {
+  model: {
+    prop: "value",
+    event: "input"
+  },
+  props: {
+    value: {
+      type: Array,
+      default: () => []
+    },
+    options: {
+      type: Array,
+      default: () => [
+        { value: false, label: "✖" },
+        { value: undefined, label: "◯" },
+        { value: true, label: "✔" }
+      ],
+      validator: options => {
+        return options.every((option, index) => {
+          if (!option.hasOwnProperty("label")) {
+            throw new Error(`option ${index} is missing a label`);
+          }
+          if (!option.hasOwnProperty("value")) {
+            throw new Error(`option ${index} is missing a value`);
+          }
+          return (
+            option.hasOwnProperty("label") && option.hasOwnProperty("value")
+          );
+        });
+      }
+    }
+  },
+  computed: {
+    vmodelProxy: {
+      get() {
+        return this.value;
+      },
+      set(to) {
+        this.$emit("input", to);
+      }
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.checkbox-list {
+  border: 0;
+  display: block;
+  .label {
+    display: block;
+  }
+}
+</style>
