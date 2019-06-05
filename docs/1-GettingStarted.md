@@ -14,7 +14,7 @@ npm i --save feathersjs-filter-ui
 
 ::: tip Required Attributes
 
-There are some required props. Read more about this in the next chapter "[Configuration](./1-Configuration.md)".
+There are some required props. Read more about this in the next chapter "[Configuration](./2-Configuration.md)".
 
 :::
 

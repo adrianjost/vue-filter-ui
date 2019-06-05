@@ -20,9 +20,16 @@ deploy:
       branch: master
   - provider: pages
     skip_cleanup: true
-    local-dir: "dist/demo"
+    local-dir: "dist/docs"
     allow-empty-commit: true
     github-token: $GITHUB_TOKEN # Set in the settings page of your repository, as a secure variable
     keep-history: true
+    on:
+      branch: master
+  - provider: surge
+    # Set SURGE_LOGIN and SURGE_TOKEN as secure variables
+    skip_cleanup: true
+    project: "dist/docs"
+    domain: docs.vue-filter-ui.surge.sh
     on:
       branch: master

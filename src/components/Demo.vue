@@ -46,7 +46,7 @@
 import DemoConfig from "./DemoConfig.vue";
 import Filter from "./Filter.vue";
 
-import parser from "@/parser/FeathersJS";
+import parser from "../parser/FeathersJS";
 
 const defaultFilter = [
   {
@@ -195,6 +195,9 @@ export default {
 
 <!-- DEMO STYLES -->
 <style lang="scss" scoped>
+pre {
+  background: #eee;
+}
 .wrapper {
   margin: 25px;
   padding: 25px;
@@ -208,6 +211,7 @@ hr {
   margin: 1rem 0;
 }
 table {
+  display: table;
   margin-top: 25px;
   width: 100%;
   text-align: left;
