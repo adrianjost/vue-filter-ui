@@ -26,7 +26,8 @@
     "access": "public"
   },
   "dependencies": {
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "vue-my-dropdown": "^2.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.7.0",

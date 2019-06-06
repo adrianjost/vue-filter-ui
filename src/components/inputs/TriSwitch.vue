@@ -1,6 +1,6 @@
 <template>
   <div class="tri-state-toggle">
-    <span>{{label}}</span>
+    <span v-if="label" class="label">{{label}}</span>
     <span>
       <input
       v-for="option in options"
@@ -75,9 +75,12 @@ export default {
   white-space: nowrap;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
+  .label{
+    flex: 1;
+  }
   input {
     display: inline-block;
     height: 32px;

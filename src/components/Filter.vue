@@ -73,19 +73,24 @@
     </slot>
 		-->
 
-    <component
-      :is="componentChips"
-      :chips="chips"
-      @open="openFilter"
-      @remove="handleRemove"
-    />
+    <div class="row">
+      <component
+        :is="componentChips"
+        v-if="chips.length > 0"
+        class="chips"
+        :chips="chips"
+        @open="openFilter"
+        @remove="handleRemove"
+      />
 
-    <component
-      :is="componentSelect"
-      :label-add="labelAdd"
-      :options="unusedFilters"
-      @openFilter="openFilter"
-    />
+      <component
+        :is="componentSelect"
+        class="filter-select"
+        :label-add="labelAdd"
+        :options="unusedFilters"
+        @openFilter="openFilter"
+      />
+    </div>
 
     <component
       :is="componentModal"
@@ -318,5 +323,15 @@ export default {
 }
 .md-chip {
   margin-bottom: 8px;
+}
+.row{
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: 100%;
+  align-items: center;
+  .chips{
+    margin-right: .5rem;
+  }
 }
 </style>
