@@ -60,6 +60,10 @@ $transition: all 0.15s ease-in-out;
 	transition: $transition;
 	cursor: pointer;
 	white-space: nowrap;
+	margin-right: 0.5rem;
+	&:last-of-type {
+		margin-right: 0;
+	}
 
 	&.is-deletable {
 		padding-right: 0.5em;
@@ -94,7 +98,7 @@ $transition: all 0.15s ease-in-out;
 		}
 		&:hover,
 		&:focus {
-			background: rgba(0, 0, 0, 0.75);
+			background: rgba(0, 0, 0, 0.5);
 			svg {
 				fill: #fff;
 			}
