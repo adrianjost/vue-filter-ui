@@ -1,14 +1,13 @@
 {
 	"name": "vue-filter-ui",
-	"version": "0.3.1",
+	"version": "0.3.2",
 	"author": "Adrian Jost <github@adrianjost.dev> (https://adrianjost.dev)",
 	"scripts": {
 		"build": "run-s build:*",
 		"lint": "vue-cli-service lint",
 		"deploy": "yarn lint && yarn build && yarn publish --access public",
 		"build:docs": "vuepress build docs -d dist/docs",
-		"build:lib": "vue-cli-service build --target lib --name VueFilterUi ./src/components/Filter.vue --mode production --dest dist/lib",
-		"build:wc": "vue-cli-service build --target wc-async --name VueFilterUi-filter-ui ./src/components/Filter.vue --mode production --dest dist/wc",
+		"build:lib": "vue-cli-service build --target lib --name VueFilterUi ./src/components/export.js --mode production --dest dist/lib",
 		"dev": "run-p dev:*",
 		"dev:docs": "vuepress dev docs",
 		"dev:vue": "vue-cli-service serve"
@@ -45,8 +44,7 @@
 		"last 2 versions"
 	],
 	"files": [
-		"dist/lib/*",
-		"dist/wc/*"
+		"dist/lib/*"
 	],
 	"gitHooks": {
 		"pre-commit": "lint-staged"

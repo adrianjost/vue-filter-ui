@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import { layouts, inputs, upperFirst } from "../export";
+console.log(layouts, inputs);
 const defaultFilter = `[
   {
     title: "Sort",
@@ -205,7 +207,7 @@ export default {
 	watch: {
 		filters(to) {
 			try {
-				const parsed = eval(to);
+				const parsed = this.parseConfig(to);
 				this.$set(this.config, "filter", parsed);
 				localStorage.setItem("filterConfig", to);
 				this.configError = "";
@@ -217,6 +219,22 @@ export default {
 	created() {
 		const storage = localStorage.getItem("filterConfig");
 		this.filters = storage ? storage : defaultFilter;
+	},
+	methods: {
+		parseConfig(config) {
+			const parsed = eval(config);
+			parsed.forEach((group) => {
+				if (typeof group.layout === "string") {
+					group.layout = layouts[upperFirst(group.layout)];
+				}
+				group.filter.forEach((input) => {
+					if (typeof input.input === "string") {
+						input.input = inputs[upperFirst(input.input)];
+					}
+				});
+			});
+			return parsed;
+		},
 	},
 };
 </script>

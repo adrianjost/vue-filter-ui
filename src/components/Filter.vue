@@ -52,6 +52,11 @@
 </template>
 
 <script>
+import DefaultSelect from "./Select";
+import DefaultChips from "./Chips";
+import DefaultModal from "./Modal";
+import DefaultLayout from "./layouts/default";
+
 export default {
 	props: {
 		labelAdd: { type: String, default: "add filter" },
@@ -65,16 +70,16 @@ export default {
 		*/
 		filter: { type: Array, required: true },
 		componentSelect: {
-			type: Function,
-			default: () => import(`@/components/Select.vue`),
+			type: Object,
+			default: () => DefaultSelect,
 		},
 		componentChips: {
-			type: Function,
-			default: () => import(`@/components/Chips.vue`),
+			type: Object,
+			default: () => DefaultChips,
 		},
 		componentModal: {
-			type: Function,
-			default: () => import(`@/components/Modal.vue`),
+			type: Object,
+			default: () => DefaultModal,
 		},
 		parser: {
 			type: Object,
@@ -127,18 +132,28 @@ export default {
 				// add identifier
 				filter.id = `group-${groupIndex}`;
 				// resolve input wrapper component
+				/*
+				// TODO I would like to have this functionality, but it doesn't work in a library build
 				if (typeof filter.layout !== "function") {
 					const name = filter.layout || "default";
-					filter.layout = () => import(`@/components/layouts/${name}.vue`);
+					filter.layout = () => import(`./layouts/${name}.vue`);
 				}
+				*/
+				if (!filter.layout) {
+					filter.layout = DefaultLayout;
+				}
+
 				// resolve input components
 				filter.filter = filter.filter.map((orgSubFilter, inputIndex) => {
 					const subFilter = { ...orgSubFilter };
+					subFilter.id = `input-${groupIndex}-${inputIndex}`;
+					/*
+					// TODO I would like to have this functionality, but it doesn't work in a library build
 					if (typeof subFilter.input === "string") {
 						const name = subFilter.input;
 						subFilter.input = () => import(`./inputs/${name}.vue`);
-						subFilter.id = `input-${groupIndex}-${inputIndex}`;
 					}
+					*/
 					if (typeof subFilter.applyNegated !== "function") {
 						const applyNegated = subFilter.applyNegated;
 						subFilter.applyNegated = () => !!applyNegated;
