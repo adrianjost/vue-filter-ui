@@ -45,9 +45,14 @@ export default {
 
 <style lang="scss" scoped>
 .toggle{
-  padding: .5rem 1rem;
+  padding: .25rem .75rem;
   border: 1px solid grey;
   border-radius: 3rem;
+        white-space: nowrap;
+
+  &:hover, &:focus{
+    background-color: rgba(0,0,0,.15)
+  }
 }
 .dialog{
     background: #fff;
