@@ -199,10 +199,6 @@ export default {
       configError: undefined
     };
   },
-  created(){
-    const storage = localStorage.getItem("filterConfig");
-    this.filters = storage ? storage : defaultFilter;
-  },
   watch: {
     filters(to) {
       try {
@@ -214,6 +210,10 @@ export default {
         this.configError = error;
       }
     },
+  },
+  created(){
+    const storage = localStorage.getItem("filterConfig");
+    this.filters = storage ? storage : defaultFilter;
   },
 };
 </script>
