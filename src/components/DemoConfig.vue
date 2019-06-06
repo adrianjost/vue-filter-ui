@@ -13,6 +13,10 @@
 				<b>cancleLabel:</b>
 				<input v-model="config.cancleLabel" type="text" />
 			</label>
+			<label>
+				<b>removeLabel:</b>
+				<input v-model="config.removeLabel" type="text" />
+			</label>
 			<!--
       <label>
         <b>handleUrl:</b>

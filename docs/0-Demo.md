@@ -1,3 +1,5 @@
 # Demo
 
+<ClientOnly>
 <DemoFilter />
+</ClientOnly>

@@ -5,6 +5,7 @@
 			:label-add="config.addLabel"
 			:label-apply="config.applyLabel"
 			:label-cancle="config.cancleLabel"
+			:label-remove="config.removeLabel"
 			:handle-url="config.handleUrl"
 			:save-state="config.saveState"
 			:consistent-order="config.consistentOrder"
