@@ -42,7 +42,6 @@
 
 <script>
 import { layouts, inputs, upperFirst } from "../export";
-console.log(layouts, inputs);
 const defaultFilter = `[
   {
     title: "Sort",

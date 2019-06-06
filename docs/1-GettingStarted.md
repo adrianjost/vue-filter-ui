@@ -18,31 +18,43 @@ There are some required props. Read more about this in the next chapter "[Config
 
 :::
 
-### HTML
-
-```html
+```vue
 <template>
-  <FeathersFilter />
+  <VueFilterUi :filter="filter" :parser="parser" />
 </template>
-```
 
-### Script
-
-```javascript
-import Vue from "vue";
-import FeathersFilter from "vue-filter-ui";
-
-Vue.use(FeathersFilter);
-```
-
-or directly in the component:
-
-```javascript
-import FeathersFilter from "vue-filter-ui";
+<script>
+import VueFilterUi, {inputs, layouts, parser} from "vue-filter-ui";
 
 export default {
-  components: {
-    FeathersFilter
-  }
+	components: {
+		VueFilterUi
+	},
+	data(){
+		return {
+			parser: parser.FeathersJS,
+			filter: [
+				{
+					title: "Items per page",
+					chipTemplate: "Items per page: %1",
+					required: true,
+					layout: layouts.Default,
+					filter: [
+						{
+							attribute: "$limit",
+							operator: "=",
+							input: inputs.Radio,
+							options: [
+								{ value: 25, label: "25" },
+								{ value: 50, label: "50" },
+								{ value: 100, label: "100" },
+							],
+						},
+					],
+				},
+			]
+		}
+	}
 };
+</script>
 ```
