@@ -13,6 +13,7 @@
         <b>cancleLabel:</b>
         <input v-model="config.cancleLabel" type="text" />
       </label>
+      <!--
       <label>
         <b>handleUrl:</b>
         <input v-model="config.handleUrl" type="checkbox" />
@@ -25,6 +26,7 @@
         <b>consistentOrder:</b>
         <input v-model="config.consistentOrder" type="checkbox" />
       </label>
+      -->
       <label style="width: 100%">
         <b>filter:</b>
         <textarea v-model="filters" />
@@ -35,6 +37,151 @@
 </template>
 
 <script>
+
+const defaultFilter = `[
+  {
+    title: "Sort",
+    chipTemplate: ${"([v1, v2]) => `v1: ${v1} v2: ${v2}`"},
+    layout: "sort",
+    required: false,
+    filter: [
+      {
+        // Query data
+        attribute: "$sort-attribute",
+        //applyNegated: false,
+        //operator: "=",
+
+        // UI options
+        options: undefined,
+        input: "TriSwitch"
+      },
+      {
+        // Query data
+        attribute: "$sort-order",
+        //applyNegated: false,
+        //operator: "=",
+
+        // UI options
+        options: undefined,
+        input: "Toggle"
+      }
+    ]
+  },
+  {
+    title: "Veröffentlicht?",
+    chipTemplate: ([v1]) => ${'`${v1 ? "is published" : "is unpublished"}`'},
+    required: false,
+    filter: [
+      {
+        // Query data
+        attribute: "isPublished",
+        applyNegated: false,
+        operator: "=",
+
+        // UI options
+        options: undefined,
+        input: "TriSwitch"
+      }
+    ]
+  },
+  {
+    title: "Lists",
+    chipTemplate: ([v1, v2]) =>
+      ${'`${v1 ? "is temp" : "is persistent"} ${v2 ? "isCool" : "isHot"}`'},
+    required: false,
+    filter: [
+      {
+        // Query data
+        attribute: "isTemp",
+        applyNegated: true,
+        operator: "=",
+
+        // UI options
+        options: [
+          {
+            label: "No",
+            value: true
+          },
+          {
+            label: "~",
+            value: undefined
+          },
+          {
+            label: "Yes",
+            value: false
+          }
+        ],
+        input: "Radio"
+      },
+      {
+        // Query data
+        attribute: "isCool",
+        operator: "=",
+
+        // UI options
+        options: [
+          {
+            label: "Check",
+            value: "YES"
+          },
+          {
+            label: "Yes",
+            value: "YES YES"
+          },
+          {
+            label: "NO",
+            value: "nope :("
+          }
+        ],
+        input: "Checkbox"
+      }
+    ]
+  },
+  {
+    title: "Select",
+    chipTemplate: "1: %1; 2: %2",
+    filter: [
+      {
+        // Query data
+        attribute: "isDaddy",
+        operator: "=",
+
+        // UI options
+        options: [
+          {
+            label: "Daddy",
+            value: true
+          },
+          {
+            label: "no daddy",
+            value: false
+          }
+        ],
+        input: "Select"
+      },
+      {
+        // Query data
+        attribute: "isMultiDaddy",
+        operator: "=",
+
+        // UI options
+        options: [
+          {
+            label: "Daddy",
+            value: true
+          },
+          {
+            label: "no daddy",
+            value: false
+          }
+        ],
+        input: "MultiSelect"
+      }
+    ]
+  }
+]
+`;
+
 export default {
   model: {
     prop: "config",
@@ -52,36 +199,22 @@ export default {
       configError: undefined
     };
   },
+  created(){
+    const storage = localStorage.getItem("filterConfig");
+    this.filters = storage ? storage : defaultFilter;
+  },
   watch: {
     filters(to) {
       try {
-        const parsed = JSON.parse(to);
-        this.config.filter = parsed;
+        const parsed = eval(to);
+        this.$set(this.config, "filter", parsed);
+        localStorage.setItem("filterConfig", to);
         this.configError = "";
       } catch (error) {
         this.configError = error;
       }
     },
-    "config.filter": {
-      deep: true,
-      handler(to) {
-        this.filters = JSON.stringify(to, null, 2);
-      }
-    },
-    config: {
-      handler(val) {
-        try {
-          localStorage.setItem("config", JSON.stringify(this.config));
-        } catch (error) {
-          this.configError = error;
-        }
-      },
-      deep: true
-    }
   },
-  created() {
-    this.filters = JSON.stringify(this.config.filter, null, 2);
-  }
 };
 </script>
 

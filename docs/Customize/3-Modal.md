@@ -11,6 +11,7 @@ A custom modal/dialog must implement the following interface:
 | `title`       | `String` | Name of the group. More details can be found under the [filter](#filter) property. |
 | `labelApply`  | `String` | Passthrough of the attribute [`labelApply`](#labelApply).                          |
 | `labelCancle` | `String` | Passthrough of the attribute [`labelCancle`](#labelCancle).                        |
+| `labelRemove` | `String` | Passthrough of the attribute [`labelRemove`](#labelRemove).                        |
 
 ### Slots
 

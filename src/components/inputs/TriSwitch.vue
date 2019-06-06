@@ -1,7 +1,8 @@
 <template>
-  <fieldset class="tri-state-toggle">
-    TriStateToggle:
-    <input
+  <div class="tri-state-toggle">
+    <span>{{label}}</span>
+    <span>
+      <input
       v-for="option in options"
       :key="option.label"
       v-model="vmodelProxy"
@@ -10,7 +11,8 @@
       :value="option.value"
       :aria-label="option.label"
     />
-  </fieldset>
+      </span>
+  </div>
 </template>
 
 <script>
@@ -23,6 +25,10 @@ export default {
     value: {
       type: Boolean,
       default: undefined
+    },
+    label: {
+      type: String,
+      default: "",
     },
     options: {
       type: Array,
@@ -65,12 +71,13 @@ export default {
     box-sizing: border-box;
   }
   border: 0;
-  font-size: 0;
-  line-height: 0;
+  padding: 0;
   white-space: nowrap;
   margin: 0 auto;
-  display: block;
-  width: 96px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
   input {
     display: inline-block;
     height: 32px;

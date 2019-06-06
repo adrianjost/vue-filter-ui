@@ -1,14 +1,22 @@
 <template>
   <div class="custom-modal-wrapper" @click.self="handleCancle">
     <div class="custom-modal">
-      <h2>{{ title }}</h2>
-      <slot />
-      <button @click="handleCancle">
-        {{ labelCancle }}
-      </button>
-      <button @click="handleApply">
-        {{ labelApply }}
-      </button>
+      <h2 class="title">{{ title }}</h2>
+      <div class="body">
+        <slot />
+      </div>
+      <div class="footer">
+        <button class="btn btn--secondary remove" @click="handleRemove">
+          {{ labelRemove }}
+        </button>
+        <div style="flex: 1"/>
+        <button class="btn btn--secondary cancle" @click="handleCancle">
+          {{ labelCancle }}
+        </button>
+        <button class="btn btn--primary apply" @click="handleApply">
+          {{ labelApply }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -27,6 +35,10 @@ export default {
     labelCancle: {
       type: String,
       default: "Cancle"
+    },
+    labelRemove: {
+      type: String,
+      default: "Remove"
     }
   },
   methods: {
@@ -35,6 +47,9 @@ export default {
     },
     handleCancle() {
       this.$emit("cancle");
+    },
+    handleRemove() {
+      this.$emit("remove");
     }
   }
 };
@@ -47,20 +62,59 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 999;
   background-color: rgba(0, 0, 0, 0.2);
 }
 .custom-modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: 300px;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 2rem;
-  border: 5px solid green;
-  box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
+      position: fixed;
+    top: 50%;
+    left: 50%;
+      z-index: 999;
+  min-width: 60ch;
+    max-width: 600px;
+    padding: 24px;
+    background: #fff;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
-button {
-  margin: 1rem 0.5rem;
+.title{
+      margin: .5em 0 1em;
+    font-size: 2em;
+    line-height: 1.1em;
+        padding-bottom: 0.3rem;
+    border-bottom: 1px solid #eaecef;
+}
+.body{
+  margin: 1rem 0 2rem;
+}
+.footer{
+  display: flex;
+  justify-content: flex-end;
+  .btn {
+    padding: .5em 1em;
+    margin: 0 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    
+    text-transform: uppercase;
+    background: transparent;
+    border: none;
+    border-radius: 2px;
+    -webkit-transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    &:hover, &:focus{
+      background-color: rgba(0,0,0,.15);
+    }
+    &.btn--primary{
+      background-color: #1b6de7;
+      color: #fff;
+      &:hover, &:focus{
+      background-color: darken(#1b6de7, 15%);
+    }
+    }
+  }
 }
 </style>

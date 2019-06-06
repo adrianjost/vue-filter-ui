@@ -93,8 +93,10 @@
       :title="openGroup.title"
       :label-apply="labelApply"
       :label-cancle="labelCancle"
+      :label-remove="labelRemove"
       @apply="handleApply"
       @cancle="handleCancle"
+      @remove="handleRemove(openGroup.id)"
     >
       <component :is="openGroup.layout" class="layout">
         <!-- eslint-disable vue/no-unused-vars -->
@@ -123,6 +125,7 @@ export default {
     labelAdd: { type: String, default: "add filter" },
     labelApply: { type: String, default: "apply" },
     labelCancle: { type: String, default: "cancle" },
+    labelRemove: { type: String, default: "remove" },
     /*
     "handleUrl": { type: Boolean },
     "saveState": { type: Boolean },
@@ -217,13 +220,12 @@ export default {
       return this.activeGroups.map(groupId => {
         const group = this.internalConfig.find(group => group.id === groupId);
         const values = group.filter.map(a => this.values[a.id]);
-        console.log(group.chipTemplate);
         const label =
           typeof group.chipTemplate === "function"
             ? group.chipTemplate
-            : function() {
+            : (values) => {
                 let out = group.chipTemplate;
-                Array.from(arguments).forEach((value, index) => {
+                values.forEach((value, index) => {
                   out = out.replace(`%${index + 1}`, value);
                 });
                 return out;
@@ -231,7 +233,7 @@ export default {
         return {
           id: group.id,
           deletable: !group.required,
-          label: label(...values)
+          label: label(values)
         };
       });
     },

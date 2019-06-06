@@ -20,6 +20,12 @@ Label of the Cancle Button of the Modal. Used in the [componentModal](#component
 
 **default:** `cancle`
 
+## labelRemove
+
+Label of the Remove Button of the Modal. Used in the [componentModal](#componentModal)-Component
+
+**default:** `remove`
+
 ## componentSelect
 
 Option to replace the component that renders the list of available filters that are not currently applied. Read more under [customization](./Customize/1-Select.md).
@@ -64,7 +70,7 @@ Each filter-group is an Object and must define the following attributes:
 | attribute      | type                 | required | description                                                                                                                                                                                                                                                                                                                                                                          |
 | -------------- | -------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `title`        | `String`             | ✔        | Used as the title in the [componentModal](#componentModal).                                                                                                                                                                                                                                                                                                                          |
-| `chipTemplate` | `String`/`Function`  | ✔        | Used as a template for the strings displayed in the [componentChips](#componentChips). If it is a string, it needs to define a placeholder for each input of the group (in order). The Placeholderformat is `%n` with n beeing the index of the input in the config. If defined as a function, the function gets the values of `input[i]` as parameter `i` and must return a String. |
+| `chipTemplate` | `String`/`Function`  | ✔        | Used as a template for the strings displayed in the [componentChips](#componentChips). If it is a string, it needs to define a placeholder for each input of the group (in order). The Placeholderformat is `%n` with n beeing the index of the input in the config. If defined as a function, the function gets the values of the inputs as an array of values v. The value for `input[i]` is in `v[i]`. The Method must return a String. |
 | `filter`       | `Array`              | ✔        | List of Filter Inputs. Each Filter must be an Object with the format [described below](#filter-inputs).                                                                                                                                                                                                                                                                              |
 | `layout`       | `String`/`Component` | ❌       | can be either the name of a predefined template (String) or a custom component. The Component must implement the interface [described under customization](/Customize/4-Layout.md).                                                                                                                                                                                                  |
 | `required`     | `Boolean`            | ❌       | If `true`, the filter-group can not be removed from the applied filters list once it was applied. Usefull for static filters like _"item per page"_.                                                                                                                                                                                                                                 |
