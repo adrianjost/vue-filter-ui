@@ -1,21 +1,25 @@
 <template>
-	<CustomDropdown :visible="visible" @clickout="visible = false">
+	<div v-on-clickout="() => (visible = false)" class="menu">
 		<div class="toggle" @click="visible = true">{{ labelAdd }}</div>
-		<ol slot="dropdown" class="dialog">
-			<li v-for="option in options" :key="option.id">
-				<button class="option" @click="handleClick(option.id)">
-					{{ option.title }}
-				</button>
-			</li>
-		</ol>
-	</CustomDropdown>
+		<transition name="scale">
+			<ol v-if="visible" class="dialog">
+				<li v-for="option in options" :key="option.id">
+					<button class="option" @click="handleClick(option.id)">
+						{{ option.title }}
+					</button>
+				</li>
+			</ol>
+		</transition>
+	</div>
 </template>
 
 <script>
-import CustomDropdown from "vue-my-dropdown";
+import { directive as onClickout } from "vue-clickout";
 
 export default {
-	components: { CustomDropdown },
+	directives: {
+		onClickout: onClickout,
+	},
 	props: {
 		labelAdd: {
 			type: String,
@@ -53,7 +57,13 @@ export default {
 		background-color: rgba(0, 0, 0, 0.15);
 	}
 }
+.menu {
+	position: relative;
+}
 .dialog {
+	position: absolute;
+	left: 0.5rem;
+	top: calc(0.5rem + 100%);
 	background: #fff;
 	border: 1px solid #ccc;
 	box-shadow: 2px 2px 6px 0 #aaa;
@@ -73,5 +83,16 @@ export default {
 			background-color: rgba(0, 0, 0, 0.15);
 		}
 	}
+}
+
+.scale-enter-active,
+.scale-leave-active {
+	transform-origin: top left;
+	transition: all 0.2s;
+}
+.scale-enter,
+.scale-leave-to {
+	opacity: 0;
+	transform: scale(0.8, 0.5);
 }
 </style>

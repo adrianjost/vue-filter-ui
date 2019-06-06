@@ -1,4 +1,4 @@
-import { inputs, layouts } from "../../src/export";
+import { inputs, layouts } from "../../src/bundle";
 
 const prefixObj = (prefix, obj) => {
 	const newObj = {};

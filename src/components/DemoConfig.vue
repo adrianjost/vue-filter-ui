@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { layouts, inputs, upperFirst } from "../export";
+import { layouts, inputs, upperFirst } from "../bundle";
 const defaultFilter = `[
   {
     title: "Sort",

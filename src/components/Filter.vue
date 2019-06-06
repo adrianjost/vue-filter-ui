@@ -273,7 +273,6 @@ export default {
 .row {
 	display: flex;
 	flex-wrap: nowrap;
-	overflow-x: auto;
 	width: 100%;
 	align-items: center;
 	.chips {

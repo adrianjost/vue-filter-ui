@@ -7,13 +7,14 @@
 		"lint": "vue-cli-service lint",
 		"deploy": "yarn lint && yarn build && yarn publish --access public",
 		"build:docs": "vuepress build docs -d dist/docs",
-		"build:lib": "vue-cli-service build --target lib --name VueFilterUi ./src/components/export.js --mode production --dest dist/lib",
+		"build:lib": "vue-cli-service build --target lib --name VueFilterUi ./src/bundle.js --mode production --dest dist/lib",
 		"dev": "run-p dev:*",
 		"dev:docs": "vuepress dev docs",
 		"dev:vue": "vue-cli-service serve"
 	},
 	"dependencies": {
-		"vue": "^2.6.10"
+		"vue": "^2.6.10",
+		"vue-clickout": "^1.0.0"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "^3.7.0",
@@ -30,7 +31,6 @@
 		"npm-run-all": "^4.1.5",
 		"prettier": "^1.17.1",
 		"sass-loader": "^7.1.0",
-		"vue-my-dropdown": "^2.1.0",
 		"vue-template-compiler": "^2.5.21",
 		"vuepress": "^0.14.11"
 	},
