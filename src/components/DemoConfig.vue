@@ -1,19 +1,19 @@
 <template>
-  <section>
-    <div class="config">
-      <label>
-        <b>addLabel:</b>
-        <input v-model="config.addLabel" type="text" />
-      </label>
-      <label>
-        <b>applyLabel:</b>
-        <input v-model="config.applyLabel" type="text" />
-      </label>
-      <label>
-        <b>cancleLabel:</b>
-        <input v-model="config.cancleLabel" type="text" />
-      </label>
-      <!--
+	<section>
+		<div class="config">
+			<label>
+				<b>addLabel:</b>
+				<input v-model="config.addLabel" type="text" />
+			</label>
+			<label>
+				<b>applyLabel:</b>
+				<input v-model="config.applyLabel" type="text" />
+			</label>
+			<label>
+				<b>cancleLabel:</b>
+				<input v-model="config.cancleLabel" type="text" />
+			</label>
+			<!--
       <label>
         <b>handleUrl:</b>
         <input v-model="config.handleUrl" type="checkbox" />
@@ -27,17 +27,16 @@
         <input v-model="config.consistentOrder" type="checkbox" />
       </label>
       -->
-      <label style="width: 100%">
-        <b>filter:</b>
-        <textarea v-model="filters" />
-      </label>
-    </div>
-    <p v-if="configError" style="color: red"><b>Error:</b> {{ configError }}</p>
-  </section>
+			<label style="width: 100%">
+				<b>filter:</b>
+				<textarea v-model="filters" />
+			</label>
+		</div>
+		<p v-if="configError" style="color: red"><b>Error:</b> {{ configError }}</p>
+	</section>
 </template>
 
 <script>
-
 const defaultFilter = `[
   {
     title: "Sort",
@@ -183,58 +182,58 @@ const defaultFilter = `[
 `;
 
 export default {
-  model: {
-    prop: "config",
-    event: "input"
-  },
-  props: {
-    config: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      filters: "",
-      configError: undefined
-    };
-  },
-  watch: {
-    filters(to) {
-      try {
-        const parsed = eval(to);
-        this.$set(this.config, "filter", parsed);
-        localStorage.setItem("filterConfig", to);
-        this.configError = "";
-      } catch (error) {
-        this.configError = error;
-      }
-    },
-  },
-  created(){
-    const storage = localStorage.getItem("filterConfig");
-    this.filters = storage ? storage : defaultFilter;
-  },
+	model: {
+		prop: "config",
+		event: "input",
+	},
+	props: {
+		config: {
+			type: Object,
+			required: true,
+		},
+	},
+	data() {
+		return {
+			filters: "",
+			configError: undefined,
+		};
+	},
+	watch: {
+		filters(to) {
+			try {
+				const parsed = eval(to);
+				this.$set(this.config, "filter", parsed);
+				localStorage.setItem("filterConfig", to);
+				this.configError = "";
+			} catch (error) {
+				this.configError = error;
+			}
+		},
+	},
+	created() {
+		const storage = localStorage.getItem("filterConfig");
+		this.filters = storage ? storage : defaultFilter;
+	},
 };
 </script>
 
 <style lang="scss" scoped>
 .config {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  max-width: 100%;
-  label {
-    padding: 0.5em;
-    min-width: 300px;
-    display: inline-block;
-  }
-  textarea {
-    width: 100%;
-    flex: 1;
-    min-height: 15rem;
-    border-color: #ccc;
-    resize: vertical;
-  }
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	max-width: 100%;
+	label {
+		padding: 0.5em;
+		min-width: 300px;
+		display: inline-block;
+	}
+	textarea {
+		width: 100%;
+		flex: 1;
+		min-height: 15rem;
+		border-color: #ccc;
+		resize: vertical;
+	}
 }
 </style>
