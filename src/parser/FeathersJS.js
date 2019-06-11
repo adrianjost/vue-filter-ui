@@ -5,6 +5,7 @@
  */
 const generateQuery = (config, values) => {
 	const query = {};
+	//console.log("generateQuery", config, values);
 	config.forEach((group) => {
 		const hasValue = group.filter.some(
 			(input) => values[input.id] !== undefined
@@ -13,12 +14,19 @@ const generateQuery = (config, values) => {
 		if (!hasValue) {
 			return;
 		}
-		if ((group.parser || {}).generator) {
+		//console.log("parse", group);
+		if (typeof (group.parser || {}).generator === "function") {
+			//console.log("custom parser");
+			// extract values for group
 			const groupValues = {};
 			group.filter.forEach((filter) => {
 				groupValues[filter.id] = values[filter.id];
 			});
-			group.parser(group, groupValues);
+			// generate query
+			const newQuery = group.parser.generator(group, groupValues);
+			Object.assign(query, newQuery);
+			//console.log("new Query", query);
+			return;
 		}
 		// edge case for sort
 		if (

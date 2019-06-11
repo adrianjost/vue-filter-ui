@@ -71,6 +71,7 @@ export default {
 	padding: 0.5rem 0;
 	margin: 0;
 	min-width: 20ch;
+	z-index: 2;
 	.option {
 		padding: 0.5rem 1rem;
 		background: transparent;
