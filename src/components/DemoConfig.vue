@@ -41,13 +41,13 @@
 </template>
 
 <script>
-import { layouts, inputs, upperFirst } from "../bundle";
+import { layouts as L, inputs as I } from "../bundle";
 const defaultFilter = `[
   {
     title: "Sort",
     chipTemplate: ${"([v1, v2]) => `v1: ${v1} v2: ${v2}`"},
-    layout: "sort",
-    required: false,
+    layout: layouts.Sort,
+    required: true,
     filter: [
       {
         // Query data
@@ -57,7 +57,7 @@ const defaultFilter = `[
 
         // UI options
         options: undefined,
-        input: "TriSwitch"
+        input: inputs.TriSwitch
       },
       {
         // Query data
@@ -67,14 +67,13 @@ const defaultFilter = `[
 
         // UI options
         options: undefined,
-        input: "Toggle"
+        input: inputs.Toggle
       }
     ]
   },
   {
     title: "Veröffentlicht?",
     chipTemplate: ([v1]) => ${'`${v1 ? "is published" : "is unpublished"}`'},
-    required: false,
     filter: [
       {
         // Query data
@@ -84,7 +83,7 @@ const defaultFilter = `[
 
         // UI options
         options: undefined,
-        input: "TriSwitch"
+        input: inputs.TriSwitch
       }
     ]
   },
@@ -92,7 +91,6 @@ const defaultFilter = `[
     title: "Lists",
     chipTemplate: ([v1, v2]) =>
       ${'`${v1 ? "is temp" : "is persistent"} ${v2 ? "isCool" : "isHot"}`'},
-    required: false,
     filter: [
       {
         // Query data
@@ -115,7 +113,7 @@ const defaultFilter = `[
             value: false
           }
         ],
-        input: "Radio"
+        input: inputs.Radio
       },
       {
         // Query data
@@ -137,7 +135,7 @@ const defaultFilter = `[
             value: "nope :("
           }
         ],
-        input: "Checkbox"
+        input: inputs.Checkbox
       }
     ]
   },
@@ -161,7 +159,7 @@ const defaultFilter = `[
             value: false
           }
         ],
-        input: "Select"
+        input: inputs.Select
       },
       {
         // Query data
@@ -179,8 +177,29 @@ const defaultFilter = `[
             value: false
           }
         ],
-        input: "MultiSelect"
+        input: inputs.MultiSelect
       }
+    ]
+	},
+	{
+    title: "Date",
+    chipTemplate: "Date: %1, Time: %2, Datetime: %3",
+    filter: [
+      {
+        attribute: "date",
+        operator: "=",
+        input: inputs.InputDate
+			},
+			{
+        attribute: "time",
+        operator: "=",
+        input: inputs.InputTime
+      },
+			{
+        attribute: "datetime",
+        operator: "=",
+        input: inputs.InputDateTime
+			},
     ]
   }
 ]
@@ -221,17 +240,13 @@ export default {
 	},
 	methods: {
 		parseConfig(config) {
+			// eslint-disable-next-line no-unused-vars
+			const layouts = L;
+			// eslint-disable-next-line no-unused-vars
+			const inputs = I;
+			// both variables defined are both are available during eval()
 			const parsed = eval(config);
-			parsed.forEach((group) => {
-				if (typeof group.layout === "string") {
-					group.layout = layouts[upperFirst(group.layout)];
-				}
-				group.filter.forEach((input) => {
-					if (typeof input.input === "string") {
-						input.input = inputs[upperFirst(input.input)];
-					}
-				});
-			});
+
 			return parsed;
 		},
 	},

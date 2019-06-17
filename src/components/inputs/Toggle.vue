@@ -51,11 +51,15 @@ export default {
 	},
 	methods: {
 		loadIndex() {
-			const newIndex = this.options.findIndex(
+			let newIndex = this.options.findIndex(
 				(option) => option.value === this.value
 			);
 			if (newIndex === -1) {
-				throw new Error("Can't find value in options", this.value);
+				if (this.value === undefined) {
+					newIndex = 0;
+				} else {
+					throw new Error("Can't find value in options", this.value);
+				}
 			}
 			this.currentIndex = newIndex;
 		},
@@ -70,6 +74,8 @@ export default {
 <style lang="scss" scoped>
 .toggle {
 	border: 1px solid grey;
+	background: transparent;
+	font-weight: bold;
 	border-radius: 50vmax;
 	display: flex;
 	flex-wrap: nowrap;

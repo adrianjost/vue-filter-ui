@@ -1,5 +1,9 @@
 <template>
-	<div v-on-clickout="() => (visible = false)" class="menu">
+	<div
+		v-if="options.length > 0"
+		v-on-clickout="() => (visible = false)"
+		class="menu"
+	>
 		<div class="toggle" @click="visible = true">{{ labelAdd }}</div>
 		<transition name="scale">
 			<ol v-if="visible" class="dialog">
@@ -48,6 +52,7 @@ export default {
 .toggle {
 	font-size: 0.9rem;
 	padding: 0.25rem 0.75rem;
+	line-height: 1;
 	border: 1px solid grey;
 	border-radius: 3rem;
 	white-space: nowrap;

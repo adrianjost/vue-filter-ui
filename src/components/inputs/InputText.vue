@@ -38,8 +38,10 @@ export default {
 .checkbox-list {
 	border: 0;
 	display: block;
-	.label {
+	.label,
+	input {
 		display: block;
+		width: 100%;
 	}
 }
 </style>

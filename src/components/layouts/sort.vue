@@ -1,9 +1,9 @@
 <template>
 	<div class="parallel">
-		<div class="slot-1">
+		<div class="slot slot-1">
 			<slot name="input-1" />
 		</div>
-		<div class="slot-2">
+		<div class="slot slot-2">
 			<slot name="input-2" />
 		</div>
 	</div>
@@ -20,6 +20,9 @@ export default {};
 	align-items: center;
 	.slot-1 {
 		flex: 1;
+	}
+	.slot:not(:last-of-type) {
+		margin-right: 0.5rem;
 	}
 }
 </style>

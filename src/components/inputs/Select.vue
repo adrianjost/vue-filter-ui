@@ -1,5 +1,5 @@
 <template>
-	<select v-model="vmodelProxy">
+	<select v-model="vmodelProxy" class="select">
 		<option v-for="option in options" :key="option.value" :value="option.value">
 			{{ option.label }}
 		</option>
@@ -52,5 +52,8 @@ export default {
 <style lang="scss" scoped>
 .select {
 	display: block;
+	width: 100%;
+	padding: 0.5rem;
+	border-radius: 2px;
 }
 </style>

@@ -17,7 +17,7 @@
 				v-if="chip.deletable"
 				type="button"
 				class="btn-delete"
-				@click="$emit('remove', chip.id)"
+				@click.self="$emit('remove', chip.id)"
 			>
 				<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 					<path
@@ -50,7 +50,7 @@ $transition: all 0.15s ease-in-out;
 }
 .chip {
 	font-size: 0.9rem;
-	line-height: 100%;
+	line-height: 1;
 	display: inline-flex;
 	flex-wrap: nowrap;
 	align-items: center;
