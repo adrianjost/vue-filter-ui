@@ -38,6 +38,10 @@ Option to replace the component that renders the list of currently active and ap
 
 Wrapper-Component for the dialog where the user can enter there filter settings. You can exchange the default modal by specifing your new modal here. Your custom modal must implement the [Modal specifications](./Customize/3-Modal.md).
 
+## handleUrl
+
+Every filtered page should be accessible with an unique url for shareability. If you wan't to let this module handle the url update for you, simply set this option to `true`.
+
 ## parser
 
 The parsers are used to generate the language specific query from the abstract config object. They are also used to initialy populate the ui with values from an existing query.
