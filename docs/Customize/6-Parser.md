@@ -14,9 +14,12 @@ This option must be an Object with two functions specified:
 
 ```js
 parser: {
-  generator: (filterGroupConfig, values) => {
-    return; /* query */
-  };
+	generator: (filterGroupConfig, values) => {
+		return; /* query */
+	},
+	parser: (filterGroupConfig, query) => {
+		return; /* values { inputId: value } */
+	};
 }
 ```
 

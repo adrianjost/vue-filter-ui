@@ -2,6 +2,7 @@
 	<div class="wrapper">
 		<search-filter
 			ref="filtercomponent"
+			v-model="apiQuery"
 			:label-add="config.addLabel"
 			:label-apply="config.applyLabel"
 			:label-cancle="config.cancleLabel"
@@ -11,7 +12,7 @@
 			:consistent-order="config.consistentOrder"
 			:filter="config.filter"
 			:parser="parser"
-			@newQuery="updateQuery"
+			@newQuery="/* updateQuery */"
 		/>
 		<hr />
 		<DemoConfig v-model="config" />
@@ -30,16 +31,6 @@
 				</td>
 			</tr>
 		</table>
-
-		<div class="events">
-			<b>Native Events</b>
-			<p v-for="event in nativeEvents" :key="event.timeStamp" class="event">
-				({{ parseInt(event.timeStamp) }}) <b>{{ event.type }}:</b>
-				<code>
-					{{ JSON.stringify(event.detail, null, 2) }}
-				</code>
-			</p>
-		</div>
 	</div>
 </template>
 
@@ -55,23 +46,35 @@ export default {
 		"search-filter": Filter,
 	},
 	data() {
+		const config = localStorage.getItem("config")
+			? JSON.parse(localStorage.getItem("config"))
+			: {
+					addLabel: undefined,
+					filter: [],
+					applyLabel: undefined,
+					cancleLabel: undefined,
+					handleUrl: true,
+					saveState: false,
+					consistentOrder: true,
+			  };
+		config.filter = [];
 		return {
 			parser,
 			toggle: false,
-			apiQuery: {},
+			apiQuery: {
+				$sort: {
+					true: false,
+				},
+				isTemp: {
+					$ne: true,
+				},
+				isCool: ["YES YES", "nope :("],
+				isDaddy: true,
+				isMultiDaddy: ["daddy", "no daddy"],
+			},
 			urlQuery: {},
 			nativeEvents: [],
-			config: localStorage.getItem("config")
-				? JSON.parse(localStorage.getItem("config"))
-				: {
-						addLabel: undefined,
-						filter: [],
-						applyLabel: undefined,
-						cancleLabel: undefined,
-						handleUrl: true,
-						saveState: false,
-						consistentOrder: true,
-				  },
+			config,
 		};
 	},
 	watch: {
@@ -94,11 +97,13 @@ export default {
 			});
 		});
 	},
+	/*
 	methods: {
 		updateQuery(query) {
 			this.apiQuery = query;
 		},
 	},
+	*/
 };
 </script>
 

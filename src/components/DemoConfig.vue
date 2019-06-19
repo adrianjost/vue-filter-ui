@@ -35,6 +35,9 @@
 				<b>filter:</b>
 				<textarea v-model="filters" />
 			</label>
+			<button @click="reset">
+				Reset
+			</button>
 		</div>
 		<p v-if="configError" style="color: red"><b>Error:</b> {{ configError }}</p>
 	</section>
@@ -73,7 +76,7 @@ const defaultFilter = `[
   },
   {
     title: "Veröffentlicht?",
-    chipTemplate: ([v1]) => ${'`${v1 ? "is published" : "is unpublished"}`'},
+    chipTemplate: ${'([v1]) => `${v1 ? "is published" : "is unpublished"}`'},
     filter: [
       {
         // Query data
@@ -170,11 +173,11 @@ const defaultFilter = `[
         options: [
           {
             label: "Daddy",
-            value: true
+            value: "daddy"
           },
           {
             label: "no daddy",
-            value: false
+            value: "no daddy"
           }
         ],
         input: inputs.MultiSelect
@@ -248,6 +251,10 @@ export default {
 			const parsed = eval(config);
 
 			return parsed;
+		},
+		reset() {
+			localStorage.clear();
+			window.location.reload();
 		},
 	},
 };

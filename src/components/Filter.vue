@@ -58,6 +58,10 @@ import DefaultModal from "./Modal";
 import DefaultLayout from "./layouts/default";
 
 export default {
+	model: {
+		prop: "query",
+		event: "newQuery",
+	},
 	props: {
 		labelAdd: { type: String, default: "add filter" },
 		labelApply: { type: String, default: "apply" },
@@ -85,15 +89,18 @@ export default {
 			type: Object,
 			required: true,
 			validator: (parser) => {
-				return ["generateQuery", "parseQuery"].every(
+				return ["generator", "parser"].every(
 					(attr) => typeof parser[attr] === "function"
 				);
 			},
 		},
+		query: {
+			type: [Object, String],
+			required: true,
+		},
 	},
 	data() {
 		return {
-			activeGroups: [],
 			openGroupId: undefined,
 			filterValues: {},
 			values: {},
@@ -173,6 +180,9 @@ export default {
 						: (values) => {
 								let out = group.chipTemplate;
 								values.forEach((value, index) => {
+									if (Array.isArray(value)) {
+										value = value.join(", ");
+									}
 									out = out.replace(`%${index + 1}`, value);
 								});
 								return out;
@@ -184,6 +194,16 @@ export default {
 				};
 			});
 		},
+		activeGroups() {
+			// set every group that has a value as active
+			return this.internalConfig
+				.filter((group) => {
+					return group.filter.some(
+						(input) => this.values[input.id] !== undefined
+					);
+				})
+				.map((group) => group.id);
+		},
 		unusedFilters() {
 			return this.internalConfig.filter((group) => {
 				return !this.activeGroups.includes(group.id);
@@ -191,6 +211,9 @@ export default {
 		},
 	},
 	watch: {
+		query() {
+			this.updateValuesFromQuery();
+		},
 		internalConfig(to) {
 			to.forEach((group) => {
 				group.filter.forEach((input) => {
@@ -200,13 +223,18 @@ export default {
 					}
 				});
 			});
+			this.updateValuesFromQuery();
 		},
+	},
+	created() {
+		this.updateValuesFromQuery();
 	},
 	methods: {
 		getSlotName(index) {
 			return `input-${index + 1}`;
 		},
 		openFilter(groupId) {
+			this.tmpValues = JSON.parse(JSON.stringify(this.values));
 			this.openGroupId = groupId;
 		},
 		handleRemove(groupId) {
@@ -218,26 +246,11 @@ export default {
 				this.tmpValues[input.id] = undefined;
 				this.values[input.id] = undefined;
 			});
-			// remove from active list
-			const newActiveGroupList = this.activeGroups.filter((a) => a !== groupId);
-			this.$set(this, "activeGroups", newActiveGroupList);
 			// update query
 			this.generateQuery();
 			this.openGroupId = undefined;
 		},
 		handleApply() {
-			// add filter to list
-			const hasValues = this.openGroup.filter.some(
-				(input) => this.tmpValues[input.id] !== undefined
-			);
-			if (hasValues && !this.activeGroups.includes(this.openGroup.id)) {
-				this.activeGroups.push(this.openGroup.id);
-			} else if (!hasValues) {
-				const index = this.activeGroups.findIndex(
-					(e) => e === this.openGroup.id
-				);
-				this.activeGroups.splice(index, 1);
-			}
 			// persist new values
 			this.openGroup.filter.forEach((input) => {
 				this.$set(this.values, input.id, this.tmpValues[input.id]);
@@ -251,8 +264,12 @@ export default {
 			this.openGroupId = undefined;
 		},
 		generateQuery() {
-			const query = this.parser.generateQuery(this.internalConfig, this.values);
+			const query = this.parser.generator(this.internalConfig, this.values);
 			this.$emit("newQuery", query);
+		},
+		updateValuesFromQuery() {
+			const parsedValues = this.parser.parser(this.internalConfig, this.query);
+			this.$set(this, "values", parsedValues);
 		},
 	},
 };

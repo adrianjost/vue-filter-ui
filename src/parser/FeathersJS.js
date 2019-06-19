@@ -1,9 +1,13 @@
+const isDictObj = (obj) => {
+	return typeof obj === "object" && obj.constructor == Object;
+};
+
 /**
  * @param  {[{}]} config filter configuration
  * @param  {{}} values input values
  * @return {} feathers query object
  */
-const generateQuery = (config, values) => {
+export const generator = (config, values) => {
 	const query = {};
 	config.forEach((group) => {
 		const hasValue = group.filter.some(
@@ -83,11 +87,67 @@ const generateQuery = (config, values) => {
  * @return {{inputId: any}} returns values dictionary
  */
 // eslint-disable-next-line no-unused-vars
-const parseQuery = (config, query) => {
-	return;
+export const parser = (config, query) => {
+	const values = {};
+
+	// edge case for sort (extract)
+	if (
+		isDictObj(query["$sort"]) &&
+		Object.entries(query["$sort"]).length === 1
+	) {
+		const [attribute, order] = Object.entries(query["$sort"])[0];
+		query["$sort-attribute"] = attribute;
+		query["$sort-order"] = order;
+	}
+
+	config.forEach((group) => {
+		// custom parser specified
+		if (typeof (group.parser || {}).parser === "function") {
+			const newValues = group.parser.parser(group, query);
+			Object.assign(values, newValues);
+			return;
+		}
+
+		// default handling
+		group.filter.forEach((input) => {
+			let queryValue = query[input.attribute];
+			if (queryValue === undefined) {
+				return;
+			}
+
+			if (isDictObj(queryValue) && Object.entries(queryValue).length === 1) {
+				const [operator, realValue] = Object.entries(queryValue)[0];
+				if (operator.startsWith("$")) {
+					switch (input.operator) {
+						case "<": {
+							if (!["$lt", "$gte"].includes(operator)) {
+								return;
+							}
+							break;
+						}
+						case "<=": {
+							if (!["$lte", "$gt"].includes(operator)) {
+								return;
+							}
+							break;
+						}
+						case "includes": {
+							if (!["$nin", "$in"].includes(operator)) {
+								return;
+							}
+							break;
+						}
+					}
+					queryValue = realValue;
+				}
+			}
+			values[input.id] = queryValue;
+		});
+	});
+	return values;
 };
 
 export default {
-	generateQuery,
-	parseQuery,
+	generator,
+	parser,
 };
