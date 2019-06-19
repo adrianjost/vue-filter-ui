@@ -216,12 +216,6 @@ export default {
 		},
 	},
 	watch: {
-		query() {
-			this.updateValuesFromQuery();
-			if (this.handleUrl) {
-				this.updateUrlQuery();
-			}
-		},
 		internalConfig(to) {
 			to.forEach((group) => {
 				group.filter.forEach((input) => {
@@ -231,18 +225,27 @@ export default {
 					}
 				});
 			});
-			this.updateValuesFromQuery();
+			this.init();
 		},
 	},
 	created() {
-		if (this.handleUrl) {
-			this.updateFromUrlQuery();
-			this.updateUrlQuery();
-		} else {
-			this.updateValuesFromQuery();
-		}
+		this.init();
 	},
 	methods: {
+		init() {
+			this.updateFromQuery();
+
+			if (this.handleUrl) {
+				if (Object.keys(this.$_getFilterQueryParameters()).length !== 0) {
+					this.clearQuery();
+				}
+				this.patchFromQuery();
+			}
+
+			this.generateQuery();
+
+			if (Object.entries) this.updateUrlQuery();
+		},
 		getSlotName(index) {
 			return `input-${index + 1}`;
 		},
@@ -274,11 +277,17 @@ export default {
 		handleCancle() {
 			this.openGroupId = undefined;
 		},
-		updateFromUrlQuery() {
-			const query = this.$_getFilterQueryParameters();
-			Object.entries(query).forEach(([key, value]) => {
-				this.$set(this.values, key, value);
+		clearQuery() {
+			Object.entries(this.values).forEach(([key]) => {
+				this.$set(this.values, key, undefined);
 			});
+		},
+		generateQuery() {
+			const query = this.parser.generator(this.internalConfig, this.values);
+			this.$emit("newQuery", query);
+			if (this.handleUrl) {
+				this.updateUrlQuery();
+			}
 		},
 		updateUrlQuery() {
 			// keep existing non filter related query params
@@ -292,13 +301,15 @@ export default {
 			//
 			this.$_updateUrlQueryString(newQuery);
 		},
-		generateQuery() {
-			const query = this.parser.generator(this.internalConfig, this.values);
-			this.$emit("newQuery", query);
-		},
-		updateValuesFromQuery() {
+		updateFromQuery() {
 			const parsedValues = this.parser.parser(this.internalConfig, this.query);
 			this.$set(this, "values", parsedValues);
+		},
+		patchFromQuery() {
+			const query = this.$_getFilterQueryParameters();
+			Object.entries(query).forEach(([key, value]) => {
+				this.$set(this.values, key, value);
+			});
 		},
 	},
 };

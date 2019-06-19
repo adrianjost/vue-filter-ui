@@ -11,9 +11,13 @@ export default {
 					if (invert) {
 						newQuery[key] = value;
 					} else {
-						newQuery[key.replace("vf-", "")] = JSON.parse(
-							decodeURIComponent(value)
-						);
+						try {
+							newQuery[key.replace("vf-", "")] = JSON.parse(
+								decodeURIComponent(value)
+							);
+						} catch (e) {
+							console.error(e);
+						}
 					}
 				});
 			return newQuery;
@@ -34,7 +38,6 @@ export default {
 			const newUrlQueryString = `?${Object.entries(newQuery)
 				.map(([key, value]) => `${key}=${value}`)
 				.join("&")}`;
-			console.log("update url", newUrlQueryString);
 			window.history.replaceState(
 				{},
 				"",

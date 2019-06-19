@@ -17,11 +17,11 @@
 				<b>removeLabel:</b>
 				<input v-model="config.removeLabel" type="text" />
 			</label>
+			<label>
+				<b>handleUrl:</b>
+				<input v-model="config.handleUrl" type="checkbox" />
+			</label>
 			<!--
-      <label>
-        <b>handleUrl:</b>
-        <input v-model="config.handleUrl" type="checkbox" />
-      </label>
       <label>
         <b>saveState:</b>
         <input v-model="config.saveState" type="checkbox" />
