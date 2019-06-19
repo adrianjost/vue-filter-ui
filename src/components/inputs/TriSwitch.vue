@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import { inputDataTypes } from "./helper";
+
 export default {
 	model: {
 		prop: "value",
@@ -23,7 +25,7 @@ export default {
 	},
 	props: {
 		value: {
-			type: Boolean,
+			type: inputDataTypes,
 			default: undefined,
 		},
 		label: {

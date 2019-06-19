@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import { inputDataTypes } from "./helper";
+
 export default {
 	model: {
 		prop: "value",
@@ -14,7 +16,7 @@ export default {
 	},
 	props: {
 		value: {
-			type: [String, Number, Boolean, Array],
+			type: inputDataTypes,
 			default: undefined,
 		},
 		options: {
