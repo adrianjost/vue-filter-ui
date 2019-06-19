@@ -144,6 +144,10 @@ export const parser = (config, query) => {
 			values[input.id] = queryValue;
 		});
 	});
+
+	delete query["$sort-attribute"];
+	delete query["$sort-order"];
+
 	return values;
 };
 
