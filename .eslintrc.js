@@ -7,6 +7,10 @@ module.exports = {
 		sourceType: "module",
 	},
 
+	env: {
+		node: true,
+	},
+
 	extends: [
 		// https://github.com/vuejs/eslint-plugin-vue#bulb-rules
 		"plugin:vue/recommended",
@@ -14,12 +18,27 @@ module.exports = {
 		"prettier",
 		"prettier/standard",
 		"prettier/vue",
+		"@vue/prettier",
 	],
 
 	rules: {
 		"vue/require-prop-types": "error",
-		"no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
-		"no-console": process.env.NODE_ENV === "production" ? "error" : "off",
+		// Only allow debugger in development
+		"no-debugger":
+			process.env.NODE_ENV === "production" || process.env.PRE_COMMIT
+				? "error"
+				: "off",
+		// Only allow `console.log` in development
+		"no-console":
+			process.env.NODE_ENV === "production" || process.env.PRE_COMMIT
+				? [
+						"error",
+						{
+							allow: ["warn", "error"],
+						},
+				  ]
+				: "off",
+
 		"vue/component-name-in-template-casing": [
 			"error",
 			"PascalCase",
@@ -37,17 +56,4 @@ module.exports = {
 			},
 		],
 	},
-
-	env: {
-		node: true,
-	},
-
-	extends: [
-		"plugin:vue/recommended",
-		"prettier",
-		"prettier/standard",
-		"prettier/vue",
-		"plugin:vue/essential",
-		"@vue/prettier",
-	],
 };
