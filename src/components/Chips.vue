@@ -17,7 +17,7 @@
 				v-if="chip.deletable"
 				type="button"
 				class="btn-delete"
-				@click.self="$emit('remove', chip.id)"
+				@click.stop.prevent="$emit('remove', chip.id)"
 			>
 				<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 					<path
