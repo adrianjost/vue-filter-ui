@@ -56,8 +56,10 @@ import DefaultSelect from "./Select";
 import DefaultChips from "./Chips";
 import DefaultModal from "./Modal";
 import DefaultLayout from "./layouts/default";
+import url from "../mixins/url";
 
 export default {
+	mixins: [url],
 	model: {
 		prop: "query",
 		event: "newQuery",
@@ -97,6 +99,9 @@ export default {
 		query: {
 			type: [Object, String],
 			required: true,
+		},
+		handleUrl: {
+			type: Boolean,
 		},
 	},
 	data() {
@@ -213,6 +218,9 @@ export default {
 	watch: {
 		query() {
 			this.updateValuesFromQuery();
+			if (this.handleUrl) {
+				this.updateUrlQuery();
+			}
 		},
 		internalConfig(to) {
 			to.forEach((group) => {
@@ -227,7 +235,12 @@ export default {
 		},
 	},
 	created() {
-		this.updateValuesFromQuery();
+		if (this.handleUrl) {
+			this.updateFromUrlQuery();
+			this.updateUrlQuery();
+		} else {
+			this.updateValuesFromQuery();
+		}
 	},
 	methods: {
 		getSlotName(index) {
@@ -255,13 +268,29 @@ export default {
 			this.openGroup.filter.forEach((input) => {
 				this.$set(this.values, input.id, this.tmpValues[input.id]);
 			});
-
 			this.handleCancle();
 			this.generateQuery();
-			this.$forceUpdate();
 		},
 		handleCancle() {
 			this.openGroupId = undefined;
+		},
+		updateFromUrlQuery() {
+			const query = this.$_getFilterQueryParameters();
+			Object.entries(query).forEach(([key, value]) => {
+				this.$set(this.values, key, value);
+			});
+		},
+		updateUrlQuery() {
+			// keep existing non filter related query params
+			const newQuery = this.$_getFilterQueryParameters(true);
+			// generate new query params from input values
+			Object.entries(this.values)
+				.filter(([, value]) => value !== undefined)
+				.forEach(([key, value]) => {
+					newQuery["vf-" + key] = encodeURIComponent(JSON.stringify(value));
+				});
+			//
+			this.$_updateUrlQueryString(newQuery);
 		},
 		generateQuery() {
 			const query = this.parser.generator(this.internalConfig, this.values);
