@@ -219,7 +219,7 @@ export default {
 		internalConfig(to) {
 			to.forEach((group) => {
 				group.filter.forEach((input) => {
-					if (!this.values.hasOwnProperty(input.id)) {
+					if (!Object.prototype.hasOwnProperty.call(this.values, input.id)) {
 						this.$set(this.values, input.id, undefined);
 						this.$set(this.tmpValues, input.id, undefined);
 					}
