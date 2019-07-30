@@ -1,24 +1,28 @@
 module.exports = {
 	root: true,
 	parser: "vue-eslint-parser",
+
 	parserOptions: {
 		parser: "babel-eslint",
 		sourceType: "module",
 	},
+
+	env: {
+		node: true,
+	},
+
 	extends: [
 		// https://github.com/vuejs/eslint-plugin-vue#bulb-rules
 		"plugin:vue/recommended",
 		// https://github.com/prettier/eslint-config-prettier
-		// "prettier",
-		// "prettier/standard",
-		// "prettier/vue",
+		"prettier",
+		"prettier/standard",
+		"prettier/vue",
+		"@vue/prettier",
 	],
+
 	rules: {
-    // TODO fix & enable the following options
-
-    "vue/require-prop-types": false,
-    // TODO END
-
+		"vue/require-prop-types": "error",
 		// Only allow debugger in development
 		"no-debugger":
 			process.env.NODE_ENV === "production" || process.env.PRE_COMMIT
@@ -34,6 +38,7 @@ module.exports = {
 						},
 				  ]
 				: "off",
+
 		"vue/component-name-in-template-casing": [
 			"error",
 			"PascalCase",

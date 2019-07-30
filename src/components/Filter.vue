@@ -1,207 +1,339 @@
 <template>
-  <div
-    ref="filter-module"
-    class="filter"
-    @getFilter="sendNewQuery"
-  >
-    <md-chip
-      v-for="chip in activeFilter"
-      :key="chip[0]"
-      v-model="activeFilter"
-      md-clickable
-      md-deletable
-      @click="visibleFilter = chip[0]"
-      @md-delete.stop="removeFilter(chip[0], true)"
-    >
-      {{ chip[1].displayString }}
-    </md-chip>
+	<div class="filter">
+		<div class="row">
+			<component
+				:is="componentChips"
+				v-if="chips.length > 0"
+				class="chips"
+				:chips="chips"
+				@open="openFilter"
+				@remove="handleRemove"
+			/>
 
-    <md-menu
-      v-if="selectableFilter.length"
-      md-direction="bottom-end"
-    >
-      <md-button
-        md-menu-trigger
-        class="add-filter"
-      >
-        <md-icon><i class="material-icons">add</i></md-icon>
-        {{ addLabel }}
-      </md-button>
-      <md-menu-content>
-        <md-menu-item
-          v-for="(filterOption) in selectableFilter"
-          :key="'Option-' + getIdentifier(filterOption)"
-          @click="visibleFilter = getIdentifier(filterOption)"
-        >
-          {{ filterOption.title }}...
-        </md-menu-item>
-      </md-menu-content>
-    </md-menu>
+			<component
+				:is="componentSelect"
+				class="filter-select"
+				:label-add="labelAdd"
+				:options="unusedFilters"
+				@openFilter="openFilter"
+			/>
+		</div>
 
-    <component
-      :is="filterDialog.type"
-      v-for="(filterDialog) in availableFilter"
-      :key="'Dialog-' + getIdentifier(filterDialog)"
-      :active="visibleFilter === getIdentifier(filterDialog)"
-      :identifier="getIdentifier(filterDialog)"
-      :config="filterDialog"
-      @set="setFilter"
-      @cancle="cancle"
-    />
-  </div>
+		<component
+			:is="componentModal"
+			v-if="openGroup"
+			:title="openGroup.title"
+			:label-apply="labelApply"
+			:label-cancle="labelCancle"
+			:label-remove="labelRemove"
+			@apply="handleApply"
+			@cancle="handleCancle"
+			@remove="handleRemove(openGroup.id)"
+		>
+			<component :is="openGroup.layout" class="layout">
+				<!-- eslint-disable vue/no-unused-vars -->
+				<!-- index usage is not detected -->
+				<template
+					v-for="(input, index) in openGroup.filter"
+					v-slot:[getSlotName(index)]
+				>
+					<!-- eslint-enable vue/no-unused-vars -->
+					<component
+						:is="input.input"
+						:key="input.label"
+						v-model="tmpValues[input.id]"
+						:options="input.options"
+						:label="input.label"
+					/>
+				</template>
+			</component>
+		</component>
+	</div>
 </template>
 
 <script>
-import Vue from 'vue'
-import { MdButton, MdMenu, MdChips, MdIcon } from 'vue-material/dist/components'
-import 'vue-material/dist/vue-material.min.css'
-Vue.use(MdButton)
-Vue.use(MdMenu)
-Vue.use(MdChips)
-Vue.use(MdIcon)
-
-import selectPicker from '@/components/filter/select.vue';
-import datePicker from '@/components/filter/date.vue';
-import sortPicker from '@/components/filter/sort.vue';
-import booleanPicker from '@/components/filter/boolean.vue';
-import limitPicker from '@/components/filter/limit.vue';
-const qs = require('query-string');
-
-const defaultFilter = [
-	{
-		type: "boolean",
-		title: "more",
-		options: { propertyA: "Label A", propertyB: "Label B" },
-	},
-]
+import DefaultSelect from "./Select";
+import DefaultChips from "./Chips";
+import DefaultModal from "./Modal";
+import DefaultLayout from "./layouts/default";
+import url from "../mixins/url";
 
 export default {
-  components: {
-    'filter-select': selectPicker,
-    'filter-date': datePicker,
-    'filter-sort': sortPicker,
-    'filter-boolean': booleanPicker,
-    'filter-limit': limitPicker,
-
-  },
-  props: {
-    "addLabel": {type: String, default: "add filter"},
-    "applyLabel": {type: String, default: "apply"},
-    "cancleLabel": {type: String, default: "cancle"},
+	mixins: [url],
+	model: {
+		prop: "query",
+		event: "newQuery",
+	},
+	props: {
+		labelAdd: { type: String, default: "add filter" },
+		labelApply: { type: String, default: "apply" },
+		labelCancle: { type: String, default: "cancle" },
+		labelRemove: { type: String, default: "remove" },
+		/*
     "handleUrl": { type: Boolean },
     "saveState": { type: Boolean },
-    "consistentOrder": {type: Boolean, default: true},
-    "filter": { type: [String, Array] , default: defaultFilter },
-  },
-  data() {
-    return {
-      visibleFilter: '',
-      activeFilter: [],
-      isWatching: true,
-      pageIdentifier: `ffilter-${window.location.origin} + ${window.location.pathname}`,
-    };
-  },
-  computed: {
-    availableFilter(){
-      const filterSettings = (typeof this.filter === "string") ? JSON.parse(this.filter) : this.filter;
-      return filterSettings.map((filter)=>{
-        filter.type = "filter-"+filter.type;
-        return filter;
-      });
-    },
-    selectableFilter(){
-      return this.availableFilter.filter((filter) => !this.isApplied(this.getIdentifier(filter)));
-    }
-  },
-  watch: {
-    activeFilter() {
-      if(this.isWatching){
-        this.sendNewQuery();
-      }
-    },
-  },
-  mounted(){
-    if(this.handleUrl){
-      window.onhashchange = this.newUrlQuery;
-    }
-    if(this.saveState){
-      const savedState = localStorage.getItem(this.pageIdentifier);
-      if(savedState){
-        window.history.replaceState(null , null, savedState);
-      }
-    }
-    this.newUrlQuery();
-  },
-  methods: {
-    getIdentifier(filter){
-      const filterIndex = this.availableFilter.findIndex((a) => a === filter);
-      return '#' + filterIndex + "-" + filter.type + '-' + (filter.property || `$${filter.type.replace("filter-", "")}`);
-    },
-    setFilter(identifier, filterData) {
-      this.visibleFilter = '';
+		"consistentOrder": {type: Boolean, default: true},
+		*/
+		filter: { type: Array, required: true },
+		componentSelect: {
+			type: Object,
+			default: () => DefaultSelect,
+		},
+		componentChips: {
+			type: Object,
+			default: () => DefaultChips,
+		},
+		componentModal: {
+			type: Object,
+			default: () => DefaultModal,
+		},
+		parser: {
+			type: Object,
+			required: true,
+			validator: (parser) => {
+				return ["generator", "parser"].every(
+					(attr) => typeof parser[attr] === "function"
+				);
+			},
+		},
+		query: {
+			type: [Object, String],
+			required: true,
+		},
+		handleUrl: {
+			type: Boolean,
+		},
+	},
+	data() {
+		return {
+			openGroupId: undefined,
+			filterValues: {},
+			values: {},
+			tmpValues: {},
+		};
+	},
+	computed: {
+		active: {
+			get() {
+				return !!this.openGroupId;
+			},
+			set(to) {
+				if (!to) {
+					this.openGroupId = undefined;
+				}
+			},
+		},
+		openGroup() {
+			return this.openGroupId
+				? this.internalConfig.find((filter) => filter.id === this.openGroupId)
+				: undefined;
+		},
+		internalConfig() {
+			return this.filter.map((orgFilter, groupIndex) => {
+				let filter = { ...orgFilter };
 
-      filterData = JSON.parse(JSON.stringify(filterData)); // deep copy
+				// normalize structure
+				if (!Array.isArray(filter.filter)) {
+					filter = {
+						title: filter.title,
+						parser: filter.parser,
+						chipTemplate: filter.chipTemplate,
+						filter: [filter],
+					};
+				}
+				// add identifier
+				filter.id = `group-${groupIndex}`;
+				// resolve input wrapper component
+				/*
+				// TODO I would like to have this functionality, but it doesn't work in a library build
+				if (typeof filter.layout !== "function") {
+					const name = filter.layout || "default";
+					filter.layout = () => import(`./layouts/${name}.vue`);
+				}
+				*/
+				if (!filter.layout) {
+					filter.layout = DefaultLayout;
+				}
 
-      this.removeFilter(identifier, false);
-      this.activeFilter.push([identifier, filterData]);
-      if(this.consistentOrder){
-        this.activeFilter.sort((a, b) => a[0].localeCompare(b[0]));
-      }
-    },
-    removeFilter(key, emit) {
-      this.activeFilter = this.activeFilter.filter(item => item[0] != key);
-      if (emit) {
-        this.sendEvent("reset", key);
-      }
-    },
-    cancle() {
-      this.visibleFilter = '';
-    },
-    sendEvent(event, data){
-      this.$emit(event,data);
-      this.$refs["filter-module"].dispatchEvent(new CustomEvent(event, {detail: data}));
-    },
-    sendNewQuery() {
-      const apiQuery = {};
-      const urlQuery = {};
-      this.activeFilter.forEach((value) => {
-        Object.assign(apiQuery, value[1].apiQuery);
-        Object.assign(urlQuery, value[1].urlQuery);
-      }, {});
-      if (this.handleUrl && history.pushState) {
-        window.history.replaceState(null , null, `#?${qs.stringify(urlQuery)}`);
-      }
-      if(this.saveState){
-        localStorage.setItem(this.pageIdentifier, window.location.hash);
-      }
+				// resolve input components
+				filter.filter = filter.filter.map((orgSubFilter, inputIndex) => {
+					const subFilter = { ...orgSubFilter };
+					subFilter.id = `input-${groupIndex}-${inputIndex}`;
+					/*
+					// TODO I would like to have this functionality, but it doesn't work in a library build
+					if (typeof subFilter.input === "string") {
+						const name = subFilter.input;
+						subFilter.input = () => import(`./inputs/${name}.vue`);
+					}
+					*/
+					if (typeof subFilter.applyNegated !== "function") {
+						const applyNegated = subFilter.applyNegated;
+						subFilter.applyNegated = () => !!applyNegated;
+					}
+					return subFilter;
+				});
+				return filter;
+			});
+		},
+		chips() {
+			return this.activeGroups.map((groupId) => {
+				const group = this.internalConfig.find((group) => group.id === groupId);
+				const values = group.filter.map((a) => this.values[a.id]);
+				const label =
+					typeof group.chipTemplate === "function"
+						? group.chipTemplate
+						: (values) => {
+								let out = group.chipTemplate;
+								values.forEach((value, index) => {
+									if (Array.isArray(value)) {
+										value = value.join(", ");
+									}
+									out = out.replace(`%${index + 1}`, value);
+								});
+								return out;
+						  };
+				return {
+					id: group.id,
+					deletable: !group.required,
+					label: label(values),
+				};
+			});
+		},
+		activeGroups() {
+			// set every group that has a value as active
+			return this.internalConfig
+				.filter((group) => {
+					return group.filter.some(
+						(input) => this.values[input.id] !== undefined
+					);
+				})
+				.map((group) => group.id);
+		},
+		unusedFilters() {
+			return this.internalConfig.filter((group) => {
+				return !this.activeGroups.includes(group.id);
+			});
+		},
+	},
+	watch: {
+		internalConfig(to) {
+			to.forEach((group) => {
+				group.filter.forEach((input) => {
+					if (!this.values.hasOwnProperty(input.id)) {
+						this.$set(this.values, input.id, undefined);
+						this.$set(this.tmpValues, input.id, undefined);
+					}
+				});
+			});
+			this.init();
+		},
+	},
+	created() {
+		this.init();
+	},
+	methods: {
+		init() {
+			this.updateFromQuery();
 
-      this.sendEvent("newFilter", [apiQuery, urlQuery]);
-    },
-    isApplied(identifier) {
-      return this.activeFilter.map(i => i[0]).includes(identifier);
-    },
-    newUrlQuery(){
-      this.isWatching = false;
-      this.activeFilter = [];
-      this.isWatching = true;
-      this.sendEvent('reset');
-      this.sendEvent("newUrlQuery", (qs.parse(location.hash.slice(1)) || {}));
-    }
+			if (this.handleUrl) {
+				if (Object.keys(this.$_getFilterQueryParameters()).length !== 0) {
+					this.clearQuery();
+				}
+				this.patchFromQuery();
+			}
 
-  },
+			this.generateQuery();
+
+			if (Object.entries) this.updateUrlQuery();
+		},
+		getSlotName(index) {
+			return `input-${index + 1}`;
+		},
+		openFilter(groupId) {
+			this.tmpValues = JSON.parse(JSON.stringify(this.values));
+			this.openGroupId = groupId;
+		},
+		handleRemove(groupId) {
+			// reset values
+			const removedGroup = this.internalConfig.find(
+				(group) => group.id === groupId
+			);
+			removedGroup.filter.forEach((input) => {
+				this.tmpValues[input.id] = undefined;
+				this.values[input.id] = undefined;
+			});
+			// update query
+			this.generateQuery();
+			this.openGroupId = undefined;
+		},
+		handleApply() {
+			// persist new values
+			this.openGroup.filter.forEach((input) => {
+				this.$set(this.values, input.id, this.tmpValues[input.id]);
+			});
+			this.handleCancle();
+			this.generateQuery();
+		},
+		handleCancle() {
+			this.openGroupId = undefined;
+		},
+		clearQuery() {
+			Object.entries(this.values).forEach(([key]) => {
+				this.$set(this.values, key, undefined);
+			});
+		},
+		generateQuery() {
+			const query = this.parser.generator(this.internalConfig, this.values);
+			this.$emit("newQuery", query);
+			if (this.handleUrl) {
+				this.updateUrlQuery();
+			}
+		},
+		updateUrlQuery() {
+			// keep existing non filter related query params
+			const newQuery = this.$_getFilterQueryParameters(true);
+			// generate new query params from input values
+			Object.entries(this.values)
+				.filter(([, value]) => value !== undefined)
+				.forEach(([key, value]) => {
+					newQuery["vf-" + key] = encodeURIComponent(JSON.stringify(value));
+				});
+			//
+			this.$_updateUrlQueryString(newQuery);
+		},
+		updateFromQuery() {
+			const parsedValues = this.parser.parser(this.internalConfig, this.query);
+			this.$set(this, "values", parsedValues);
+		},
+		patchFromQuery() {
+			const query = this.$_getFilterQueryParameters();
+			Object.entries(query).forEach(([key, value]) => {
+				this.$set(this.values, key, value);
+			});
+		},
+	},
 };
 </script>
 
-<style lang="scss">
-@import '@/styles/default.scss';
-</style>
 <style lang="scss" scoped>
-/* ENTER CUSTOM CSS HERE */
-.add-filter{
-  vertical-align: middle;
-  margin-bottom: 8px;
+.filter {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
-.md-chip{
-  margin-bottom: 8px;
+.add-filter {
+	vertical-align: middle;
+	margin-bottom: 8px;
+}
+.md-chip {
+	margin-bottom: 8px;
+}
+.row {
+	display: flex;
+	flex-wrap: nowrap;
+	width: 100%;
+	align-items: center;
+	.chips {
+		margin-right: 0.5rem;
+	}
 }
 </style>
