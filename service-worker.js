@@ -21,19 +21,19 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox
 self.__precacheManifest = [
   {
     "url": "0-Demo.html",
-    "revision": "7464eddfd927506d64bc405aabc8b735"
+    "revision": "61034e2846db5db330edb894015d281d"
   },
   {
     "url": "1-GettingStarted.html",
-    "revision": "ef139d24bdf72e164e85e775b3d78a3b"
+    "revision": "5016e356b980ec79d80a32082f8e7dc5"
   },
   {
     "url": "2-Configuration.html",
-    "revision": "f7dfe62b243c083582907a64a62f68cf"
+    "revision": "9aa967f11c441deb0c3f6ad186552761"
   },
   {
     "url": "404.html",
-    "revision": "13e3bea85f8482f86310f1e7b1352085"
+    "revision": "ef2b2dee17e08081fe62e8e025d81f47"
   },
   {
     "url": "assets/css/0.styles.5ab877a6.css",
@@ -108,8 +108,8 @@ self.__precacheManifest = [
     "revision": "a5042cb9e49036f17c9461e422f172d1"
   },
   {
-    "url": "assets/js/app.c54767c2.js",
-    "revision": "fcf8f24167d97ca36218d567f64676c2"
+    "url": "assets/js/app.702eb0c9.js",
+    "revision": "843134983d5d078b4221ebbf0e28420d"
   },
   {
     "url": "cloud-transparent.png",
@@ -117,47 +117,47 @@ self.__precacheManifest = [
   },
   {
     "url": "Components/Inputs.html",
-    "revision": "28960a0555648c7de02af65b9087dbe2"
+    "revision": "fc88c392fb504c6b5d550d9dbb73863e"
   },
   {
     "url": "Components/Layouts.html",
-    "revision": "14ab47f8b1adb66cc1761dce2e91304f"
+    "revision": "694c8e752aa75f2250c1319f19717651"
   },
   {
     "url": "Customize/0-Customize.html",
-    "revision": "ddf424ff47ddcf1b77cb1777f4c3e70c"
+    "revision": "b3dc3eb8f7fb898ea26c718e3c202cfb"
   },
   {
     "url": "Customize/1-Select.html",
-    "revision": "2f6df6eeaafb8b77aae3840fbc153341"
+    "revision": "4a7bd0d02b4af7cb44f8a0d6da99288a"
   },
   {
     "url": "Customize/2-Chips.html",
-    "revision": "beb4f40e9331c86d90e653a3d9afcd6b"
+    "revision": "81e7766d21533bc25fc9b12302fe3be8"
   },
   {
     "url": "Customize/3-Modal.html",
-    "revision": "4c73e1119950297ec6b520d11d0fc35d"
+    "revision": "2ca61741a40fcc71c731fb1f5f21d370"
   },
   {
     "url": "Customize/4-Layout.html",
-    "revision": "e88a5f644e9da8350904c5de1c36c9de"
+    "revision": "b03f6ea538017366a5d65cc6142d10f7"
   },
   {
     "url": "Customize/5-Input.html",
-    "revision": "c4b3ee18f33be6dfd67dea9bdc1d1b37"
+    "revision": "ee4f375fccca24997b042d40cc5027f2"
   },
   {
     "url": "Customize/6-Parser.html",
-    "revision": "affc567ae864a18bddc09f6571dfcc19"
+    "revision": "0adc248ee2c439c7028069f59ee81369"
   },
   {
     "url": "Customize/index.html",
-    "revision": "9db388bd7d733ee3e80bd2ea1e6aa77f"
+    "revision": "5e8692e1ad8f40b9578f4f6e00776d4b"
   },
   {
     "url": "index.html",
-    "revision": "ebbc14b630125fbba93235d4a50353af"
+    "revision": "58d951a838b5811bc09fe90b4a4cf2d7"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
