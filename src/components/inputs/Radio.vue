@@ -34,11 +34,12 @@ export default {
 			],
 			validator: (options) => {
 				return options.every((option, index) => {
-					if (!option.hasOwnProperty("label")) {
+					if (!Object.prototype.hasOwnProperty.call(option, "label")) {
 						throw new Error(`option ${index} is missing a label`);
 					}
 					return (
-						option.hasOwnProperty("label") && option.hasOwnProperty("value")
+						Object.prototype.hasOwnProperty.call(option, "label") &&
+						Object.prototype.hasOwnProperty.call(option, "value")
 					);
 				});
 			},
