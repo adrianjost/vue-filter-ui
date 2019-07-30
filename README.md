@@ -4,7 +4,7 @@ an universal configurable filter module that will fire an event
 and gives you a FeathersJS query that you should apply.
 
 [![forthebadge](http://forthebadge.com/images/badges/made-with-vue.svg)](http://forthebadge.com)
-[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
+[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com) [![Greenkeeper badge](https://badges.greenkeeper.io/adrianjost/vue-filter-ui.svg)](https://greenkeeper.io/)
 
 ![filter-module](https://user-images.githubusercontent.com/22987140/36727522-db3ee16e-1bbd-11e8-91d2-426e0bebb306.PNG)
 
