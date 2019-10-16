@@ -17,7 +17,7 @@
 		"vue-clickout": "^1.0.0"
 	},
 	"devDependencies": {
-		"@vue/cli-plugin-babel": "^3.7.0",
+		"@vue/cli-plugin-babel": "^4.0.0",
 		"@vue/cli-plugin-eslint": "^3.8.0",
 		"@vue/cli-service": "^3.7.0",
 		"@vue/eslint-config-prettier": "^5.0.0",
