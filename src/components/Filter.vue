@@ -4,18 +4,18 @@
 			<component
 				:is="componentChips"
 				v-if="chips.length > 0"
-				class="chips"
-				:chips="chips"
 				@open="openFilter"
 				@remove="handleRemove"
+				:chips="chips"
+				class="chips"
 			/>
 
 			<component
 				:is="componentSelect"
-				class="filter-select"
 				:label-add="labelAdd"
 				:options="unusedFilters"
 				@openFilter="openFilter"
+				class="filter-select"
 			/>
 		</div>
 
@@ -33,10 +33,7 @@
 			<component :is="openGroup.layout" class="layout">
 				<!-- eslint-disable vue/no-unused-vars -->
 				<!-- index usage is not detected -->
-				<template
-					v-for="(input, index) in openGroup.filter"
-					v-slot:[getSlotName(index)]
-				>
+				<template v-for="(input, index) in openGroup.filter" v-slot:[getSlotName(index)]>
 					<!-- eslint-enable vue/no-unused-vars -->
 					<component
 						:is="input.input"
@@ -69,12 +66,11 @@ export default {
 		labelApply: { type: String, default: "apply" },
 		labelCancle: { type: String, default: "cancle" },
 		labelRemove: { type: String, default: "remove" },
-		/*
-    "handleUrl": { type: Boolean },
-    "saveState": { type: Boolean },
-		"consistentOrder": {type: Boolean, default: true},
-		*/
 		filter: { type: Array, required: true },
+		activeFilters: {
+			type: Array,
+			default: () => [],
+		},
 		componentSelect: {
 			type: Object,
 			default: () => DefaultSelect,
@@ -288,6 +284,23 @@ export default {
 			if (this.handleUrl) {
 				this.updateUrlQuery();
 			}
+			const newActiveFilters = [];
+			this.internalConfig.forEach((group) => {
+				const filter = group.filter.find(
+					(input) => this.values[input.id] !== undefined
+				);
+				if (!filter) {
+					return;
+				}
+				const newFilter = {
+					attribute: filter.attribute,
+					value: this.values[filter.id],
+					operator: filter.operator,
+					applyNegated: filter.applyNegated() || false,
+				};
+				newActiveFilters.push(newFilter);
+			});
+			this.$emit("update:active-filters", newActiveFilters);
 		},
 		updateUrlQuery() {
 			// keep existing non filter related query params
@@ -302,7 +315,20 @@ export default {
 			this.$_updateUrlQueryString(newQuery);
 		},
 		updateFromQuery() {
-			const parsedValues = this.parser.parser(this.internalConfig, this.query);
+			const parsedValues = [];
+			this.activeFilters.forEach((filter) => {
+				this.internalConfig.forEach((group) => {
+					group.filter.forEach((input) => {
+						if (filter.attribute === input.attribute) {
+							const queryValue = filter.value;
+							if (queryValue === undefined) {
+								return;
+							}
+							parsedValues[input.id] = queryValue;
+						}
+					});
+				});
+			});
 			this.$set(this, "values", parsedValues);
 		},
 		patchFromQuery() {
