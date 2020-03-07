@@ -1,3 +1,5 @@
+<!-- eslint-disable vue/require-component-is -->
+<!-- :is is not detected -->
 <template>
 	<div class="filter">
 		<div class="row">
@@ -31,8 +33,9 @@
 			@remove="handleRemove(openGroup.id)"
 		>
 			<component :is="openGroup.layout" class="layout">
-				<!-- eslint-disable vue/no-unused-vars -->
 				<!-- index usage is not detected -->
+				<!-- eslint-disable vue/no-unused-vars -->
+				<!--  eslint-disable-next-line prettier/prettier-->
 				<template v-for="(input, index) in openGroup.filter" v-slot:[getSlotName(index)]>
 					<!-- eslint-enable vue/no-unused-vars -->
 					<component
@@ -70,6 +73,14 @@ export default {
 		activeFilters: {
 			type: Array,
 			default: () => [],
+			validator: (activeFilters) => {
+				return activeFilters.every(
+					(activeFilter) =>
+						activeFilter.attribute &&
+						activeFilter.operator &&
+						activeFilter.value
+				);
+			},
 		},
 		componentSelect: {
 			type: Object,
