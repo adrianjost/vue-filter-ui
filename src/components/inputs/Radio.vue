@@ -1,15 +1,14 @@
 <template>
-	<fieldset class="radio-list">
-		<label v-for="option in options" :key="option.label" class="label">
-			<input
-				v-model="vmodelProxy"
-				type="radio"
-				:name="JSON.stringify(options)"
-				:value="option.value"
-			/>
-			{{ option.label }}
-		</label>
-	</fieldset>
+	<div>
+		<span v-if="label" class="label">{{ label }}</span>
+		<fieldset class="radio-list">
+			<label v-for="option in options" :key="option.label" class="label">
+				<!-- eslint-disable-next-line prettier/prettier -->
+				<input v-model="vmodelProxy" :name="JSON.stringify(options)" :value="option.value" type="radio" />
+				{{ option.label }}
+			</label>
+		</fieldset>
+	</div>
 </template>
 
 <script>
@@ -21,6 +20,10 @@ export default {
 		event: "input",
 	},
 	props: {
+		label: {
+			type: String,
+			default: "",
+		},
 		value: {
 			type: inputDataTypes,
 			default: undefined,

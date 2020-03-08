@@ -1,5 +1,8 @@
 <template>
-	<CustomSelect v-model="vmodelProxy" :options="options" multiple />
+	<div>
+		<span v-if="label" class="label">{{ label }}</span>
+		<CustomSelect v-model="vmodelProxy" :options="options" multiple />
+	</div>
 </template>
 <script>
 import CustomSelect from "./Select";
@@ -13,6 +16,10 @@ export default {
 		event: "input",
 	},
 	props: {
+		label: {
+			type: String,
+			default: "",
+		},
 		value: {
 			type: Array,
 			default: () => [],

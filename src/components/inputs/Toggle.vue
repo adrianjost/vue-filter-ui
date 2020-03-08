@@ -1,9 +1,10 @@
 <template>
-	<button type="button" tab-index="0" class="toggle" @click="nextState">
-		<span class="toggle-text">
-			{{ options[currentIndex].label }}
-		</span>
-	</button>
+	<div>
+		<span v-if="label" class="label">{{ label }}</span>
+		<button @click="nextState" type="button" tab-index="0" class="toggle">
+			<span class="toggle-text">{{ options[currentIndex].label }}</span>
+		</button>
+	</div>
 </template>
 
 <script>
@@ -15,6 +16,10 @@ export default {
 		event: "input",
 	},
 	props: {
+		label: {
+			type: String,
+			default: "",
+		},
 		value: {
 			type: inputDataTypes,
 			default: undefined,
@@ -88,5 +93,8 @@ export default {
 	justify-content: center;
 	align-items: center;
 	padding: 0.25em;
+}
+.label {
+	display: block;
 }
 </style>

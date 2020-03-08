@@ -6,10 +6,10 @@
 				v-for="option in options"
 				:key="option.label"
 				v-model="vmodelProxy"
-				type="radio"
 				:name="JSON.stringify(options)"
 				:value="option.value"
 				:aria-label="option.label"
+				type="radio"
 			/>
 		</span>
 	</div>

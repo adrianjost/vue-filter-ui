@@ -1,15 +1,18 @@
 <template>
-	<fieldset class="checkbox-list">
-		<label v-for="option in options" :key="option.label" class="label">
-			<input
-				v-model="vmodelProxy"
-				type="checkbox"
-				:name="option.label + option.value"
-				:value="option.value"
-			/>
-			{{ option.label }}
-		</label>
-	</fieldset>
+	<div>
+		<span v-if="label" class="label">{{ label }}</span>
+		<fieldset class="checkbox-list">
+			<label v-for="option in options" :key="option.label" class="label">
+				<input
+					v-model="vmodelProxy"
+					:name="option.label + option.value"
+					:value="option.value"
+					type="checkbox"
+				/>
+				{{ option.label }}
+			</label>
+		</fieldset>
+	</div>
 </template>
 
 <script>
@@ -19,6 +22,10 @@ export default {
 		event: "input",
 	},
 	props: {
+		label: {
+			type: String,
+			default: "",
+		},
 		value: {
 			type: [Boolean, Array],
 			default: () => [],
