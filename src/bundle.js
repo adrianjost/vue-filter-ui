@@ -9,7 +9,6 @@ const Layouts = require.context(
 	false,
 	/[a-z]\w+\.(vue)$/
 );
-const Parser = require.context("./parser", false, /\w+\.(js)$/);
 
 export const upperFirst = (string) =>
 	string.charAt(0).toUpperCase() + string.slice(1);
@@ -35,6 +34,5 @@ const requireComponents = (context) => {
 
 export const inputs = requireComponents(Inputs);
 export const layouts = requireComponents(Layouts);
-export const parser = requireComponents(Parser);
 
 export default VueFilterUi;

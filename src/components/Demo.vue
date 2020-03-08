@@ -2,43 +2,28 @@
 	<div class="wrapper">
 		<search-filter
 			ref="filtercomponent"
-			v-model="apiQuery"
+			v-model="activeFilters"
 			:label-add="config.addLabel"
 			:label-apply="config.applyLabel"
 			:label-cancle="config.cancleLabel"
 			:label-remove="config.removeLabel"
-			:handle-url="config.handleUrl"
 			:save-state="config.saveState"
 			:consistent-order="config.consistentOrder"
 			:filter="config.filter"
-			:parser="parser"
-			@newQuery="/* updateQuery */"
 		/>
 		<hr />
 		<DemoConfig v-model="config" />
 		<hr />
-		<table width="100%">
-			<tr>
-				<th>FeathersJS</th>
-				<th>URLQuery</th>
-			</tr>
-			<tr>
-				<td>
-					<pre>{{ JSON.stringify(apiQuery, null, 2) }}</pre>
-				</td>
-				<td>
-					<pre>{{ JSON.stringify(urlQuery, null, 2) }}</pre>
-				</td>
-			</tr>
-		</table>
+		<div>
+			<h4>Active Filters</h4>
+			<pre>{{ JSON.stringify(activeFilters, null, 2) }}</pre>
+		</div>
 	</div>
 </template>
 
 <script>
 import DemoConfig from "./DemoConfig.vue";
 import Filter from "./Filter.vue";
-
-import parser from "../parser/FeathersJS";
 
 export default {
 	components: {
@@ -59,20 +44,30 @@ export default {
 			  };
 		config.filter = [];
 		return {
-			parser,
 			toggle: false,
-			apiQuery: {
-				$sort: {
-					true: false,
+			activeFilters: [
+				{
+					attribute: "$sort",
+					value: "true",
+					operator: "=",
 				},
-				isTemp: {
-					$ne: true,
+				{
+					attribute: "isTemp",
+					value: "true",
+					operator: "=",
+					applyNegated: true,
 				},
-				isCool: ["YES YES", "nope :("],
-				isDaddy: true,
-				isMultiDaddy: ["daddy", "no daddy"],
-			},
-			urlQuery: {},
+				{
+					attribute: "isCool",
+					value: "YES YES",
+					operator: "=",
+				},
+				{
+					attribute: "isDaddy",
+					value: "no daddy",
+					operator: "=",
+				},
+			],
 			nativeEvents: [],
 			config,
 		};
@@ -87,7 +82,7 @@ export default {
 	},
 	mounted() {
 		// test native event handling
-		const events = ["newFilter", "newUrlQuery", "reset"];
+		const events = ["newFilter", "newActiveFilter", "reset"];
 		window.addEventListener("load", () => {
 			const filter = this.$refs["filtercomponent"].$el;
 			events.forEach((event) => {
@@ -97,13 +92,6 @@ export default {
 			});
 		});
 	},
-	/*
-	methods: {
-		updateQuery(query) {
-			this.apiQuery = query;
-		},
-	},
-	*/
 };
 </script>
 

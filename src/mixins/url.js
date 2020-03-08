@@ -34,15 +34,5 @@ export default {
 				});
 			return query;
 		},
-		$_updateUrlQueryString(newQuery) {
-			const newUrlQueryString = `?${Object.entries(newQuery)
-				.map(([key, value]) => `${key}=${value}`)
-				.join("&")}`;
-			window.history.replaceState(
-				{},
-				"",
-				decodeURIComponent(`${window.location.pathname}${newUrlQueryString}`)
-			);
-		},
 	},
 };

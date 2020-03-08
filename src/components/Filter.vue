@@ -61,8 +61,8 @@ import url from "../mixins/url";
 export default {
 	mixins: [url],
 	model: {
-		prop: "query",
-		event: "newQuery",
+		prop: "activeFilters",
+		event: "update:active-filters",
 	},
 	props: {
 		labelAdd: { type: String, default: "add filter" },
@@ -78,7 +78,7 @@ export default {
 					(activeFilter) =>
 						activeFilter.attribute &&
 						activeFilter.operator &&
-						activeFilter.value
+						activeFilter.value != undefined
 				);
 			},
 		},
@@ -93,22 +93,6 @@ export default {
 		componentModal: {
 			type: Object,
 			default: () => DefaultModal,
-		},
-		parser: {
-			type: Object,
-			required: true,
-			validator: (parser) => {
-				return ["generator", "parser"].every(
-					(attr) => typeof parser[attr] === "function"
-				);
-			},
-		},
-		query: {
-			type: [Object, String],
-			required: true,
-		},
-		handleUrl: {
-			type: Boolean,
 		},
 	},
 	data() {
@@ -143,7 +127,6 @@ export default {
 				if (!Array.isArray(filter.filter)) {
 					filter = {
 						title: filter.title,
-						parser: filter.parser,
 						chipTemplate: filter.chipTemplate,
 						filter: [filter],
 					};
@@ -242,16 +225,7 @@ export default {
 		init() {
 			this.updateFromQuery();
 
-			if (this.handleUrl) {
-				if (Object.keys(this.$_getFilterQueryParameters()).length !== 0) {
-					this.clearQuery();
-				}
-				this.patchFromQuery();
-			}
-
 			this.generateQuery();
-
-			if (Object.entries) this.updateUrlQuery();
 		},
 		getSlotName(index) {
 			return `input-${index + 1}`;
@@ -290,11 +264,6 @@ export default {
 			});
 		},
 		generateQuery() {
-			const query = this.parser.generator(this.internalConfig, this.values);
-			this.$emit("newQuery", query);
-			if (this.handleUrl) {
-				this.updateUrlQuery();
-			}
 			const newActiveFilters = [];
 			this.internalConfig.forEach((group) => {
 				const filter = group.filter.find(
@@ -306,47 +275,29 @@ export default {
 				const newFilter = {
 					attribute: filter.attribute,
 					value: this.values[filter.id],
-					operator: filter.operator,
+					operator: filter.operator || "=",
 					applyNegated: filter.applyNegated() || false,
 				};
 				newActiveFilters.push(newFilter);
 			});
 			this.$emit("update:active-filters", newActiveFilters);
 		},
-		updateUrlQuery() {
-			// keep existing non filter related query params
-			const newQuery = this.$_getFilterQueryParameters(true);
-			// generate new query params from input values
-			Object.entries(this.values)
-				.filter(([, value]) => value !== undefined)
-				.forEach(([key, value]) => {
-					newQuery["vf-" + key] = encodeURIComponent(JSON.stringify(value));
-				});
-			//
-			this.$_updateUrlQueryString(newQuery);
-		},
 		updateFromQuery() {
-			const parsedValues = [];
-			this.activeFilters.forEach((filter) => {
+			const newValues = [];
+			this.activeFilters.forEach((activeFilter) => {
 				this.internalConfig.forEach((group) => {
 					group.filter.forEach((input) => {
-						if (filter.attribute === input.attribute) {
-							const queryValue = filter.value;
-							if (queryValue === undefined) {
+						if (input.attribute === activeFilter.attribute) {
+							const newValue = activeFilter.value;
+							if (newValue === undefined) {
 								return;
 							}
-							parsedValues[input.id] = queryValue;
+							newValues[input.id] = newValue;
 						}
 					});
 				});
 			});
-			this.$set(this, "values", parsedValues);
-		},
-		patchFromQuery() {
-			const query = this.$_getFilterQueryParameters();
-			Object.entries(query).forEach(([key, value]) => {
-				this.$set(this.values, key, value);
-			});
+			this.$set(this, "values", newValues);
 		},
 	},
 };
