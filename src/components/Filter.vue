@@ -124,6 +124,7 @@ export default {
 				if (!Array.isArray(filter.filter)) {
 					filter = {
 						title: filter.title,
+						parser: filter.parser,
 						chipTemplate: filter.chipTemplate,
 						filter: [filter],
 					};
@@ -160,7 +161,6 @@ export default {
 					}
 					return subFilter;
 				});
-				console.log("filter ->", filter);
 
 				return filter;
 			});
