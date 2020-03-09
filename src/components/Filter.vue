@@ -31,10 +31,7 @@
 			@remove="handleRemove(openGroup.id)"
 		>
 			<component :is="openGroup.layout" class="layout">
-				<template
-					v-for="(input, index) in openGroup.filter"
-					v-slot:[getSlotName(index)]
-				>
+				<template v-for="(input, index) in openGroup.filter" v-slot:[getSlotName(index)]>
 					<!-- eslint-disable vue/valid-v-for -->
 					<component
 						:is="input.input"
@@ -60,8 +57,8 @@ import url from "../mixins/url";
 export default {
 	mixins: [url],
 	model: {
-		prop: "activeFilters",
-		event: "update:active-filters",
+		prop: "query",
+		event: "newQuery",
 	},
 	props: {
 		labelAdd: { type: String, default: "add filter" },
@@ -69,18 +66,6 @@ export default {
 		labelCancle: { type: String, default: "cancle" },
 		labelRemove: { type: String, default: "remove" },
 		filter: { type: Array, required: true },
-		activeFilters: {
-			type: Array,
-			default: () => [],
-			validator: (activeFilters) => {
-				return activeFilters.every(
-					(activeFilter) =>
-						activeFilter.attribute &&
-						activeFilter.operator &&
-						activeFilter.value != undefined
-				);
-			},
-		},
 		componentSelect: {
 			type: Object,
 			default: () => DefaultSelect,
@@ -92,6 +77,19 @@ export default {
 		componentModal: {
 			type: Object,
 			default: () => DefaultModal,
+		},
+		parser: {
+			type: Object,
+			required: true,
+			validator: (parser) => {
+				return ["generator", "parser"].every(
+					(attr) => typeof parser[attr] === "function"
+				);
+			},
+		},
+		query: {
+			type: [Array, Object, String],
+			required: true,
 		},
 	},
 	data() {
@@ -263,7 +261,7 @@ export default {
 			});
 		},
 		generateQuery() {
-			const newActiveFilters = [];
+			const newQuery = [];
 			this.internalConfig.forEach((group) => {
 				const filter = group.filter.find(
 					(input) => this.values[input.id] !== undefined
@@ -277,17 +275,17 @@ export default {
 					operator: filter.operator || "=",
 					applyNegated: filter.applyNegated() || false,
 				};
-				newActiveFilters.push(newFilter);
+				newQuery.push(newFilter);
 			});
-			this.$emit("update:active-filters", newActiveFilters);
+			this.$emit("newQuery", newQuery);
 		},
 		updateFromQuery() {
 			const newValues = [];
-			this.activeFilters.forEach((activeFilter) => {
+			this.query.forEach((filter) => {
 				this.internalConfig.forEach((group) => {
 					group.filter.forEach((input) => {
-						if (input.attribute === activeFilter.attribute) {
-							const newValue = activeFilter.value;
+						if (input.attribute === filter.attribute) {
+							const newValue = filter.value;
 							if (newValue === undefined) {
 								return;
 							}

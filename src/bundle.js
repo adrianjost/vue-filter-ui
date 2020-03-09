@@ -34,5 +34,6 @@ const requireComponents = (context) => {
 
 export const inputs = requireComponents(Inputs);
 export const layouts = requireComponents(Layouts);
+export const parser = requireComponents(Parser);
 
 export default VueFilterUi;

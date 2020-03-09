@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<span v-if="label" class="label">{{ label }}</span>
 		<fieldset class="checkbox-list">
+			<legend v-if="label" class="label">{{ label }}</legend>
 			<label v-for="option in options" :key="option.label" class="label">
 				<input
 					v-model="vmodelProxy"

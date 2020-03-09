@@ -1,11 +1,11 @@
 <template>
-	<div>
+	<label>
 		<span v-if="label" class="label">{{ label }}</span>
 		<select v-model="vmodelProxy" class="select">
 			<!-- eslint-disable-next-line prettier/prettier -->
 			<option v-for="option in options" :key="option.value" :value="option.value">{{ option.label }}</option>
 		</select>
-	</div>
+	</label>
 </template>
 
 <script>

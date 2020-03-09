@@ -2,7 +2,7 @@
 	<div class="wrapper">
 		<search-filter
 			ref="filtercomponent"
-			v-model="activeFilters"
+			v-model="query"
 			:label-add="config.addLabel"
 			:label-apply="config.applyLabel"
 			:label-cancle="config.cancleLabel"
@@ -10,13 +10,14 @@
 			:save-state="config.saveState"
 			:consistent-order="config.consistentOrder"
 			:filter="config.filter"
+			:parser="parser"
 		/>
 		<hr />
 		<DemoConfig v-model="config" />
 		<hr />
 		<div>
-			<h4>Active Filters</h4>
-			<pre>{{ JSON.stringify(activeFilters, null, 2) }}</pre>
+			<h4>Filter Query</h4>
+			<pre>{{ JSON.stringify(query, null, 2) }}</pre>
 		</div>
 	</div>
 </template>
@@ -24,6 +25,7 @@
 <script>
 import DemoConfig from "./DemoConfig.vue";
 import Filter from "./Filter.vue";
+import parser from "../parser/FeathersJS";
 
 export default {
 	components: {
@@ -44,8 +46,9 @@ export default {
 			  };
 		config.filter = [];
 		return {
+			parser,
 			toggle: false,
-			activeFilters: [
+			query: [
 				{
 					attribute: "$sort",
 					value: "true",
