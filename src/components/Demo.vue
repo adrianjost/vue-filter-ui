@@ -25,6 +25,7 @@
 <script>
 import DemoConfig from "./DemoConfig.vue";
 import Filter from "./Filter.vue";
+
 import parser from "../parser/FeathersJS";
 
 export default {
@@ -85,7 +86,7 @@ export default {
 	},
 	mounted() {
 		// test native event handling
-		const events = ["newFilter", "newActiveFilter", "reset"];
+		const events = ["newFilter", "newQuery", "reset"];
 		window.addEventListener("load", () => {
 			const filter = this.$refs["filtercomponent"].$el;
 			events.forEach((event) => {

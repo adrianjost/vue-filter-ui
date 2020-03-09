@@ -1,10 +1,10 @@
 <template>
-	<div>
+	<label>
 		<span v-if="label" class="label">{{ label }}</span>
 		<button @click="nextState" type="button" tab-index="0" class="toggle">
 			<span class="toggle-text">{{ options[currentIndex].label }}</span>
 		</button>
-	</div>
+	</label>
 </template>
 
 <script>

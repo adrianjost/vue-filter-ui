@@ -1,14 +1,12 @@
 <template>
-	<div>
-		<span v-if="label" class="label">{{ label }}</span>
-		<fieldset class="radio-list">
-			<label v-for="option in options" :key="option.label" class="label">
-				<!-- eslint-disable-next-line prettier/prettier -->
-				<input v-model="vmodelProxy" :name="JSON.stringify(options)" :value="option.value" type="radio" />
-				{{ option.label }}
-			</label>
-		</fieldset>
-	</div>
+	<fieldset class="radio-list">
+		<legend v-if="label" class="label">{{ label }}</legend>
+		<label v-for="option in options" :key="option.label" class="label">
+			<!-- eslint-disable-next-line prettier/prettier -->
+			<input v-model="vmodelProxy" :name="JSON.stringify(options)" :value="option.value" type="radio" />
+			{{ option.label }}
+		</label>
+	</fieldset>
 </template>
 
 <script>

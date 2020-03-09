@@ -1,8 +1,8 @@
 <template>
-	<div>
+	<label>
 		<span v-if="label" class="label">{{ label }}</span>
 		<CustomSelect v-model="vmodelProxy" :options="options" multiple />
-	</div>
+	</label>
 </template>
 <script>
 import CustomSelect from "./Select";

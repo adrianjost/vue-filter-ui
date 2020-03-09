@@ -1,5 +1,5 @@
 <template>
-	<div class="tri-state-toggle">
+	<label class="tri-state-toggle">
 		<span v-if="label" class="label">{{ label }}</span>
 		<span>
 			<input
@@ -12,7 +12,7 @@
 				type="radio"
 			/>
 		</span>
-	</div>
+	</label>
 </template>
 
 <script>
