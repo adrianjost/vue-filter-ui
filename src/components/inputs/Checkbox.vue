@@ -1,18 +1,16 @@
 <template>
-	<div>
-		<fieldset class="checkbox-list">
-			<legend v-if="label" class="label">{{ label }}</legend>
-			<label v-for="option in options" :key="option.label" class="label">
-				<input
-					v-model="vmodelProxy"
-					:name="option.label + option.value"
-					:value="option.value"
-					type="checkbox"
-				/>
-				{{ option.label }}
-			</label>
-		</fieldset>
-	</div>
+	<fieldset class="checkbox-list">
+		<legend v-if="label" class="label">{{ label }}</legend>
+		<label v-for="option in options" :key="option.label" class="label">
+			<input
+				v-model="vmodelProxy"
+				:name="option.label + option.value"
+				:value="option.value"
+				type="checkbox"
+			/>
+			{{ option.label }}
+		</label>
+	</fieldset>
 </template>
 
 <script>
