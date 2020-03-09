@@ -9,6 +9,7 @@ const Layouts = require.context(
 	false,
 	/[a-z]\w+\.(vue)$/
 );
+const Parser = require.context("./parser", false, /\w+\.(js)$/);
 
 export const upperFirst = (string) =>
 	string.charAt(0).toUpperCase() + string.slice(1);

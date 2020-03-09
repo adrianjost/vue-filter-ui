@@ -26,7 +26,7 @@
 import DemoConfig from "./DemoConfig.vue";
 import Filter from "./Filter.vue";
 
-import parser from "../parser/FeathersJS";
+import parser from "../parser/default";
 
 export default {
 	components: {

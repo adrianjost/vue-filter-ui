@@ -5,17 +5,17 @@
 				:is="componentChips"
 				v-if="chips.length > 0"
 				:chips="chips"
-				class="chips"
 				@open="openFilter"
 				@remove="handleRemove"
+				class="chips"
 			/>
 
 			<component
 				:is="componentSelect"
 				:label-add="labelAdd"
 				:options="unusedFilters"
-				class="filter-select"
 				@openFilter="openFilter"
+				class="filter-select"
 			/>
 		</div>
 
@@ -128,6 +128,7 @@ export default {
 						filter: [filter],
 					};
 				}
+
 				// add identifier
 				filter.id = `group-${groupIndex}`;
 				// resolve input wrapper component
@@ -159,6 +160,8 @@ export default {
 					}
 					return subFilter;
 				});
+				console.log("filter ->", filter);
+
 				return filter;
 			});
 		},
@@ -215,9 +218,6 @@ export default {
 			this.init();
 		},
 	},
-	created() {
-		this.init();
-	},
 	methods: {
 		init() {
 			this.updateFromQuery();
@@ -261,40 +261,12 @@ export default {
 			});
 		},
 		generateQuery() {
-			const newQuery = [];
-			this.internalConfig.forEach((group) => {
-				const filter = group.filter.find(
-					(input) => this.values[input.id] !== undefined
-				);
-				if (!filter) {
-					return;
-				}
-				const newFilter = {
-					attribute: filter.attribute,
-					value: this.values[filter.id],
-					operator: filter.operator || "=",
-					applyNegated: filter.applyNegated() || false,
-				};
-				newQuery.push(newFilter);
-			});
-			this.$emit("newQuery", newQuery);
+			const query = this.parser.generator(this.internalConfig, this.values);
+			this.$emit("newQuery", query);
 		},
 		updateFromQuery() {
-			const newValues = [];
-			this.query.forEach((filter) => {
-				this.internalConfig.forEach((group) => {
-					group.filter.forEach((input) => {
-						if (input.attribute === filter.attribute) {
-							const newValue = filter.value;
-							if (newValue === undefined) {
-								return;
-							}
-							newValues[input.id] = newValue;
-						}
-					});
-				});
-			});
-			this.$set(this, "values", newValues);
+			const parsedValues = this.parser.parser(this.internalConfig, this.query);
+			this.$set(this, "values", parsedValues);
 		},
 	},
 };
