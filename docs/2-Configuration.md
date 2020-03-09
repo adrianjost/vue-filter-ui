@@ -38,9 +38,11 @@ Option to replace the component that renders the list of currently active and ap
 
 Wrapper-Component for the dialog where the user can enter there filter settings. You can exchange the default modal by specifing your new modal here. Your custom modal must implement the [Modal specifications](./Customize/3-Modal.md).
 
+<!--
 ## handleUrl
 
 Every filtered page should be accessible with an unique url for shareability. If you wan't to let this module handle the url update for you, simply set this option to `true`.
+-->
 
 ## parser
 
@@ -49,17 +51,17 @@ To use an existing parser, you can simply import it.
 
 ```html
 <template>
-  <FilterComponent :parser="parser" />
+	<FilterComponent :parser="parser" />
 </template>
 
 <script>
-  import { parser } from "vue-filter-ui";
+	import { parser } from "vue-filter-ui";
 
-   data(){
-   	return {
-   		parser: parser.FeathersJS,
-   	}
-   }
+	data(){
+		return {
+			parser: parser.FeathersJS,
+		}
+	}
 </script>
 ```
 
@@ -121,17 +123,17 @@ There is an edge case for sorting. The query for sorting must be generated from 
 
 ```js
 filter: [
-  {
-    attribute: "$year",
-    applyNegated: true,
-    operator: "=",
-    design: "Radio",
-    options: [
-      { value: 2018, label: "2018" },
-      { value: 2019, label: "2019" },
-      { value: 2020, label: "2020" }
-    ]
-  }
-  // ...
+	{
+		attribute: "$year",
+		applyNegated: true,
+		operator: "=",
+		design: "Radio",
+		options: [
+			{ value: 2018, label: "2018" },
+			{ value: 2019, label: "2019" },
+			{ value: 2020, label: "2020" }
+		]
+	}
+	// ...
 ];
 ```

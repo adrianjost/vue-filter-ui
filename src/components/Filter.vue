@@ -1,23 +1,21 @@
-<!-- eslint-disable vue/require-component-is -->
-<!-- :is is not detected -->
 <template>
 	<div class="filter">
 		<div class="row">
 			<component
 				:is="componentChips"
 				v-if="chips.length > 0"
-				@open="openFilter"
-				@remove="handleRemove"
 				:chips="chips"
 				class="chips"
+				@open="openFilter"
+				@remove="handleRemove"
 			/>
 
 			<component
 				:is="componentSelect"
 				:label-add="labelAdd"
 				:options="unusedFilters"
-				@openFilter="openFilter"
 				class="filter-select"
+				@openFilter="openFilter"
 			/>
 		</div>
 
@@ -33,11 +31,11 @@
 			@remove="handleRemove(openGroup.id)"
 		>
 			<component :is="openGroup.layout" class="layout">
-				<!-- index usage is not detected -->
-				<!-- eslint-disable vue/no-unused-vars -->
-				<!--  eslint-disable-next-line prettier/prettier-->
-				<template v-for="(input, index) in openGroup.filter" v-slot:[getSlotName(index)]>
-					<!-- eslint-enable vue/no-unused-vars -->
+				<template
+					v-for="(input, index) in openGroup.filter"
+					v-slot:[getSlotName(index)]
+				>
+					<!-- eslint-disable vue/valid-v-for -->
 					<component
 						:is="input.input"
 						:key="input.label"
@@ -45,6 +43,7 @@
 						:options="input.options"
 						:label="input.label"
 					/>
+					<!-- eslint-enable vue/valid-v-for -->
 				</template>
 			</component>
 		</component>
