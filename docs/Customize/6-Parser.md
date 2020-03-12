@@ -4,6 +4,7 @@ parsers are used to generate the language specific query from the abstract confi
 
 ## available Parsers
 
+- default (passes through internal state without modifications)
 - [FeathersJS](https://feathersjs.com/)
 
 ## extend a parser

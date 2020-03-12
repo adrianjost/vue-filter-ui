@@ -4,17 +4,17 @@
 			<component
 				:is="componentChips"
 				v-if="chips.length > 0"
-				class="chips"
 				:chips="chips"
+				class="chips"
 				@open="openFilter"
 				@remove="handleRemove"
 			/>
 
 			<component
 				:is="componentSelect"
-				class="filter-select"
 				:label-add="labelAdd"
 				:options="unusedFilters"
+				class="filter-select"
 				@openFilter="openFilter"
 			/>
 		</div>
@@ -31,13 +31,11 @@
 			@remove="handleRemove(openGroup.id)"
 		>
 			<component :is="openGroup.layout" class="layout">
-				<!-- eslint-disable vue/no-unused-vars -->
-				<!-- index usage is not detected -->
 				<template
 					v-for="(input, index) in openGroup.filter"
 					v-slot:[getSlotName(index)]
 				>
-					<!-- eslint-enable vue/no-unused-vars -->
+					<!-- eslint-disable vue/valid-v-for -->
 					<component
 						:is="input.input"
 						:key="input.label"
@@ -45,6 +43,7 @@
 						:options="input.options"
 						:label="input.label"
 					/>
+					<!-- eslint-enable vue/valid-v-for -->
 				</template>
 			</component>
 		</component>
@@ -56,10 +55,8 @@ import DefaultSelect from "./Select";
 import DefaultChips from "./Chips";
 import DefaultModal from "./Modal";
 import DefaultLayout from "./layouts/default";
-import url from "../mixins/url";
 
 export default {
-	mixins: [url],
 	model: {
 		prop: "query",
 		event: "newQuery",
@@ -69,11 +66,6 @@ export default {
 		labelApply: { type: String, default: "apply" },
 		labelCancle: { type: String, default: "cancle" },
 		labelRemove: { type: String, default: "remove" },
-		/*
-    "handleUrl": { type: Boolean },
-    "saveState": { type: Boolean },
-		"consistentOrder": {type: Boolean, default: true},
-		*/
 		filter: { type: Array, required: true },
 		componentSelect: {
 			type: Object,
@@ -97,11 +89,8 @@ export default {
 			},
 		},
 		query: {
-			type: [Object, String],
+			type: [Array, Object, String],
 			required: true,
-		},
-		handleUrl: {
-			type: Boolean,
 		},
 	},
 	data() {
@@ -141,6 +130,7 @@ export default {
 						filter: [filter],
 					};
 				}
+
 				// add identifier
 				filter.id = `group-${groupIndex}`;
 				// resolve input wrapper component
@@ -172,6 +162,7 @@ export default {
 					}
 					return subFilter;
 				});
+
 				return filter;
 			});
 		},
@@ -234,17 +225,7 @@ export default {
 	methods: {
 		init() {
 			this.updateFromQuery();
-
-			if (this.handleUrl) {
-				if (Object.keys(this.$_getFilterQueryParameters()).length !== 0) {
-					this.clearQuery();
-				}
-				this.patchFromQuery();
-			}
-
 			this.generateQuery();
-
-			if (Object.entries) this.updateUrlQuery();
 		},
 		getSlotName(index) {
 			return `input-${index + 1}`;
@@ -285,31 +266,10 @@ export default {
 		generateQuery() {
 			const query = this.parser.generator(this.internalConfig, this.values);
 			this.$emit("newQuery", query);
-			if (this.handleUrl) {
-				this.updateUrlQuery();
-			}
-		},
-		updateUrlQuery() {
-			// keep existing non filter related query params
-			const newQuery = this.$_getFilterQueryParameters(true);
-			// generate new query params from input values
-			Object.entries(this.values)
-				.filter(([, value]) => value !== undefined)
-				.forEach(([key, value]) => {
-					newQuery["vf-" + key] = encodeURIComponent(JSON.stringify(value));
-				});
-			//
-			this.$_updateUrlQueryString(newQuery);
 		},
 		updateFromQuery() {
 			const parsedValues = this.parser.parser(this.internalConfig, this.query);
 			this.$set(this, "values", parsedValues);
-		},
-		patchFromQuery() {
-			const query = this.$_getFilterQueryParameters();
-			Object.entries(query).forEach(([key, value]) => {
-				this.$set(this.values, key, value);
-			});
 		},
 	},
 };

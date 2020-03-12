@@ -17,29 +17,16 @@
 				<b>removeLabel:</b>
 				<input v-model="config.removeLabel" type="text" />
 			</label>
-			<label>
-				<b>handleUrl:</b>
-				<input v-model="config.handleUrl" type="checkbox" />
-			</label>
-			<!--
-      <label>
-        <b>saveState:</b>
-        <input v-model="config.saveState" type="checkbox" />
-      </label>
-      <label>
-        <b>consistentOrder:</b>
-        <input v-model="config.consistentOrder" type="checkbox" />
-      </label>
-      -->
 			<label style="width: 100%">
 				<b>filter:</b>
 				<textarea v-model="filters" />
 			</label>
-			<button @click="reset">
-				Reset
-			</button>
+			<button @click="reset">Reset</button>
 		</div>
-		<p v-if="configError" style="color: red"><b>Error:</b> {{ configError }}</p>
+		<p v-if="configError" style="color: red">
+			<b>Error:</b>
+			{{ configError }}
+		</p>
 	</section>
 </template>
 
@@ -57,9 +44,10 @@ const defaultFilter = `[
         attribute: "$sort-attribute",
         //applyNegated: false,
         //operator: "=",
+        label: "Sortier-Attribut",
 
         // UI options
-        options: undefined,
+
         input: inputs.TriSwitch
       },
       {
@@ -67,6 +55,7 @@ const defaultFilter = `[
         attribute: "$sort-order",
         //applyNegated: false,
         //operator: "=",
+        label: "Sortierreihenfolge",
 
         // UI options
         options: undefined,
@@ -83,6 +72,7 @@ const defaultFilter = `[
         attribute: "isPublished",
         applyNegated: false,
         operator: "=",
+        label: "Veröffentlicht?",
 
         // UI options
         options: undefined,
@@ -100,6 +90,7 @@ const defaultFilter = `[
         attribute: "isTemp",
         applyNegated: true,
         operator: "=",
+        label: "isTemp",
 
         // UI options
         options: [
@@ -122,6 +113,7 @@ const defaultFilter = `[
         // Query data
         attribute: "isCool",
         operator: "=",
+        label: "isCool",
 
         // UI options
         options: [

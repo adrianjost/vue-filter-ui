@@ -1,18 +1,18 @@
 <template>
-	<div class="tri-state-toggle">
+	<label class="tri-state-toggle">
 		<span v-if="label" class="label">{{ label }}</span>
 		<span>
 			<input
 				v-for="option in options"
 				:key="option.label"
 				v-model="vmodelProxy"
-				type="radio"
 				:name="JSON.stringify(options)"
 				:value="option.value"
 				:aria-label="option.label"
+				type="radio"
 			/>
 		</span>
-	</div>
+	</label>
 </template>
 
 <script>

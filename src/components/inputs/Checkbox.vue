@@ -1,11 +1,12 @@
 <template>
 	<fieldset class="checkbox-list">
+		<legend v-if="label" class="label">{{ label }}</legend>
 		<label v-for="option in options" :key="option.label" class="label">
 			<input
 				v-model="vmodelProxy"
-				type="checkbox"
 				:name="option.label + option.value"
 				:value="option.value"
+				type="checkbox"
 			/>
 			{{ option.label }}
 		</label>
@@ -19,6 +20,10 @@ export default {
 		event: "input",
 	},
 	props: {
+		label: {
+			type: String,
+			default: "",
+		},
 		value: {
 			type: [Boolean, Array],
 			default: () => [],

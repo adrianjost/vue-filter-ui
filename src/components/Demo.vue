@@ -2,35 +2,23 @@
 	<div class="wrapper">
 		<search-filter
 			ref="filtercomponent"
-			v-model="apiQuery"
+			v-model="query"
 			:label-add="config.addLabel"
 			:label-apply="config.applyLabel"
 			:label-cancle="config.cancleLabel"
 			:label-remove="config.removeLabel"
-			:handle-url="config.handleUrl"
 			:save-state="config.saveState"
 			:consistent-order="config.consistentOrder"
 			:filter="config.filter"
 			:parser="parser"
-			@newQuery="/* updateQuery */"
 		/>
 		<hr />
 		<DemoConfig v-model="config" />
 		<hr />
-		<table width="100%">
-			<tr>
-				<th>FeathersJS</th>
-				<th>URLQuery</th>
-			</tr>
-			<tr>
-				<td>
-					<pre>{{ JSON.stringify(apiQuery, null, 2) }}</pre>
-				</td>
-				<td>
-					<pre>{{ JSON.stringify(urlQuery, null, 2) }}</pre>
-				</td>
-			</tr>
-		</table>
+		<div>
+			<h4>Filter Query</h4>
+			<pre>{{ JSON.stringify(query, null, "\t") }}</pre>
+		</div>
 	</div>
 </template>
 
@@ -38,7 +26,7 @@
 import DemoConfig from "./DemoConfig.vue";
 import Filter from "./Filter.vue";
 
-import parser from "../parser/FeathersJS";
+import parser from "../parser/default";
 
 export default {
 	components: {
@@ -53,26 +41,34 @@ export default {
 					filter: [],
 					applyLabel: undefined,
 					cancleLabel: undefined,
-					handleUrl: true,
-					saveState: false,
-					consistentOrder: true,
 			  };
 		config.filter = [];
 		return {
 			parser,
 			toggle: false,
-			apiQuery: {
-				$sort: {
-					true: false,
+			query: [
+				{
+					attribute: "$sort",
+					value: "true",
+					operator: "=",
 				},
-				isTemp: {
-					$ne: true,
+				{
+					attribute: "isTemp",
+					value: "true",
+					operator: "=",
+					applyNegated: true,
 				},
-				isCool: ["YES YES", "nope :("],
-				isDaddy: true,
-				isMultiDaddy: ["daddy", "no daddy"],
-			},
-			urlQuery: {},
+				{
+					attribute: "isCool",
+					value: "YES YES",
+					operator: "=",
+				},
+				{
+					attribute: "isDaddy",
+					value: "no daddy",
+					operator: "=",
+				},
+			],
 			nativeEvents: [],
 			config,
 		};
@@ -87,7 +83,7 @@ export default {
 	},
 	mounted() {
 		// test native event handling
-		const events = ["newFilter", "newUrlQuery", "reset"];
+		const events = ["newFilter", "newQuery", "reset"];
 		window.addEventListener("load", () => {
 			const filter = this.$refs["filtercomponent"].$el;
 			events.forEach((event) => {
@@ -97,81 +93,31 @@ export default {
 			});
 		});
 	},
-	/*
-	methods: {
-		updateQuery(query) {
-			this.apiQuery = query;
-		},
-	},
-	*/
 };
 </script>
 
-<!-- CUSTOM MODAL -->
-<style lang="scss" scoped>
-.custom-modal-wrapper {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.2);
-}
-.custom-modal {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background: white;
-	padding: 2rem;
-	border: 5px solid green;
-	box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
-}
-</style>
-
-<!-- DEMO STYLES -->
 <style lang="scss" scoped>
 .wrapper {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 		Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-}
-
-pre {
-	background: #eee;
-}
-.wrapper {
 	margin: 25px;
 	padding: 25px;
 	border: 1px dashed lightgrey;
 	border-radius: 5px;
-}
-hr {
-	border: none;
-	background: transparent;
-	border-bottom: 1px dashed lightgrey;
-	margin: 1rem 0;
-}
-table {
-	display: table;
-	margin-top: 25px;
-	width: 100%;
-	text-align: left;
-	word-break: break-all;
-	word-break: break-word;
-}
-.pre {
-	overflow: auto;
-}
-.events {
-	max-height: 350px;
-	overflow-y: auto;
-	.event {
-		margin: 0;
+	hr {
+		border: none;
+		background: transparent;
+		border-bottom: 1px dashed lightgrey;
+		margin: 1rem 0;
+	}
+	pre {
 		padding: 8px;
-		background-color: rgba(0, 0, 0, 0.05);
-		&:nth-of-type(2n) {
-			background-color: rgba(0, 0, 0, 0.25);
-		}
+		border-radius: 4px;
+		tab-size: 2;
+		max-height: 350px;
+		overflow: auto;
+		color: #fff;
+		background-color: #282c34;
 	}
 }
 </style>
