@@ -1,7 +1,7 @@
 <template>
 	<label>
 		<span v-if="label" class="label">{{ label }}</span>
-		<button @click="nextState" type="button" tab-index="0" class="toggle">
+		<button type="button" tab-index="0" class="toggle" @click="nextState">
 			<span class="toggle-text">{{ options[currentIndex].label }}</span>
 		</button>
 	</label>

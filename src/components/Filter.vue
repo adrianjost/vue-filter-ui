@@ -5,17 +5,17 @@
 				:is="componentChips"
 				v-if="chips.length > 0"
 				:chips="chips"
+				class="chips"
 				@open="openFilter"
 				@remove="handleRemove"
-				class="chips"
 			/>
 
 			<component
 				:is="componentSelect"
 				:label-add="labelAdd"
 				:options="unusedFilters"
-				@openFilter="openFilter"
 				class="filter-select"
+				@openFilter="openFilter"
 			/>
 		</div>
 
@@ -31,7 +31,10 @@
 			@remove="handleRemove(openGroup.id)"
 		>
 			<component :is="openGroup.layout" class="layout">
-				<template v-for="(input, index) in openGroup.filter" v-slot:[getSlotName(index)]>
+				<template
+					v-for="(input, index) in openGroup.filter"
+					v-slot:[getSlotName(index)]
+				>
 					<!-- eslint-disable vue/valid-v-for -->
 					<component
 						:is="input.input"
