@@ -17,16 +17,6 @@
 				<b>removeLabel:</b>
 				<input v-model="config.removeLabel" type="text" />
 			</label>
-			<!--
-      <label>
-        <b>saveState:</b>
-        <input v-model="config.saveState" type="checkbox" />
-      </label>
-      <label>
-        <b>consistentOrder:</b>
-        <input v-model="config.consistentOrder" type="checkbox" />
-      </label>
-			-->
 			<label style="width: 100%">
 				<b>filter:</b>
 				<textarea v-model="filters" />

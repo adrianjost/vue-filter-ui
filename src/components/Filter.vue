@@ -55,10 +55,8 @@ import DefaultSelect from "./Select";
 import DefaultChips from "./Chips";
 import DefaultModal from "./Modal";
 import DefaultLayout from "./layouts/default";
-import url from "../mixins/url";
 
 export default {
-	mixins: [url],
 	model: {
 		prop: "query",
 		event: "newQuery",
@@ -221,10 +219,12 @@ export default {
 			this.init();
 		},
 	},
+	created() {
+		this.init();
+	},
 	methods: {
 		init() {
 			this.updateFromQuery();
-
 			this.generateQuery();
 		},
 		getSlotName(index) {
