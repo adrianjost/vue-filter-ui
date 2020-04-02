@@ -17,13 +17,13 @@
 				<b>removeLabel:</b>
 				<input v-model="config.removeLabel" type="text" />
 			</label>
-			<label style="width: 100%">
+			<label style="width: 100%;">
 				<b>filter:</b>
 				<textarea v-model="filters" />
 			</label>
 			<button @click="reset">Reset</button>
 		</div>
-		<p v-if="configError" style="color: red">
+		<p v-if="configError" style="color: red;">
 			<b>Error:</b>
 			{{ configError }}
 		</p>
