@@ -10,8 +10,8 @@
 				<input v-model="config.applyLabel" type="text" />
 			</label>
 			<label>
-				<b>cancleLabel:</b>
-				<input v-model="config.cancleLabel" type="text" />
+				<b>cancelLabel:</b>
+				<input v-model="config.cancelLabel" type="text" />
 			</label>
 			<label>
 				<b>removeLabel:</b>

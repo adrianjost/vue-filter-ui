@@ -24,10 +24,10 @@
 			v-if="openGroup"
 			:title="openGroup.title"
 			:label-apply="labelApply"
-			:label-cancle="labelCancle"
+			:label-cancel="labelCancel"
 			:label-remove="labelRemove"
 			@apply="handleApply"
-			@cancle="handleCancle"
+			@cancel="handleCancel"
 			@remove="handleRemove(openGroup.id)"
 		>
 			<component :is="openGroup.layout" class="layout">
@@ -64,7 +64,7 @@ export default {
 	props: {
 		labelAdd: { type: String, default: "add filter" },
 		labelApply: { type: String, default: "apply" },
-		labelCancle: { type: String, default: "cancle" },
+		labelCancel: { type: String, default: "cancel" },
 		labelRemove: { type: String, default: "remove" },
 		filter: { type: Array, required: true },
 		componentSelect: {
@@ -252,10 +252,10 @@ export default {
 			this.openGroup.filter.forEach((input) => {
 				this.$set(this.values, input.id, this.tmpValues[input.id]);
 			});
-			this.handleCancle();
+			this.handleCancel();
 			this.generateQuery();
 		},
-		handleCancle() {
+		handleCancel() {
 			this.openGroupId = undefined;
 		},
 		clearQuery() {

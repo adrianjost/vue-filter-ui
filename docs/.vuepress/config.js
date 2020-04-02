@@ -55,7 +55,7 @@ module.exports = {
 	themeConfig: {
 		// https://vuepress.vuejs.org/default-theme-config/
 		sidebar: listFiles(baseDir),
-		logo: "/cloud-transparent.png",
+		logo: "/logo.png",
 		lastUpdated: "Last Updated",
 		repo: "adrianjost/vue-filter-ui",
 		docsDir: "/docs",

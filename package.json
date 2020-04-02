@@ -1,6 +1,6 @@
 {
 	"name": "vue-filter-ui",
-	"version": "0.5.0",
+	"version": "0.6.0",
 	"author": "Adrian Jost <github@adrianjost.dev> (https://adrianjost.dev)",
 	"scripts": {
 		"build": "run-s build:*",
@@ -53,8 +53,7 @@
 	"license": "MIT",
 	"lint-staged": {
 		"*.{js,vue}": [
-			"vue-cli-service lint",
-			"git add"
+			"vue-cli-service lint"
 		]
 	},
 	"main": "dist/lib/VueFilterUi.umd.min.js",

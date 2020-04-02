@@ -1,5 +1,5 @@
 <template>
-	<div class="custom-modal-wrapper" @click.self="handleCancle">
+	<div class="custom-modal-wrapper" @click.self="handleCancel">
 		<div class="custom-modal">
 			<h2 class="title">{{ title }}</h2>
 			<div class="body">
@@ -10,8 +10,8 @@
 					{{ labelRemove }}
 				</button>
 				<div style="flex: 1" />
-				<button class="btn btn--secondary cancle" @click="handleCancle">
-					{{ labelCancle }}
+				<button class="btn btn--secondary cancel" @click="handleCancel">
+					{{ labelCancel }}
 				</button>
 				<button class="btn btn--primary apply" @click="handleApply">
 					{{ labelApply }}
@@ -32,9 +32,9 @@ export default {
 			type: String,
 			default: "Apply",
 		},
-		labelCancle: {
+		labelCancel: {
 			type: String,
-			default: "Cancle",
+			default: "Cancel",
 		},
 		labelRemove: {
 			type: String,
@@ -45,8 +45,8 @@ export default {
 		handleApply() {
 			this.$emit("apply");
 		},
-		handleCancle() {
-			this.$emit("cancle");
+		handleCancel() {
+			this.$emit("cancel");
 		},
 		handleRemove() {
 			this.$emit("remove");

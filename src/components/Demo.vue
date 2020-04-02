@@ -5,7 +5,7 @@
 			v-model="query"
 			:label-add="config.addLabel"
 			:label-apply="config.applyLabel"
-			:label-cancle="config.cancleLabel"
+			:label-cancel="config.cancelLabel"
 			:label-remove="config.removeLabel"
 			:save-state="config.saveState"
 			:consistent-order="config.consistentOrder"
@@ -40,7 +40,7 @@ export default {
 					addLabel: undefined,
 					filter: [],
 					applyLabel: undefined,
-					cancleLabel: undefined,
+					cancelLabel: undefined,
 			  };
 		config.filter = [];
 		return {

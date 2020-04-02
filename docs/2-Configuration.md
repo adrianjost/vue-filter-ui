@@ -14,11 +14,11 @@ Label of the Apply Button of the Modal. Used in the [componentModal](#componentM
 
 **default:** `apply`
 
-## labelCancle
+## labelCancel
 
-Label of the Cancle Button of the Modal. Used in the [componentModal](#componentModal)-Component
+Label of the Cancel Button of the Modal. Used in the [componentModal](#componentModal)-Component
 
-**default:** `cancle`
+**default:** `cancel`
 
 ## labelRemove
 

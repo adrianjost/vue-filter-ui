@@ -1,7 +1,7 @@
 ---
 home: true
-heroImage: ./cloud-transparent.png
-heroText: Universal Filters
+heroImage: ./logo.png
+heroText: Vue Filter UI
 tagline: Fully Customizable Vue Filters
 actionText: Get Started →
 actionLink: /1-GettingStarted.md
