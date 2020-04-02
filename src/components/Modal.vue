@@ -9,7 +9,7 @@
 				<button class="btn btn--secondary remove" @click="handleRemove">
 					{{ labelRemove }}
 				</button>
-				<div style="flex: 1" />
+				<div style="flex: 1;" />
 				<button class="btn btn--secondary cancel" @click="handleCancel">
 					{{ labelCancel }}
 				</button>
