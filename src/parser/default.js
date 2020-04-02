@@ -27,7 +27,7 @@ export const generator = (config, values) => {
  * @return {{inputId: any}} returns values dictionary
  */
 export const parser = (config, query) => {
-	const values = [];
+	const values = {};
 	query.forEach((filter) => {
 		config.forEach((group) => {
 			group.filter.forEach((input) => {

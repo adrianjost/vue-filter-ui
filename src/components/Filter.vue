@@ -56,6 +56,8 @@ import DefaultChips from "./Chips";
 import DefaultModal from "./Modal";
 import DefaultLayout from "./layouts/default";
 
+import klona from "klona";
+
 export default {
 	model: {
 		prop: "query",
@@ -231,7 +233,7 @@ export default {
 			return `input-${index + 1}`;
 		},
 		openFilter(groupId) {
-			this.tmpValues = JSON.parse(JSON.stringify(this.values));
+			this.tmpValues = klona(this.values);
 			this.openGroupId = groupId;
 		},
 		handleRemove(groupId) {

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.1
+
+### Fixes
+
+- when reopening an already applied filter, the settings where not loaded correctly. This bug was introduced in v0.5.0.
+
 ## 0.6.0
 
 ### Breaking Changes
