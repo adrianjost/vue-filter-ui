@@ -7,6 +7,14 @@ pull_request_rules:
       merge:
         method: squash
         strict: true
+  - name: let dependabot recreate prs with conflicts
+    conditions:
+      - author~=dependabot(-preview)?\[bot\]
+      - label~=dependencies
+      - conflict
+    actions:
+      comment:
+        message: "@dependabot recreate"
   - name: automatic merge on CI success and review
     conditions:
       - label~=merge pull
