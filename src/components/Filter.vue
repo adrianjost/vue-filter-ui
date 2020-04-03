@@ -42,6 +42,7 @@
 						v-model="tmpValues[input.id]"
 						:options="input.options"
 						:label="input.label"
+						v-bind="input.attributes"
 					/>
 					<!-- eslint-enable vue/valid-v-for -->
 				</template>

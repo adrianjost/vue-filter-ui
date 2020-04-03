@@ -1,7 +1,7 @@
 <template>
 	<label class="label">
-		{{ label }}
-		<input v-model="vmodelProxy" type="text" />
+		{{ label }} <br />
+		<input v-model="vmodelProxy" type="text" :placeholder="placeholder" />
 	</label>
 </template>
 
@@ -17,6 +17,10 @@ export default {
 			default: "",
 		},
 		value: {
+			type: String,
+			default: "",
+		},
+		placeholder: {
 			type: String,
 			default: "",
 		},

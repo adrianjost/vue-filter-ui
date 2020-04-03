@@ -64,6 +64,26 @@ const defaultFilter = `[
     ]
   },
   {
+    title: "Firstname",
+    chipTemplate: ${'([v1]) => `${v1 ? "is published" : "is unpublished"}`'},
+    filter: [
+      {
+        // Query data
+        attribute: "firstname",
+        applyNegated: false,
+        operator: "=",
+        label: "Firstname?",
+
+        // UI options
+        options: undefined,
+        input: inputs.InputText,
+        attributes: {
+          placeholder: "Placeholder value"
+        }
+      }
+    ]
+  },
+  {
     title: "Veröffentlicht?",
     chipTemplate: ${'([v1]) => `${v1 ? "is published" : "is unpublished"}`'},
     filter: [

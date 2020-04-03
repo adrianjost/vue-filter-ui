@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.0
+
+### Added
+
+- new "attributes" option for inputs. The `attributes` attribute at input config level will get `v-bind`ed to the according input component and you can use it to pass custom props to your input components.
+
+### Internal
+
+- update dependencies
+
 ## 0.6.1
 
 ### Fixes

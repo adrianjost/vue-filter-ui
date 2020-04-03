@@ -58,7 +58,7 @@ defaultOptions = [
 
 #### Demo
 
-<InputInputText />
+<InputText />
 
 ## InputNumber
 
