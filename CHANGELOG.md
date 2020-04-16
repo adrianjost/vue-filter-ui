@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.0
+
+### Added
+
+- new `componentLayout` option, to customize the general Layout of the filters, chips, and the select.
+
 ## 0.7.1
 
 ## Changed
