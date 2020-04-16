@@ -1,6 +1,6 @@
 <template>
-	<div class="filter">
-		<div class="row">
+	<component :is="componentLayout">
+		<template v-slot:chips>
 			<component
 				:is="componentChips"
 				v-if="chips.length > 0"
@@ -9,7 +9,8 @@
 				@open="openFilter"
 				@remove="handleRemove"
 			/>
-
+		</template>
+		<template v-slot:select>
 			<component
 				:is="componentSelect"
 				:label-add="labelAdd"
@@ -17,44 +18,46 @@
 				class="filter-select"
 				@openFilter="openFilter"
 			/>
-		</div>
-
-		<component
-			:is="componentModal"
-			v-if="openGroup"
-			:title="openGroup.title"
-			:label-apply="labelApply"
-			:label-cancel="labelCancel"
-			:label-remove="labelRemove"
-			@apply="handleApply"
-			@cancel="handleCancel"
-			@remove="handleRemove(openGroup.id)"
-		>
-			<component :is="openGroup.layout" class="layout">
-				<template
-					v-for="(input, index) in openGroup.filter"
-					v-slot:[getSlotName(index)]
-				>
-					<!-- eslint-disable vue/valid-v-for -->
-					<component
-						:is="input.input"
-						:key="input.label"
-						v-model="tmpValues[input.id]"
-						:options="input.options"
-						:label="input.label"
-						v-bind="input.attributes"
-					/>
-					<!-- eslint-enable vue/valid-v-for -->
-				</template>
+		</template>
+		<template v-slot:modal>
+			<component
+				:is="componentModal"
+				v-if="openGroup"
+				:title="openGroup.title"
+				:label-apply="labelApply"
+				:label-cancel="labelCancel"
+				:label-remove="labelRemove"
+				@apply="handleApply"
+				@cancel="handleCancel"
+				@remove="handleRemove(openGroup.id)"
+			>
+				<component :is="openGroup.layout" class="layout">
+					<template
+						v-for="(input, index) in openGroup.filter"
+						v-slot:[getSlotName(index)]
+					>
+						<!-- eslint-disable vue/valid-v-for -->
+						<component
+							:is="input.input"
+							:key="input.label"
+							v-model="tmpValues[input.id]"
+							:options="input.options"
+							:label="input.label"
+							v-bind="input.attributes"
+						/>
+						<!-- eslint-enable vue/valid-v-for -->
+					</template>
+				</component>
 			</component>
-		</component>
-	</div>
+		</template>
+	</component>
 </template>
 
 <script>
 import DefaultSelect from "./Select";
 import DefaultChips from "./Chips";
 import DefaultModal from "./Modal";
+import DefaultMainLayout from "./Layout";
 import DefaultLayout from "./layouts/default";
 
 import klona from "klona";
@@ -81,6 +84,10 @@ export default {
 		componentModal: {
 			type: Object,
 			default: () => DefaultModal,
+		},
+		componentLayout: {
+			type: Object,
+			default: () => DefaultMainLayout,
 		},
 		parser: {
 			type: Object,
@@ -277,15 +284,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-.row {
-	display: flex;
-	flex-wrap: nowrap;
-	width: 100%;
-	align-items: center;
-	.chips {
-		margin-right: 0.5rem;
-	}
-}
-</style>

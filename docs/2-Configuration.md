@@ -26,17 +26,21 @@ Label of the Remove Button of the Modal. Used in the [componentModal](#component
 
 **default:** `remove`
 
+## componentLayout
+
+Option to replace the general Layout of the filter ui. Read more under [customization](./Customize/1-Layout.md).
+
 ## componentSelect
 
-Option to replace the component that renders the list of available filters that are not currently applied. Read more under [customization](./Customize/1-Select.md).
+Option to replace the component that renders the list of available filters that are not currently applied. Read more under [customization](./Customize/2-Select.md).
 
 ## componentChips
 
-Option to replace the component that renders the list of currently active and applied filters. Read more under [customization](./Customize/2-Chips.md).
+Option to replace the component that renders the list of currently active and applied filters. Read more under [customization](./Customize/3-Chips.md).
 
 ## componentModal
 
-Wrapper-Component for the dialog where the user can enter there filter settings. You can exchange the default modal by specifing your new modal here. Your custom modal must implement the [Modal specifications](./Customize/3-Modal.md).
+Wrapper-Component for the dialog where the user can enter there filter settings. You can exchange the default modal by specifing your new modal here. Your custom modal must implement the [Modal specifications](./Customize/4-Modal.md).
 
 ## parser
 
@@ -59,7 +63,7 @@ To use an existing parser, you can simply import it.
 </script>
 ```
 
-You can find the [complete list of available parsers here](./Customize/6-Parser.md#available-parsers).
+You can find the [complete list of available parsers here](./Customize/7-Parser.md#available-parsers).
 
 ## filter
 
@@ -74,7 +78,7 @@ Each filter-group is an Object and must define the following attributes:
 | `title`        | `String`            | ✔        | Used as the title in the [componentModal](#componentModal).                                                                                                                                                                                                                                                                                                                                                                                |
 | `chipTemplate` | `String`/`Function` | ✔        | Used as a template for the strings displayed in the [componentChips](#componentChips). If it is a string, it needs to define a placeholder for each input of the group (in order). The Placeholderformat is `%n` with n beeing the index of the input in the config. If defined as a function, the function gets the values of the inputs as an array of values v. The value for `input[i]` is in `v[i]`. The Method must return a String. |
 | `filter`       | `Array`             | ✔        | List of Filter Inputs. Each Filter must be an Object with the format [described below](#filter-inputs).                                                                                                                                                                                                                                                                                                                                    |
-| `layout`       | `Component`         | ❌        | You can import some predefined designs from `import { layouts } from "vue-filter.ui"`. The Component must implement the interface [described under customization](/Customize/4-Layout.md).                                                                                                                                                                                                                                                 |
+| `layout`       | `Component`         | ❌        | You can import some predefined designs from `import { layouts } from "vue-filter.ui"`. The Component must implement the interface [described under customization](/Customize/5-Layouts.md).                                                                                                                                                                                                                                                 |
 | `required`     | `Boolean`           | ❌        | If `true`, the filter-group can not be removed from the applied filters list once it was applied. Usefull for static filters like _"item per page"_.                                                                                                                                                                                                                                                                                       |
 | `parser` | `Object` | ❌ | Can override the parser used for the group where it is defined. This must implement [the parser interface](/Customize/6-Parser.md#extend-a-parser).
 
@@ -111,7 +115,7 @@ There is an edge case for sorting. The query for sorting must be generated from 
 | `attribute`    | `String`             | ✔        | the database attribute that should get queried. <br/>**Be aware:** there is an edge case for the sort filter.                                                                                                                                                                                           |
 | `options`      | `Array`              | ❌        | Available Options for the input. If defined, each entry must be an object with the keys `label` and `value`. <br/>**Note:** some inputs may define default options, but you should always specify your own to be safe.                                                                                  |
 | `applyNegated` | `Boolean`/`Function` | ❌        | • Defines, whether the user selected value should be negated in the generated query. Example: User: `true`, applyNegated: `true` results in the query for `not true`. <br/>• Defaults to false. <br />• When used as a function, those function gets the current input value and must return a Boolean. |
-| `input`        | `Component`          | ✔        | Specifies the component which will be used for the input. You can import some predefined designs from `import { inputs } from "vue-filter.ui"`. Read more about custom inputs [here](/Customize/5-Input.md).                                                                                            |
+| `input`        | `Component`          | ✔        | Specifies the component which will be used for the input. You can import some predefined designs from `import { inputs } from "vue-filter.ui"`. Read more about custom inputs [here](/Customize/6-Inputs.md).                                                                                            |
 | `operator`     | `String`             | (✔)      | • Defines the operator used in the generated query. <br/>• defaults to `=` <br/> • Must be one of the following options: `>`, `>=`, `=` or `includes`.<br/> • `<` and `<=` can be achived by negating the input with `applyNegated`.                                                                    |
 | `label`        | `String`             | (✔)      | Some Inputs require a label. This is often the case for free text inputs without options. Read more in the [inputs documentation](/Components/Inputs.md)                                                                                                                                                |
 
