@@ -1,6 +1,6 @@
 {
 	"name": "vue-filter-ui",
-	"version": "0.7.1",
+	"version": "0.8.0",
 	"author": "Adrian Jost <github@adrianjost.dev> (https://adrianjost.dev)",
 	"scripts": {
 		"build": "run-s build:*",
