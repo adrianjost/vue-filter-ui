@@ -279,17 +279,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.filter {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-		Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-}
-.add-filter {
-	vertical-align: middle;
-	margin-bottom: 8px;
-}
-.md-chip {
-	margin-bottom: 8px;
-}
 .row {
 	display: flex;
 	flex-wrap: nowrap;

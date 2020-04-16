@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.7.1
+
+## Changed
+
+- remove some default styles to improve compatibility with custom styles, maily removed the default `font-family`.
+
 ## 0.7.0
 
 ### Added
