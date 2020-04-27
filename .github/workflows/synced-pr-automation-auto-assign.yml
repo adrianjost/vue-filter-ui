@@ -1,8 +1,10 @@
+# GENERATED CONTENT
+# remove repo from adrianjost/.github/synced/workflows/generator.js before editing
 name: PR Automation
-on:
+'on':
   pull_request:
-    types: [opened]
-
+    types:
+      - opened
 jobs:
   assign-author:
     name: Assign author to PR
