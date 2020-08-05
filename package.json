@@ -33,7 +33,7 @@
 		"sass-loader": "^9.0.3",
 		"vue-clickout": "^1.0.0",
 		"vue-template-compiler": "^2.5.21",
-		"vuepress": "^1.5.2"
+		"vuepress": "^1.5.3"
 	},
 	"postcss": {
 		"plugins": {
