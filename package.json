@@ -13,7 +13,7 @@
 		"dev:vue": "vue-cli-service serve"
 	},
 	"dependencies": {
-		"vue": "^2.6.10"
+		"vue": "^2.7.7"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "^4.5.9",
@@ -32,7 +32,7 @@
 		"prettier": "^2.2.1",
 		"sass-loader": "^10.1.0",
 		"vue-clickout": "^1.0.0",
-		"vue-template-compiler": "^2.5.21",
+		"vue-template-compiler": "^2.7.7",
 		"vuepress": "^1.7.1"
 	},
 	"postcss": {
