@@ -13,7 +13,7 @@
 		"dev:vue": "vue-cli-service serve"
 	},
 	"dependencies": {
-		"vue": "^2.6.10"
+		"vue": "^3.2.47"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "^4.5.9",
